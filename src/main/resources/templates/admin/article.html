@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <!-- 通用 -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IT知识学习网站后台管理系统</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="../../static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../static/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../static/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="../../static/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../../static/plugins/bootstrap-table/css/bootstrap-table.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="../../static/plugins/response/html5shiv.min.js"></script>
+    <script src="../../static/plugins/response/respond.min.js"></script>
+    <![endif]--
+
+<!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    <!-- jQuery 3 -->
+    <script src="../../static/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="../../static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="../../static/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="../../static/bower_components/fastclick/lib/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../static/dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="../../static/dist/js/demo.js"></script>
+    <script src="../../static/plugins/bootstrap-table/js/bootstrap-table.js"></script>
+    <!-- 自定义工具 -->
+    <script src="../../static/plugins/request.js"></script>
+    <script src="../../static/js/ContextPath.js"></script>
+
+
+    <!-- 引入bootstrap-table的资源 -->
+    <link rel="stylesheet" href="../../static/plugins/bootstrap-table/css/bootstrap-table.css">
+    <script type="text/javascript" src="../../static/plugins/bootstrap-table/js/bootstrap-table.js"></script>
+    <script type="text/javascript" src="../../static/plugins/bootstrap-table/js/bootstrap-table-locale-all.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            var $table;
+
+            var queryURL =  getContextPath() + "articles/admin";
+            $table = $('#table_article').bootstrapTable({
+                url: queryURL,
+                method: 'GET',
+                uniqueId: 'id',
+                striped: true,
+                cache: false,
+                sortable: true,
+                sortOrder: "asc",
+                sidePagination: "server",
+                undefinedText: '--',
+                toolbar: '#toolbar',
+                pagination: true,             //是否要分页
+                //是否显示分页
+                pageNumber: 1,
+                //初始化加载第一页，默认第一页,并记录
+                pageSize: 10,                      //默认每页显示多少条记录
+                //每页显示的数量
+                pageList: [5, 10, 30, 50],
+
+
+                //表格加载数据的时候会触发该方法,次方法一般用于添加额外参数或者修改参数名
+                queryParams: function(params) {
+                    delete params.search;
+                    delete params.sort;
+                    delete params.order;
+
+                    params.pageSize=params.limit;
+                    params.pageNum = params.offset;
+                    delete params.offset;
+                    delete params.limit;
+
+                    var nameParam = $("#searchForm").find("input[name='name']").val();
+                    var status =$("select[name='status']").val();
+                    if(nameParam){
+                        params.name=nameParam;
+                    }else if(status){
+                        params.status = status;
+                    }
+                    return params;
+                },
+                columns: [{                       //表格显示的列
+                    checkbox: true,
+                },
+                    {
+                        field: 'name',
+                        title: '标题',
+                        valign: "middle",
+                        formatter: nameformatter,
+                    },
+                    {
+                        field: 'author.username',
+                        title: '帐号',
+                        valign: "middle",
+                    },
+                    {
+                        field: 'author.anothername',
+                        title: '用户名',
+                        valign: "middle",
+                    },
+                    {
+                        field: 'column',
+                        title: '标签',
+                        formatter: tagFormatter,
+                        valign: "middle",
+                    },
+                    {
+                        field: 'status',
+                        title: '状态',
+                        sortable: true,
+                        formatter: statusFormatter,
+                        valign: "middle",
+                    },
+                    {
+                        field: 'createdate',
+                        title: '创建时间',
+                        sortable: true,
+                        formatter: dateFormatter,
+                    },
+                    {
+                        field: 'reason',
+                        title: '原因',
+                        valign: "middle",
+                    },
+                    {
+                        title: '操作',
+                        formatter: buttonmatter,
+                        valign: "middle",
+                    }
+                ],
+                onLoadSuccess: function () {
+                },
+                onLoadError: function () {
+                },
+
+                //获取到服务器数据会触发该方法,该方法一般用于处理数据的格式
+                responseHandler: function (res) {
+                    //数据响应回来会触发该方法
+                    //如果是server分页,数据比如按照如下格式
+                    //{“rows”:数据,”total”:总的记录数}
+                    console.log(res);
+                    return {
+                        "total": res.count,
+                        //总页数
+                        "rows": res.datas //数据
+                    };
+                    return res;
+                }
+            });
+
+            function nameformatter(value, row, index) {
+                console.log(row);
+                if (row.status != 2) {
+                    return "<a target='_blank' href='" + getContextPath() + "articles/page/AC" + row.num + "'>" + row.name + "</a>";
+                } else {
+                    return row.name;
+                }
+            }
+
+            function tagFormatter(value, row, index){
+                return value;
+            }
+
+            function statusFormatter(value, row, index) {
+                if (row.status == 0) {
+                    return "<span style='color: rgb(38,41,44);'>审核中</span>";
+                } else if (row.status == 1) {
+                    return "<span style='color: rgb(255,59,48);'>已通过</span>";
+                } else if (row.status == 2) {
+                    return "<span style='color: rgb(7,193,96);'>不通过</span>";
+                }
+            }
+
+            function dateFormatter(value, row, index) {
+                var year = row.createdate.slice(0, row.createdate.indexOf("T"));
+                var time = row.createdate.slice(row.createdate.indexOf("T") + 1, row.createdate.indexOf("."));
+                return year + " " + time;
+            }
+
+            function buttonmatter(value, row, index) {
+                if(row.status == 0){
+                    return '<button type="button" class="btn btn-primary btn-xs" href="javascript:;" data-ope="pass" data-id=' + row.id + '>通过</button>' +
+                        '&nbsp;&nbsp;' +
+                        '<button type="button" class="btn btn-primary btn-xs" href="javascript:;" data-ope="no-pass" data-id=' + row.id + '>不通过</button>'+
+                        '&nbsp;&nbsp;' +
+                        '<button type="button" class="btn btn-primary btn-xs" href="javascript:;" data-ope="delete" data-id=' + row.id + '>删除</button>'
+                }else if(status == 1){
+                    return '<button type="button" class="btn btn-primary btn-xs" href="javascript:;" data-ope="delete" data-id=' + row.id + '>下架</button>';
+                }else {
+                    return '<button type="button" class="btn btn-primary btn-xs" href="javascript:;" data-ope="delete"  data-id=' + row.id + '>删除</button>';
+                }
+            }
+
+            $("#toolbar").on("click","button",function(){
+                var ope = $(this).data("ope");
+                var selectRows = $table.bootstrapTable('getAllSelections');
+                if(ope=="pass"){
+                    //获取所有选中的记录的id
+                    if(selectRows.length==0){
+                        alert("至少选择一条记录");
+                        return;
+                    }
+
+                    var idArray = $.map(selectRows,function(item,index){
+                        return item.id;
+                    });
+
+                    var param={};
+                    param.teacher_status = 1;
+                    param._method="PUT";
+                    $.ajax({
+                        url:getContextPath() + "articles/admin/aduit/"+idArray.join(","),
+                        type:"post",
+                        data:param,
+                        success:function(data){
+                            if(data.success){
+                                //删除成功
+                                $table.bootstrapTable('refresh');
+                            }else{
+                                alert(data.msg);
+                            }
+                        }
+                    })
+                }
+                else if(ope=="no-pass"){
+                    //获取所有选中的记录的id
+                    if(selectRows.length==0){
+                        alert("至少选择一条记录");
+                        return;
+                    }
+
+                    var idArray = $.map(selectRows,function(item,index){
+                        return item.id;
+                    });
+                    $("#reasonBox").modal("show");
+                    $("#send").click(function () {
+                        var param={};
+                        param.teacher_status = 2;
+                        param.reason = $(".reasonSelect").val();
+                        param._method="PUT";
+                        $.ajax({
+                            url:getContextPath() + "articles/admin/aduit/"+idArray.join(","),
+                            type:"post",
+                            data:param,
+                            success:function(data){
+                                if(data.success){
+                                    $table.bootstrapTable('refresh');
+                                }else{
+                                    alert(data.msg);
+                                }
+                            }
+                        })
+                        $("#send").unbind("click");
+                    })
+                }
+                else if(ope=="delete"){
+                    //越级删除
+                    //获取所有选中的记录的id
+                    if(selectRows.length==0){
+                        alert("至少选择一条记录");
+                        return;
+                    }
+                    var idArray = $.map(selectRows,function(item,index){
+                        return item.id;
+                    });
+                    data = "_method=delete";
+                    request.ajax(getContextPath() + "articles/admin/delete/" + idArray.join(","), "POST", data, true, function (data) {
+                        if (data.success) {
+                            //删除成功
+                            alert("删除成功");
+                            $table.bootstrapTable('refresh');
+                        } else {
+                            alert(data.msg)
+                        }
+                    })
+                }
+                else if(ope == "refresh"){
+                    $table.bootstrapTable("refresh");
+                }
+            });
+            $("#searchForm").on("submit",function(){
+                $table.bootstrapTable('refresh');
+            });
+            $table.on("click", "button", function () {
+                var id = $(this).data("id");
+                data = "_method=delete";
+                var param ={};
+                if ($(this).data("ope") == "delete") {
+                    request.ajax(getContextPath() + "articles/admin/delete/" + id, "POST", data, true, function (data) {
+                        if (data.success) {
+                            //删除成功
+                            alert("删除成功");
+                            $table.bootstrapTable('refresh');
+                        } else {
+                            alert(data.msg)
+                        }
+                    })
+                }else if($(this).data("ope") == "pass"){
+                    var ids = [];
+                    ids[0] = id;
+                    param.teacher_status = 1;
+                    param._method="PUT";
+                    $.ajax({
+                        url:getContextPath() + "articles/admin/aduit/"+ids.join(","),
+                        type:"post",
+                        data:param,
+                        success:function(data){
+                            if(data.success){
+                                //删除成功
+                                $table.bootstrapTable('refresh');
+                            }else{
+                                alert(data.msg);
+                            }
+                        }
+                    })
+                }else if($(this).data("ope") == "no-pass"){
+                    $("#reasonBox").modal("show");
+                    var ids = [];
+                    ids[0] = id;
+                    $("#send").click(function () {
+                        param.teacher_status = 2;
+                        param.reason = $(".reasonSelect").val();
+                        param._method="PUT";
+                        $.ajax({
+                            url:getContextPath() + "articles/admin/aduit/"+ids.join(","),
+                            type:"post",
+                            data:param,
+                            success:function(data){
+                                if(data.success){
+                                    //删除成功
+                                    $("#reasonBox").modal("hide");
+                                    $table.bootstrapTable('refresh');
+                                }else{
+                                    alert(data.msg);
+                                }
+                            }
+                        })
+                        $("#send").unbind("click");
+                    })
+                }
+            })
+            $("select[name='status']").change(function () {
+                $table.bootstrapTable("refresh");
+            })
+        })
+
+    </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+
+<div class="wrapper">
+
+    <!-- 头部 -->
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="/static/index2.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>IT</b>IT</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>ITIT</b>后台管理网站</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- Messages: style can be found in dropdown.less-->
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="label label-success">4</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 4 messages</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li><!-- start message -->
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../../static/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Support Team
+                                                <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                    <!-- end message -->
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">See All Messages</a></li>
+                        </ul>
+                    </li>
+                    <!-- Notifications: style can be found in dropdown.less -->
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-warning">10</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 10 notifications</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">View all</a></li>
+                        </ul>
+                    </li>
+                    <!-- Tasks: style can be found in dropdown.less -->
+                    <li class="dropdown tasks-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-flag-o"></i>
+                            <span class="label label-danger">9</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 9 tasks</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li><!-- Task item -->
+                                        <a href="#">
+                                            <h3>
+                                                Design some buttons
+                                                <small class="pull-right">20%</small>
+                                            </h3>
+                                            <div class="progress xs">
+                                                <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
+                                                     aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <span class="sr-only">20% Complete</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- end task item -->
+                                </ul>
+                            </li>
+                            <li class="footer">
+                                <a href="#">View all tasks</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img th:src="${session.admin.header}" src="../../static/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <span class="hidden-xs" th:text="${session.admin.name}">xxx</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img  th:src="${session.admin.header}" src="../../static/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                <p th:text="${session.admin.name}">
+                                </p>
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="/admin/logout" class="btn btn-default btn-flat">退出</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 菜单 -->
+    <!-- Left side column. contains the sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img th:src="${session.admin.header}"  src="../../static/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p th:text="${session.admin.name}">xx</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>
+            <!-- search form -->
+            <form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn">
+              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+              </button>
+            </span>
+                </div>
+            </form>
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">菜单栏</li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i>
+                        <span>审核功能</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="/teachers/admin"><i class="fa fa-circle-o"></i>教师审核</a></li>
+                        <li><a href="/articles/admin"><i class="fa fa-circle-o"></i>专栏审核</a></li>
+                        <li><a href="/videos/admin"><i class="fa fa-circle-o"></i>视频审核</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Blank page
+                <small>it all starts here</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Examples</a></li>
+                <li class="active">Blank page</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Title</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                                title="Collapse">
+                            <i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                            <i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+
+                <div class="box-body">
+                    <div class="row">
+                        <form id="searchForm" action="" onsubmit="return false;">
+                            <div class="col-xs-2">
+                                <input type="text" name="name" class="form-control" placeholder="用户名称">
+                            </div>
+                            <div class="col-xs-2">
+                                <button type="submit" class="btn bg-olive btn-flat">查询</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="toolbar">
+                        <button type="button" data-ope="pass" class="btn bg-olive btn-flat">通过</button>
+                        <button type="button" data-ope="no-pass" class="btn bg-red btn-flat">不通过</button>
+                        <button type="button" data-ope="delete" class="btn bg-orange btn-flat">删除</button>
+                        <select name="status" id="status" class="btn bg-gray">
+                            <option value="">全部</option>
+                            <option value="0">待审核</option>
+                            <option value="1">已通过</option>
+                            <option value="2">不通过</option>
+                        </select>
+                        <button type="button" data-ope="refresh" class="glyphicon glyphicon-repeat btn btn-flat"></button>
+                    </div>
+                    <!-- bootstrap table插件 -->
+                    <table id="table_article"></table>
+                </div>
+                <div id="reasonBox" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">原因</h4>
+                            </div>
+                            <div class="modal-body">
+                               <span>原因:</span>
+                                <select class="form-control reasonSelect" name="reason">
+                                    <option value="">请选择原因</option>
+                                    <option value="内容不符合">内容不符合</option>
+                                    <option value="专栏无法观看">专栏无法观看</option>
+                                    <option value="标签不符合">标签不符合</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" id="close" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-weixin-green" id="send">确定</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    Footer
+                </div>
+                <!-- /.box-footer-->
+            </div>
+            <!-- /.box -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- 底部 -->
+
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 2.4.18
+        </div>
+        <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights
+        reserved.
+    </footer>
+
+    <!-- 设置 -->
+
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+
+            <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Home tab content -->
+            <div class="tab-pane" id="control-sidebar-home-tab">
+                <h3 class="control-sidebar-heading">Recent Activity</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+
+                                <p>Will be 23 on April 24th</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-user bg-yellow"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+
+                                <p>New phone +1(800)555-1234</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+
+                                <p>nora@example.com</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-file-code-o bg-green"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+
+                                <p>Execution time 5 seconds</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+
+                <h3 class="control-sidebar-heading">Tasks Progress</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Custom Template Design
+                                <span class="label label-danger pull-right">70%</span>
+                            </h4>
+
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Update Resume
+                                <span class="label label-success pull-right">95%</span>
+                            </h4>
+
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Laravel Integration
+                                <span class="label label-warning pull-right">50%</span>
+                            </h4>
+
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Back End Framework
+                                <span class="label label-primary pull-right">68%</span>
+                            </h4>
+
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+
+            </div>
+            <!-- /.tab-pane -->
+            <!-- Stats tab content -->
+            <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+            <!-- /.tab-pane -->
+            <!-- Settings tab content -->
+            <div class="tab-pane" id="control-sidebar-settings-tab">
+                <form method="post">
+                    <h3 class="control-sidebar-heading">General Settings</h3>
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Report panel usage
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+
+                        <p>
+                            Some information about this general settings option
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Allow mail redirect
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+
+                        <p>
+                            Other sets of options are available
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Expose author name in posts
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+
+                        <p>
+                            Allow the user to show his name in blog posts
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <h3 class="control-sidebar-heading">Chat Settings</h3>
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Show me as online
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Turn off notifications
+                            <input type="checkbox" class="pull-right">
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Delete chat history
+                            <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+                </form>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+</body>
+</html>
+

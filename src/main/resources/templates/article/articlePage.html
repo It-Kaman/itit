@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../static/icon/ali-icon/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/Page/font.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/Page/common.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/Page/header.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/Page/footer.css">
+    <link rel="stylesheet" href="../../static/plugins/validator/css/bootstrapValidator.min.css">
+    <link rel="stylesheet" href="../../static/editormd/css/editormd.min.css"/>
+
+    <script type="application/javascript" src="../../static/js/jquery-3.4.1.js"></script>
+    <script type="application/javascript" src="../../static/js/bootstrap.js"></script>
+    <script type="application/javascript" src="../../static/plugins/validator/js/bootstrapValidator.min.js"></script>
+    <script type="application/javascript" src="../../static/js/ContextPath.js"></script>
+    <script type="application/javascript" src="../../static/plugins/request.js"></script>
+    <script type="application/javascript" src="../../static/js/util/dateFomat.js"></script>
+
+    <script src="../../static/editormd/lib/marked.min.js"></script>
+    <script src="../../static/editormd/lib/prettify.min.js"></script>
+    <script src="../../static/editormd/lib/raphael.min.js"></script>
+    <script src="../../static/editormd/lib/underscore.min.js"></script>
+    <script src="../../static/editormd/lib/sequence-diagram.min.js"></script>
+    <script src="../../static/editormd/lib/flowchart.min.js"></script>
+    <script src="../../static/editormd/lib/jquery.flowchart.min.js"></script>
+    <script src="../../static/editormd/editormd.js"></script>
+    <title th:text="${#request.getAttribute('article').getName()}">xx</title>
+    <style>
+        section{
+            overflow: hidden;
+            /*margin-top: 20px;*/
+            margin-top: 120px;
+            padding: 0px !important;
+            background: rgb(255,255,255);
+        }
+        section>aside{
+            float: left;
+            width: 20%;
+            background: rgb(37,40,43);
+            height: 1087px;
+            transition: width .5s;
+        }
+        section>aside.aside_close{
+            width: 3%;
+        }
+        section>aside>nav{
+            padding-left: 10%;
+            color: rgba(255,255,255,.8);
+        }
+        section>aside>nav>span.iconfont:hover{
+            color: white;
+        }
+        section>aside>nav>span.icon-caidan{
+            color: rgba(255,255,255,.8);
+            font-size: 25px;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        section>aside>.author-box{
+            width: 100%;
+            margin-top: 10px;
+        }
+        section>aside>.author-box>.author-header{
+            width: 100%;
+            height: auto;
+            padding: 0 15%;
+        }
+        section>aside>.author-box>.author-header>img{
+            width: 100%;
+            object-fit: cover;
+        }
+        section>aside>.author-box>.author-info{
+            margin-top: 20px;
+        }
+        section>aside>.author-box>.author-info>span{
+            color: white;
+        }
+        section>aside>.author-box>.author-info>span.name{
+            color: white;
+            display: block;
+            text-align: center;
+            font-size: 18px;
+        }
+        section>aside>.author-box>.author-info>span.fans, section>aside>.author-box>.author-info>span.upload{
+            width: 50%;
+            float: left;
+            margin: 10px 0px;
+        }
+        section>aside>.author-box>.author-info>span:last-of-type{
+            display: block;
+            text-align: center;
+            font-size: 17px;
+        }
+        section>aside>.author-box>.author-info>span:last-of-type>a{
+            color: #2ba246;
+        }
+        section>div.content-body{
+            float: left;
+            width: 80%;
+            transition: all .5s;
+        }
+        section>div.aside_close{
+            width: 97%;;
+        }
+        section>div.content-body>nav{
+            height: 123px;
+            border-bottom: 1px solid #cdcdcd;
+            line-height: 40px;
+            padding-left: 5%;
+            font-size: 17px;
+            overflow: hidden;
+        }
+        section>div.content-body>nav>.descrption{
+            font-size: 14px;
+            line-height: 14px;
+            text-overflow: ellipsis;
+            word-wrap: break-word;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            display: -webkit-box;
+            overflow: hidden;
+            margin: 0px;
+            text-indent: 2em;
+        }
+        section>div.content-body>nav>.createdate{
+            float: right;
+            padding-right: 2%;
+        }
+
+
+        section>div.content-body>.part1{
+            overflow: auto;
+            height: 914px;
+            width: 100%;
+            padding: 30px 2% 0px 2%;
+            margin-bottom: 50px;
+        }
+        section>div.content-body>.part1>.article-body{
+            height: auto;
+            overflow-y: auto;
+            padding: 40px 1% 100px 1%;
+        }
+
+
+       .article-comment{
+            margin-top: 50px;
+            overflow: hidden;
+           background: transparent;
+        }
+        .article-comment>.comment-title>p{
+            font-size: 20px;
+        }
+        .article-comment>.comment-title>p>span{
+            padding: 0 2% 0 1%;
+        }
+
+        /*富文本*/
+        .article-comment>.to-comment{
+            width: 70%;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .article-comment>.to-comment>button{
+            border: none;
+            background: rgb(42,161,70);
+            color: #ffffff;
+            padding: 1% 2%;
+            border-radius: 5px;
+            outline: none;
+            margin-top: 10px;
+            float: right;
+            cursor: pointer;
+        }
+        .article-comment>.to-comment>button:active{
+            background: rgba(42,161,70,.8);
+        }
+        .article-comment>.to-comment>#c_content{
+            margin: 0px;
+            border-radius: 5px;
+        }
+        .article-comment>.to-comment>#c_content>.editormd-toolbar{
+            background: #202022;
+        }
+        .article-comment>.to-comment>#c_content>.editormd-toolbar .editormd-menu>li>a{
+            border: 1px solid transparent;
+            color: #f5f5f5;
+        }
+        .article-comment>.to-comment>#c_content>.editormd-toolbar .editormd-menu>li>a:hover{
+            background: rgba(255,255,255,.3);
+        }
+        .article-comment>.to-comment>#c_content>.CodeMirror{
+            background: #ffffff;
+        }
+        .article-comment>.to-comment>#c_content>.CodeMirror>.CodeMirror-scroll>.CodeMirror-gutters{
+            background: rgb(41,43,45);
+        }
+
+        .article-comment>article{
+            overflow: hidden;
+        }
+        .article-comment>article>.pagination-box{
+            overflow: hidden;
+        }
+        .article-comment>article>.pagination-box>span{
+            float: left;
+            display: inline-block;
+            line-height: 34px;
+            margin-top: 20px;
+            padding-right: 2%;
+        }
+        .article-comment>article>.content-list{
+            margin-top: 30px;
+        }
+        .article-comment>article>.content-list>.content-box{
+            margin-top: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left{
+            width: 10%;
+            display: inline-block;
+            text-align: center;
+            float: left;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>a{
+            position: relative;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>a>img{
+            width: 70%;
+            object-fit: cover;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>a>p{
+            text-align: center;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>a:hover >img{
+            border: 1px solid rgb(158,234,106);
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>.user-details{
+            position: absolute;
+            width: 20%;
+            height: 100px;
+            background: rgb(245,245,245);
+            border-radius: 5px;
+            border: 1px solid rgba(43,41,42,.3);
+            box-shadow: 2px 2px 2px 1px rgba(0,0,0,.05);
+            top: 50%;
+            margin-top: -60px;
+            left: 5%;
+            overflow: hidden;
+            padding: 10px 1%;
+            box-sizing: border-box;
+            display: none;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>.user-details:hover{
+             display: block;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>.user-details>.part1{
+            height: 60px;
+            overflow: hidden;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>.user-details>.part1>img{
+            height: 60px;
+            object-fit: cover;
+            float: left;
+            line-height: 80px;
+            border-radius: 50%;
+            border: 1px solid rgb(45,42,41);
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>.user-details>.part1>span{
+            font-size: 16px;
+            float: left;
+            line-height: 60px;
+            padding-left: 1%;
+            display: inline-block;
+            width: 50%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            cursor: default;
+            box-sizing: border-box;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>.user-details>.part2>a{
+            border-radius: 5px;
+            background: black;
+            color: white;
+            display: inline-block;
+            padding: 1% 4%;
+            box-sizing: border-box;
+            float: right;
+            height: 20px;
+            width: 35%;
+            font-size: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .article-comment>article>.content-list>.content-box>.content-left>.user-details>.part2>a:hover{
+            background: rgb(42,161,69);
+        }
+        .article-comment>article>.content-list>.content-box>.content-right{
+            width: 89%;
+            display: inline-block;
+            float: left;
+        }
+        .article-comment>article>.content-list>.content-box>.content-right>.tools{
+            text-align: right;
+        }
+
+        .article-comment>article>.content-list>.content-box>.content-right>.tools>.delete{
+            color: #2ba246;
+            cursor: pointer;
+        }
+        .article-comment>article>.content-list>.content-box>.content-right>.tools>.delete:active{
+            opacity: .7;
+            -moz-user-select: none; /*火狐*/
+            -webkit-user-select: none; /*webkit浏览器*/
+            -ms-user-select: none; /*IE10*/
+            -khtml-user-select: none; /*早期浏览器*/
+            user-select: none;
+        }
+
+        .air{
+            float: right;
+            width: 5%;
+            height: 30px;
+        }
+/*新的修改样式*/
+        .btn-weixin-green{
+            background: rgb(43,162,70);
+            color: white;
+        }
+    </style>
+    <script>
+        $(function () {
+            request.ajax(getContextPath()+"search/hot","get","",true,function (data) {
+                if(data.success){
+                    data.datas.forEach(function (element) {
+                        $("<option name='content' value='"+element.searchName+"'></option>").attr("label","搜索次数:"+element.num).appendTo("#search-list");
+                    })
+                    $("input[name='search-content']").attr("placeholder",data.showtag.searchName);
+                }
+            })
+        })
+
+        $("input[name='search-content']").keyup(function () {
+            $(this).attr("data-ope","clear");
+        })
+
+        $(".Search-Modular>button.icon-sousuo").click(function () {
+            var name = $("input[name='search-content']").attr("placeholder");
+            if( $("input[name='search-content']").data("ope") != "clear"){
+                window.location.href = getContextPath()+"search?name="+name;
+            }else {
+                window.location.href = getContextPath()+"search?name="+$("input[name='search-content']").val();
+            }
+        })
+    </script>
+</head>
+<body>
+    <!--头部-->
+    <header class="container-fluid">
+        <!--左边部分-->
+        <div class="icon-left">
+            <a href="/index"><i class="zhanku">IT学习网站</i></a>
+            <!--<a class="" href="#">首页</a>-->
+        </div>
+        <div class="air"></div>
+        <!--查询-->
+        <div class="Search-Modular">
+            <input type="text" data-ope="normal" class="search-content" name="search-content" list="search-list" placeholder="请输入搜索关键词">
+            <button class="iconfont icon-sousuo"></button>
+            <datalist id="search-list"></datalist>
+        </div>
+        <!--右边部分-->
+        <div class="header-right-list">
+            <!--未登录-->
+            <!--/*@thymesVar id="user" type="com.itit.entry.User"*/-->
+            <ul th:if="${session.user == null}" class="unlogin">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'" href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/register">注册</a>
+                </li>
+                <li>
+                    <a href="/login">登录</a>
+                </li>
+                <li>
+                    <div class="header-img">
+                        <img th:src="${#request.getServletContext().getContextPath()}+'/static/img/header/default/akari.jpg'" class="img-circle" width="34px" height="34px"/>
+                        <div class="header-img-list">
+                            <ul>
+                                <li class="btn-group">
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/login'" href="/login"><div class="btn"><span>登录</span></div></a>
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/register'" href="/register"><div class="btn"><span>注册</span></div></a>
+                                </li>
+                                <li>选择语言</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!--已登录-->
+            <ul th:if="${session.user != null}" class="has-login" th:data-id="${session.user.getId()}">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'"  href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a  th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="#">历史</a></li>
+                <li th:text="${session.user.anothername}"></li>
+                <li><div class="header-img">
+                    <img th:src="${session.user.header}" class="img-circle" width="34px" height="34px"/>
+                    <div class="header-img-list">
+                        <ul>
+                            <li>
+                                <ul>
+                                    <li><a th:href="'/UserCenter?id='+${session.user.getId()}">个人中心</a></li>
+                                    <li>投稿管理</li>
+                                    <li>订单中心</li>
+                                    <li>我的课程</li>
+                                </ul>
+                            </li>
+                            <li>选择语言</li>
+                            <li><a style="display: block" th:href="${#request.getServletContext().getContextPath()}+'/logout'">退出</a></li>
+                        </ul>
+                    </div>
+                </div></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+        <!--侧边栏-->
+        <aside>
+            <nav>
+                <span class="iconfont icon-caidan"></span>
+            </nav>
+            <div class="author-box">
+                <div class="author-header">
+                    <img class="img-circle" th:src="${#request.getAttribute('article').getAuthor().getHeader()}" src="../../static/img/header/default/akari.jpg" alt="">
+                </div>
+                <div class="author-info" th:data-id="${#request.getAttribute('article').getAuthor().getId()}">
+                    <span class="name" th:text="${#request.getAttribute('article').getAuthor().getAnothername()}">xx</span>
+                    <span class="fans" th:text="'粉丝数:'+${#request.getAttribute('article').getAuthor().getFansNum()}">粉丝数:xx</span>
+                    <span class="upload" th:text="'发表数:' + ${#request.getAttribute('article').getAuthor().getArticleNum()}">发表数:xx</span>
+                    <span><a href="javascript:;" th:href="'/UserCenter?id='+${#request.getAttribute('article').getAuthor().getId()}">个人信息</a></span>
+                </div>
+            </div>
+        </aside>
+        <div class="content-body" th:data-id="${#request.getAttribute('article').getId()}">
+            <nav class="header">
+                <h2 class="title" th:text="${#request.getAttribute('article').getName()}">--</h2>
+                <p class="descrption" th:text="${#request.getAttribute('article').getDescription()}">xx</p>
+                <span class="createdate" th:text="${#request.getAttribute('date')}">xx</span>
+            </nav>
+
+            <div class="part1">
+                <div id="article-body" CLASS="markdown-body editormd-html-preview" th:utext="${#request.getAttribute('content')}"></div>
+            </div>
+        </div>
+    </section>
+    <section class="container article-comment clearfix">
+            <div class="comment-title">
+                <p><span class="comment-num" th:text="${#request.getAttribute('totalNum')}">0</span>评论</p>
+            </div>
+            <!--评论消息框-->
+            <div class="to-comment" th:if="${#request.getAttribute('article').getStatus()==0?hidden:''}">
+                <div id="c_content">
+                    <textarea style="display:none;"></textarea>
+                </div>
+                <button class="to-click"><i class="iconfont icon-fasong"></i>发送</button>
+            </div>
+            <form id="searchForm" action="" onsubmit="return false;">
+                <input type="hidden" name="pageNum"/>
+                <input type="hidden" name="pageSize"/>
+                <input type="hidden" name="id" th:value="${#request.getAttribute('article').getId()}">
+            </form>
+            <article class="users_comment">
+                <!--评论-->
+                <div class="clearfix content-list">
+                    <div class="content-box" index="1">
+                        <div class="content-left">
+                            <a href="#">
+                                <img src="../../static/img/header/default/akari.jpg" alt="">
+                                <p>蘑菇云</p>
+                            </a>
+                            <div class="user-details">
+                                <div class="part1">
+                                    <img src="../../static/img/header/default/akari.jpg" alt="">
+                                    <span>蘑菇云蘑菇云蘑菇云蘑菇云</span>
+                                </div>
+                                <div class="part2">
+                                    <a class="info" href="#" th:href="@{${#httpServletRequest.getContextPath()}+ '/UserCenter?id=1'}">个人信息</a>
+                                    <span class="air" style=" float:right;width: 5%;padding: 1%"></span>
+                                    <a href="javascript:;" class="attention">关注</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-right">
+                            <div class="ctext editormd-html-preview">
+                                <p>dfczsczscszcztwemoji-1f170sadsassaa<img src="http://twemoji.maxcdn.com/36x36/1f310.png" title="twemoji-1f310" alt="twemoji-1f310" class="emoji twemoji" /> <img src="http://twemoji.maxcdn.com/36x36/1f310.png" title="twemoji-1f310" alt="twemoji-1f310" class="emoji twemoji" /> <img src="http://twemoji.maxcdn.com/36x36/1f311.png" title="twemoji-1f311" alt="twemoji-1f311" class="emoji twemoji" /><br><a href="http://www.baidu.com" title="百度">百度</a></p>
+                                <p>dfczsczscszcztwemoji-1f170sadsassaa<img src="http://twemoji.maxcdn.com/36x36/1f310.png" title="twemoji-1f310" alt="twemoji-1f310" class="emoji twemoji" /> <img src="http://twemoji.maxcdn.com/36x36/1f310.png" title="twemoji-1f310" alt="twemoji-1f310" class="emoji twemoji" /> <img src="http://twemoji.maxcdn.com/36x36/1f311.png" title="twemoji-1f311" alt="twemoji-1f311" class="emoji twemoji" /><br><a href="http://www.baidu.com" title="百度">百度</a></p>
+                                <p>dfczsczscszcztwemoji-1f170sadsassaa<img src="http://twemoji.maxcdn.com/36x36/1f310.png" title="twemoji-1f310" alt="twemoji-1f310" class="emoji twemoji" /> <img src="http://twemoji.maxcdn.com/36x36/1f310.png" title="twemoji-1f310" alt="twemoji-1f310" class="emoji twemoji" /> <img src="http://twemoji.maxcdn.com/36x36/1f311.png" title="twemoji-1f311" alt="twemoji-1f311" class="emoji twemoji" /><br><a href="http://www.baidu.com" title="百度">百度</a></p>
+                            </div>
+                            <div class="tools">
+                                <span class="delete" data-id="1">删除</span>
+                                <span class="date-time">2019-10-11 12:24:15</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--分页-->
+                <div class="pagination-box">
+                    <span>共<span class="page_num">0</span>页</span>
+                    <ul class="pagination">
+                        <li class="disabled first">
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="disabled last">
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+        </section>
+    <!--底部-->
+    <footer>
+        <label>&COPY;CopyRight From It-Kaman.All Rights Reserved.</label>
+    </footer>
+</body>
+
+<script>
+    $(".icon-caidan").click(function () {
+        $("section>aside").toggleClass("aside_close");
+        $("section>div.content-body").toggleClass("aside_close");
+        if($("section>aside").hasClass("aside_close")){
+            $(".author-box>.author-info").css("display","none");
+        }else {
+            $(".author-box>.author-info").removeAttr("style");
+        }
+    })
+</script>
+<!--评论-->
+<script type="text/javascript">
+    var testEditor;
+    $(function () {
+        var pageSize = 15;
+        var pageNum = 0;
+        var MaxPageNum = 1;
+
+        var acId = $(".content-body").data("id");
+        //判断是否关注
+        var checkFollow = function(){
+            $(".content-left>a").hover(function () {
+                var index = $(this).parent().parent().attr("index");
+                $(this).siblings(".user-details").css({"display":"block"});
+            },function () {
+                $(this).siblings(".user-details").removeAttr("style");
+            })
+        }
+        //点击关注
+        var attention = function () {
+            $(".attention").click(function () {
+                if($(".attention").text() == "关注"){
+                    $(".attention").text("已关注");
+                    alert("关注成功")
+                }else {
+                    $(".attention").text("关注");
+                }
+                var user_id = $(this).parent().parent().parent().parent().attr("index");
+                $.ajax({
+                    url:"/fans/follow",
+                    type:"post",
+                    data:{"user_id":user_id},
+                    success:function (data) {
+                        console.log(data);
+                        if(!data.success) {
+                            window.location.href = "/login";
+                        }
+                    }
+                })
+            })
+        }
+
+
+        //评论页面显示
+        var clickPage = function(vid){
+            $(".content-list").empty();
+            request.ajax(getContextPath()+"comment/article/"+acId,"post",$("#searchForm").serialize(),false,function (data) {
+                if (data.success){
+                    data.datas.forEach(function (element,index) {
+                        var deleteHtml ="";
+                        var Userid = $(".has-login").data("id")
+                        if (Userid == element.from_id.id){
+                            deleteHtml = "<span class='delete' data-id='"+element.id+"'>删除</span>"
+                        }
+                        $("<div class='content-box' index='"+element.from_id.id+"'>").append("" +
+                            "<div class='content-left'>" +
+                            "<a href='"+getContextPath()+"/UserCenter?id="+element.from_id.id+"'>" +
+                            "<img src='"+element.from_id.header+"' alt=''>" +
+                            "<p>"+element.from_id.anothername+"</p>" +
+                            "</a>"+
+                            "<div class='user-details'>"+
+                            "<div class='part1'>" +
+                            "<img src='"+element.from_id.header+"' alt=''>" +
+                            "<span>"+element.from_id.anothername+"</span>" +
+                            "</div>"+
+                            "<div class='part2'>"+
+                            "<a class='info' href='/UserCenter?id="+element.from_id.id+"'>个人信息</a>"+
+                            "<span class='air' style='float: right;width: 5%;padding: 1%'></span>"+
+                            "<a href='javascript:;' class='attention'>关注</a>"+
+                            "</div>"+
+                            "</div>"+
+                            "</div>" +
+                            "<div class='content-right'>" +
+                            "<div class='ctext editormd-html-preview'>" +
+                            element.content+
+                            "</div>" +
+                            "<div class='tools'>" +
+                            "<span class='data-time'>"+timeFormat(element.create_date)+"</span>" +
+                            deleteHtml +
+                            "</div>" +
+                            "</div>").appendTo($(".content-list"));
+
+                        $.ajax({
+                            type:"post",
+                            url:"/fans/"+element.from_id.id,
+                            success:function (data) {
+                                console.log(data);
+                                if(data.success){
+                                    if(data.count === 1){
+                                        if(data.datas){
+                                            //已关注
+                                            $(".content-box:eq("+index+") .user-details>.part2>.attention").text("已关注");
+                                        }else {
+                                            $(".content-box:eq("+index+") .user-details>.part2>.attention").text("关注");
+                                        }
+                                    }else{
+                                        $(".content-box:eq("+index+") .user-details>.part2>.attention").remove();
+                                    }
+                                }
+                            }
+                        })
+                })
+                    $(".page_num").text(data.MaxPageNum);
+                    $(".comment-num").text(data.count);
+                    checkFollow();
+                    attention();
+                    deleteBtn();
+                }else {
+                    if(data.msg != undefined){
+                        alert(data.msg);
+                    }
+                }
+            })
+        }
+
+        var pageinationTool = function (num,maxPageSize) {
+            console.log(num,maxPageSize);
+            var index = num;
+            var minIndex = index - 2;
+            var maxIndex = 2+ Number(index);
+            if(minIndex <= 0){
+                minIndex = 1;
+                if (maxIndex > maxPageSize){
+                    maxIndex = maxPageSize;
+                }
+            }else{
+                if(maxIndex > maxPageSize){
+                    maxIndex = maxPageSize;
+                }
+            }
+            //遍历分页
+            $(".pagination>li").not($(".pagination>li:first")).not($(".pagination>li:last")).remove();
+            if(index != maxIndex){
+                $(".pagination>li:last").removeClass("disabled");
+            }else {
+                $(".pagination>li:last").addClass("disabled");
+            }
+
+            if(index != minIndex){
+                $(".pagination>li:first").removeClass("disabled");
+            }else {
+                $(".pagination>li:first").addClass("disabled");
+            }
+            for(var i = maxIndex; i >= minIndex ;i--){
+                if(i == index){
+                    $("<li class='active'><a href='javascript:;'>"+i+"</a></li>").insertAfter($(".pagination>li:first"));
+                }else {
+                    $("<li><a href='javascript:;'>"+i+"</a></li>").insertAfter($(".pagination>li:first"));
+                }
+            }
+        }
+        //分页点击
+        var pagination = function(){
+            //分页工具栏
+            $(".pagination-box>.pagination>li").click(function (event) {
+                //判断当前点击的页
+                if(!$(this).hasClass("disabled")|| !$(this).hasClass("active")){
+                    var index = $(this).text();
+                    if($(this).hasClass("last")){
+                        index = MaxPageNum;
+                    }else if($(this).hasClass("first")){
+                        index = 1;
+                    }
+                    $("input:hidden[name='pageNum']").val((index-1)*pageSize+1);
+                    pageNum = (index-1)*pageSize+1;
+                    clickPage();
+                    pageinationTool(index,MaxPageNum);
+                }
+                event.preventDefault();
+                pagination();
+            })
+        }
+
+        var deleteBtn = function(){
+            $(".tools>.delete").click(function () {
+                var $deleteNode = $(this).parent().parent().parent();
+                var id = $(this).data("id");
+                var user_id = $deleteNode.attr("index");
+                request.ajax(getContextPath()+"comment/delete/"+id,"DELETE",{"_method":"post","user_id":user_id,"status":1},false,function (data) {
+                    if(data.success){
+                        alert("删除成功");
+                       $deleteNode.remove();
+                        clickPage();
+                        MaxPageNum = $(".page_num").text();
+                        pageinationTool(1,Number(MaxPageNum));
+                        pagination();
+                    }
+                })
+            })
+        }
+
+        <!--多文本-->
+        editormd.emoji = {
+            path : "https://www.webfx.com/tools/emoji-cheat-sheet/",
+            ext:".png"
+        };
+
+        testEditor = editormd("c_content", {
+            width   : "100%",
+            height  : 200,
+            delay   : 1000,
+            watch : false,
+            syncScrolling : "single",
+            saveHTMLToTextarea:true,
+            path    : "../../static/editormd/lib/",
+            emoji : true,
+            imageUpload:true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: getContextPath()+"imageUpload",
+            taskList        : true,
+            tex             : true,  // 默认不解析
+            flowChart       : true,  // 默认不解析
+            sequenceDiagram : true,  // 默认不解析
+            placeholder:"请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论",
+
+
+            //自定义工具栏
+            toolbarIcons : function() {
+                // Or return editormd.toolbarModes[name]; // full, simple, mini
+                // Using "||" set icons align right.
+                return ["undo", "redo", "|","emoji", "bold","del","hr","italic", "quote","list-ul",
+                    "list-ol","hr","|","link","image","code-block","preformatted-text",
+                    "|","goto-line","preview","fullscreen", "watch","clear"]
+            }
+        });
+
+        $(".to-click").click(function(){
+            var content = testEditor.getHTML();
+            var sendToId;
+            if(content.trim().length == 0){
+                alert("请输入信息");
+                return false;
+            }else {
+                var data = new FormData();
+                data.append("content",content);
+                if (sendToId){
+                    data.append("to_id.id",sendToId)
+                }else{
+                    data.append("to_id.id",$(".author-info").data("id"));
+                }
+                data.append("object_id",$(".content-body").data("id"));
+                data.append("status","1");
+
+                //获取导航栏的用户数据
+                //
+                var header_img = $(".header-img>img").attr("src");
+                var header_name = $(".has-login>li:eq(2)").text();
+                var header_id = $(".has-login").data("id");
+                var $newMsg = $("<div class='content-box'>");
+                var date = new Date();
+                $newMsg.attr("data-id",header_id);
+                $newMsg.empty();
+                $newMsg.append("<div class='content-left'>" +
+                    "<a href='"+getContextPath()+"/UserCenter?id="+header_id+"'>" +
+                    "<img src='"+header_img+"' alt=''>" +
+                    "<p>"+header_name+"</p>" +
+                    "</a>"+
+                    "<div class='user-details'>"+
+                    "<div class='part1'>" +
+                    "<img src='"+header_img+"' alt=''>" +
+                    "<span>"+header_name+"</span>" +
+                    "</div>"+
+                    "<div class='part2'>"+
+                    "<a class='info' href='/UserCenter?id="+header_id+"'>个人信息</a>"+
+                    "<span class='air' style='float: right;width: 5%;padding: 1%'></span>"+
+                    "</div>"+
+                    "</div>"+
+                    "</div>" +
+                    "<div class='content-right'>" +
+                    "<div class='ctext editormd-html-preview'>" +
+                    content +
+                    "</div>" +
+                    "<div class='tools'>" +
+                    "<span class='data-time'>"+date.getFullYear() +"-" +date.getMonth() + "-" + date.getDate() + " " +date.getHours() + ":" +date.getMinutes()+":" + date.getSeconds()+"</span>" +
+                    "</div>" +
+                    "</div>");
+                if($(".content-list>.content-box").length == 0){
+                    $(".content-list").append($newMsg)
+                }else {
+                    $(".content-box").eq(0).before($newMsg);
+                }
+                $($newMsg).children().eq(0).children("a").hover(function () {
+                    var index = $(this).parent().parent().attr("index");
+                    $(this).siblings(".user-details").css({"display":"block"});
+                },function () {
+                    $(this).siblings(".user-details").removeAttr("style");
+                })
+                $.ajax({
+                    url:getContextPath()+"/comment/add",
+                    type:"post",
+                    data:data,
+                    async:false,
+                    processData: false,
+                    contentType: false,
+                    success:function (data) {
+                        if(!data.success){
+                            if(data.datas == "login"){
+                                window.location.href="/login";
+                            }else {
+                                alert(data.msg);
+                            }
+                        }else {
+                            alert("发送成功");
+                            clickPage()
+                            MaxPageNum = $(".page_num").text();
+                            pageinationTool(1,Number(MaxPageNum));
+                            pagination();
+                        }
+                    }
+                })
+            }
+        })
+
+        $("input[name='pageSize']").val(pageSize);
+        $("input[name='pageNum']").val(pageNum);
+        clickPage()
+        pageNum = 1;
+        MaxPageNum = $(".page_num").text();
+        pageinationTool(1,Number(MaxPageNum));
+        pagination();
+    })
+</script>
+</html>

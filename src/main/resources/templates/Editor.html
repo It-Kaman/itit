@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/editormd/css/style.css" />
+    <link rel="stylesheet" href="../static/editormd/css/editormd.css" />
+</head>
+<body>
+<div id="layout">
+    <header>
+        <h1>Simple example</h1>
+    </header>
+    <div id="test-editormd">
+        <textarea style="display:none;">[TOC]
+
+        #### Disabled options
+
+        - TeX (Based on KaTeX);
+        - Emoji;
+        - Task lists;
+        - HTML tags decode;
+        - Flowchart and Sequence Diagram;
+
+        #### Editor.md directory
+
+            editor.md/
+                    lib/
+                    css/
+                    scss/
+                    tests/
+                    fonts/
+                    images/
+                    plugins/
+                    examples/
+                    languages/
+                    editormd.js
+                    ...
+
+        ```html
+        &lt;!-- English --&gt;
+        &lt;script src="../dist/js/languages/en.js"&gt;&lt;/script&gt;
+
+        &lt;!-- 繁體中文 --&gt;
+        &lt;script src="../dist/js/languages/zh-tw.js"&gt;&lt;/script&gt;
+        ```
+        </textarea>
+    </div>
+</div>
+<button class="transform">sadsa</button>
+<script src="../static/js/jquery-3.4.1.js"></script>
+<script src="../static/editormd/editormd.js"></script>
+<script type="text/javascript">
+    var testEditor;
+
+    $(function() {
+        editormd.emoji = {
+            path : "https://www.webfx.com/tools/emoji-cheat-sheet/",
+            ext:".png"
+        };
+
+        testEditor = editormd("test-editormd", {
+            width   : "90%",
+            height  : 640,
+            delay   : 1000,
+            syncScrolling : "single",
+            saveHTMLToTextarea:true,
+            path    : "../static/editormd/lib/",
+            emoji : true,
+            imageUpload:true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "imageUpload",
+            taskList        : true,
+            tex             : true,  // 默认不解析
+            flowChart       : true,  // 默认不解析
+            sequenceDiagram : true,  // 默认不解析
+        });
+
+
+        $(".transform").click(function () {
+            console.log(testEditor.getHTML())
+        })
+    });
+</script>
+</body>
+</html>

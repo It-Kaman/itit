@@ -1,0 +1,62 @@
+section>article.content-body>.inner-box{
+    font-size: 16px;
+}
+section>article.content-body>.inner-box>div.part1{
+    line-height: 34px;
+    overflow: hidden;
+}
+section>article.content-body>.inner-box>div.part1>span{
+    font-size: 16px;
+}
+section>article.content-body>.inner-box>div.part1>ul.strong-show{
+    overflow: hidden;
+    padding-left: 1%;
+    /*margin-top: 26px;*/
+    width: 20%;
+    display: inline-block;
+    height: 34px;
+    float: left;
+    padding-top: 13px;
+}
+section>article.content-body>.inner-box>div.part1>ul.strong-show>li:not([class="air"])
+{
+    float: left;
+    width: 20%;
+    height: 8px;
+    border: 1px solid black;
+    display: none;
+}
+section>article.content-body>.inner-box>div.part1>ul.strong-show>li.air{
+    width: 10%;
+    height: 8px;
+    float: left;
+}
+section>article.content-body>.inner-box>div.part1>ul.strong-show>li.strong{
+    background: red;
+    display: block;
+    border: 1px solid red;
+}
+section>article.content-body>.inner-box>div.part1>ul.strong-show>li.medium{
+    background: orange;
+    border: 1px solid orange;
+    display: block;
+}
+section>article.content-body>.inner-box>div.part1>ul.strong-show>li.week{
+    background: yellow;
+    border: 1px solid yellow;
+    display: block;
+}
+section>article.content-body>.inner-box>div.part1>.strong-content{
+    float: left;
+    font-size: 17px;
+}
+section>article.content-body>.inner-box>.line{
+    margin-top: 20px;
+    height: 1px;
+    margin-bottom: 20px;
+}
+section>article.content-body>.inner-box>div.part3>a>span{
+    display: block;
+    width: 20%;
+    margin-top: 20px;
+}

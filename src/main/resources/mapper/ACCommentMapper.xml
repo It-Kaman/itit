@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.ACCommentDao">
+    <select id="queryAll" resultType="comment">
+        select * from itit_a_comment
+    </select>
+    <select id="findByQuery" parameterType="CommentQuery" resultType="Comment">
+        select id,content,article_id,from_id,to_id,create_date from itit_a_comment
+        <where>
+            <if test="object_id != null">
+                article_id = #{object_id}
+            </if>
+        </where>
+    </select>
+    <select id="queryCountByQuery" parameterType="CommentQuery" resultType="int">
+        select count(1) from itit_a_comment
+        <where>
+          <if test="object_id != null">
+              object_id = #{object_id}
+          </if>
+        </where>
+    </select>
+    <!--评论功能-->
+    <resultMap id="Base_COMMENT" type="Comment">
+        <id column="id" property="id"/>
+        <result property="object_id" column="article_id"></result>
+        <result column="create_date" property="create_date"></result>
+        <result column="content" property="content"></result>
+        <association property="from_id" columnPrefix="f_" javaType="User">
+            <id property="id" column="id"/>
+            <result column="anothername" property="anothername"/>
+            <result property="header" column="header"/>
+        </association>
+        <association property="to_id" columnPrefix="t_" javaType="User">
+            <id property="id" column="id"/>
+            <result column="anothername" property="anothername"/>
+            <result property="header" column="header"/>
+        </association>
+    </resultMap>
+
+    <select id="findByQuery2" parameterType="CommentQuery" resultMap="Base_COMMENT">
+        select
+        a.id,a.content,a.article_id,f.id as f_id,f.anothername as f_anothername,f.header as f_header, t.id as t_id,t.anothername as t_anothername,t.header as t_header,a.create_date
+        from itit_a_comment a
+        left join itit_user f
+        on from_id = f.id
+        left join itit_user t
+        on to_id = t.id
+        <where>
+            <if test="object_id != null">
+                article_id = #{object_id}
+            </if>
+        </where>
+        order by create_date asc
+    </select>
+
+    <insert id="add" parameterType="Comment">
+        insert into itit_a_comment(content,article_id,from_id,to_id,create_date) values (#{content},#{object_id},#{from_id.id},#{to_id.id},#{create_date})
+    </insert>
+
+    <delete id="deleteById">
+        delete from itit_a_comment where id = #{id};
+    </delete>
+</mapper>

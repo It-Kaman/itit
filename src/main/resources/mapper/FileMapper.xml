@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.FileDao">
+    <resultMap id="BASE_COLUMN" type="ItitFile">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result property="url" column="url"/>
+        <result property="size" column="size"></result>
+        <result column="object_id" property="object_id"/>
+        <result property="status" column="status"/>
+        <result property="user.id" column="author"/>
+    </resultMap>
+    <select id="findByQuery" parameterType="FileQuery" resultMap="BASE_COLUMN">
+        select id,name,url,object_id,status,author,size from itit_file
+        <trim suffixOverrides="AND || OR" prefix="WHERE">
+            <if test="name!=null and name !=''">
+                <bind name="likeName" value="'%' + _parameter.name + '%'" />
+                lower(name) like lower(#{likeName}) and
+            </if>
+            <if test="status != null and status !=''">
+                status = #{status} and
+            </if>
+            <if test="user != null and user.id !=null">
+                author = user.id and
+            </if>
+            <if test="object_id != null and object_id != ''">
+                object_id = #{object_id}
+            </if>
+        </trim>
+    </select>
+    <select id="queryById" resultType="ItitFile">
+        select  name,url,object_id,status,author from itit_file where id = #{id}
+    </select>
+    <insert id="add" parameterType="ItitFile">
+        insert into itit_file(name,url,object_id,status,author,size) values (#{name},#{url},#{object_id},#{status},#{user.id},#{size})
+    </insert>
+    <delete id="delete">
+        delete from itit_file where id = #{id}
+    </delete>
+    <delete id="deltetByobject_IdAndStatus">
+        delete from itit_file where object_id = #{object_id} and status = #{status}
+    </delete>
+</mapper>

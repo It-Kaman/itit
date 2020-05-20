@@ -1,0 +1,77 @@
+section{
+    height: 500px;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    margin-top: -250px;
+}
+section>div.box{
+    width: 100%;
+    height: 100%;
+    padding: 0 30%;
+    text-align: center;
+}
+section>div.box>div{
+    position: relative;
+}
+section>div.box>div>span.icon{
+    display: block;
+    color: rgb(7,193,96);
+    font-size: 100px;
+}
+section>div.box>div>span.msg{
+    font-size: 20px;
+    color: rgb(42,42,44);
+    display: block;
+}
+section>div.box>div>a{
+    overflow: hidden;
+}
+section>div.box>div>div{
+    width: 100%;
+    padding: 0% 35%;
+    height: 25px;
+    margin-top: 20px;
+}
+section>div.box>div>div>a{
+    width: 100%;
+    height: 100%;
+}
+
+section>div.box>div>div>a>span.back{
+    border: 1px solid rgb(42,42,44);;
+    display: block;
+    width: 100%;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 5px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+section>div.box>div>div>a:hover >span.back{
+    color: white;
+}
+
+section>div.box>div>div>a>span.back:after{
+    content: "";
+    position: absolute;
+    display: inline-block;
+    background: black;
+    width: 0%;
+    height: 50px;
+    left: -50px;
+    top: -10px;
+    left: -5px;
+    transform: rotate(8deg);
+    transition: all .5s cubic-bezier(0.2, 0.0, 0.2, 1);
+    z-index: -1;
+}
+section>div.box>div>div>a:hover >span:after{
+    width: 107%;
+}
+footer{
+    position: fixed;
+    bottom: 0px;
+}

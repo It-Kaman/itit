@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.TagDao">
+    <select id="selectAll" resultType="Tag">
+        select id,name from itit_tag
+    </select>
+
+    <select id="findByIds" parameterType="int" resultType="Tag">
+        select id,name from itit_tag where id in
+        <foreach collection="array" item="ids" separator="," close=")" open="(">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="findByQuery" parameterType="TagQuery" resultType="Tag">
+        select id,name from itit_tag
+        <where>
+            <if test="name != null and name !=''">
+                name = #{name}
+            </if>
+            <if test="id != null">
+                id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <select id="ArticleTagfindById" resultType="String" parameterType="int">
+        select t.name from itit_tag_article_middle m left join itit_tag t on tag_id = t.id
+        where m.article_id = #{id}
+    </select>
+
+    <select id="VideoTagfindById" resultType="String" parameterType="int">
+        select t.name from itit_tag_video_middle m left join itit_tag t on tag_id = t.id
+        where m.video_id = #{id}
+    </select>
+</mapper>

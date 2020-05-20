@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.AdminDao">
+
+    <!-- 登录 -->
+    <select id="login" resultType="Admin">
+        select *from itit_admin where loginName = #{loginName} and password = #{password}
+    </select>
+    <resultMap type="Admin" id="detailResultMap">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result column="loginName" property="loginName"/>
+        <result column="password" property="password"/>
+        <result column="header" property="header"/>
+        <result column="status" property="status"/>
+    </resultMap>
+    <select id="findByQuery" parameterType="AdminQuery" resultMap="detailResultMap">
+        select u.id,u.name,u.loginName,
+        <trim suffix=",">
+          <if test="password != null and password != ''">
+              u.password
+          </if>
+        </trim>
+        u.status,u.header
+        from itit_admin u
+        <where>
+            <if test="name != null and name != ''">
+                u.name = #{name}
+            </if>
+            <if test="loginName != null and loginName!=''">
+                u.loginName = #{loginName}
+            </if>
+            <if test="password != null and password!=''">
+                u.password = #{password}
+            </if>
+            <if test="status != null and status!=''">
+                u.status = #{status}
+            </if>
+            <if test="header != null and header!=''">
+                u.header = #{header}
+            </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="Admin" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into itit_admin(name,loginName,password,status,header) values
+        (#{name},#{loginName},#{password},#{status},#{header})
+    </insert>
+
+
+  <!--  <resultMap id="ResultById" type="Admin">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"/>
+        <result property="loginName" column="loginName"/>
+        <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="header" column="header"/>
+        <result property="dept.id" column="deptId"/>
+        <collection property="roles" ofType="Role" columnPrefix="roles_">
+            <id column="id" property="id"></id>
+        </collection>
+    </resultMap>
+    <select id="findById" resultMap="ResultById">
+         select u.*, m.roleId roles_id from itit_admin u left JOIN middle_itit_admin_role m  on u.id = m.itit_adminId  where u.id = #{id}
+    </select>-->
+    <update id="update" parameterType="Admin">
+        update itit_admin
+        <set>
+            <if test="name != null and name !=''">
+                name = #{name},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="header != null and header != ''">
+                header = #{header},
+            </if>
+            <if test="status != null and status !=''">
+                status = #{status},
+            </if>
+        </set>
+        where id =#{id}
+    </update>
+    
+    <delete id="deleteByIds">
+        delete from itit_admin where id in
+        <foreach collection="array" item="ids" close=")" open="(" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+
+    <!--<insert id="bind" parameterType="int">
+        insert into middle_itit_admin_role(itit_adminId,roleId) values(#{itit_adminId},#{roleId})
+    </insert>
+    
+    <delete id="unbind" parameterType="int">
+        delete from middle_itit_admin_role where itit_adminId = #{itit_adminId}
+    </delete>-->
+</mapper>

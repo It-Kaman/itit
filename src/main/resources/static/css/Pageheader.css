@@ -1,0 +1,179 @@
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('../static/fonts/glyphicons-halflings-regular.eot');
+    src: url('../static/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+    url('../static/fonts/glyphicons-halflings-regular.woff') format('woff'),
+    url('../static/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+    url('../static/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+.header{
+    background: #393836;
+    width: 100%;
+    min-width: 980px;
+}
+
+.navbar-body{
+    margin-top: 8px;
+    float:left;
+}
+
+.navbar-User{
+    margin-right: 200px;
+}
+
+.header-select{
+    width: 400px;
+    padding-top:8px;
+
+    /*position: absolute;*/
+    /*margin:  0 auto;*/
+}
+
+.navbar-right #userLi{
+    /*padding-top: 15px;*/
+    /*padding-bottom: 15px;*/
+    padding: 10px 15px;
+}
+
+.Left-title{
+    color: #fff;
+}
+
+
+/*顶部元素*/
+.userinfo,.NoLogin{
+    z-index: 15;
+    display: block;
+    font-size: 14px;
+    border-radius:10px;
+    left: 50%;
+    margin-left: -100px;
+    overflow: hidden;
+    position: absolute;
+    width: 250px;
+    height: 300px;
+    margin-top: 7px;
+    background-color: #fff;
+    box-shadow:0 5px 15px 0 rgba(0,0,0,.15);
+}
+
+.NoLogin img{
+    margin: 0 auto;
+    width: 220px;
+    height: 180px;
+    margin-top: 10px;
+    margin-left: 15px;
+    margin-right: 15px;
+    /*border: black 1px solid;*/
+}
+
+.NoLogin-line{
+    margin-top: 10px;
+    border-bottom: 1px solid  #e1e2e5;
+    margin-bottom: 10px;
+}
+
+.Register_Login,.NoLogin img
+{
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.NoLogin span{
+    margin-left:15px;
+    color: #6d757a;
+}
+
+.Register_Login{
+    width: 220px;
+    height:35px;
+}
+
+
+
+
+
+
+.userinfo .head-user{
+    padding: 10px 20px;
+    height: 100px;
+    border-bottom: 1px solid #eeeeee;
+}
+.userinfo .head-user .head-con p {
+    margin-top: 20px;
+    margin-bottom:4px;
+}
+.userinfo .head-user .head-con{
+    color: #9d9d9d;
+    margin-left:45%;
+    font-size: 14px;
+    /*height: 80px;*/
+}
+.head-img{
+    float: left;
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+}
+
+.user-name{
+    color: #000;
+    font-size:16px;
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.userinfo .head-other{
+    padding-top: 5px;
+    font-size: 15px;
+    border-bottom: 1px solid #eeeeee;
+    height: 150px;
+    color: black;
+}
+
+.userinfo .head-other a{
+    display: block;
+    color: black;
+}
+.userinfo .head-other a span{
+    padding: 15px 20px;
+    /*line-height: 20px;*/
+}
+.userinfo .head-other a:hover{
+    text-decoration: none;
+    color:#5bc0de;
+    background-color: #eeeeee;
+}
+
+.userinfo .head-out{
+    padding-top: 5px;
+    font-size: 15px;
+}
+.userinfo .head-out a{
+    display: block;
+    color: black;
+}
+
+.userinfo .head-out a:hover{
+    text-decoration: none;
+    color:#5bc0de;
+    background-color: #eeeeee;
+}
+.userinfo .head-out a span{
+    padding: 10px 20px;
+    line-height: 35px;
+}
+
+/*    头顶导航栏*/
+.header-left a{
+    font-size: 20px;
+}
+.header-left a:hover{
+    text-decoration: none;
+    color: #5bc0de;
+}
+.header-left a:link{
+    text-decoration: none;
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心-个人头像</title>
+    <link rel="stylesheet" href="../../static/css/User/header.css">
+</head>
+<body>
+    <div class="inner-box">
+        <div class="update-box">
+            <!--上传图片边框-->
+            <div class="container-bg">
+                <img id="update_img">
+                <label for="input_img" class="click-change">
+                    <imgcon></imgcon>
+                    <span>选择图片</span>
+                </label>
+                <label class="reset" for="input_img" style="display: none">
+                    <imgcon></imgcon>
+                    <span>重新选择</span>
+                </label>
+            </div>
+            <input type="file" id="input_img" name="file" accept="image/jpg,image/png, image/jpeg" multiple="multiple">
+        </div>
+        <div class="line"></div>
+        <div class="show-box">
+            <div class="now-header-box">
+                <img id="RightImage" class="RightImage"  th:src="${session.user.getHeader()}">
+                <div class="img-text">当前头像</div>
+                <p class="descript">请上传少于2M的图片，图片支持JPG、PNG格式</p>
+            </div>
+        </div>
+    </div>
+    <div class="btns">
+        <button id="update" disabled="true" class="btn btn-info update-btn disabled">保存</button>
+        <!-- <input id="update" type="button" class="btn btn-info update-btn disabled" value="保存" disabled="true"></input>-->
+    </div>
+</body>
+<script type="application/javascript">
+    $(function () {
+        //图片显示等
+        var input_img = document.querySelector("#input_img");
+        // input_img.click();
+        var cache_img;
+        input_img.addEventListener("change",function () {
+            if(input_img.value == "")
+            {
+                return;
+            }
+            var file = document.getElementById("input_img").files[0];
+            if(file == undefined)
+            {
+                return;
+            }else {
+                var fileType = file.type.split("/")[0];
+                if(fileType != "image")
+                {
+                    console.log("请上传图片");
+                }
+                var fileSize = Math.round(file.size / 1024 / 1024);
+                if(fileSize >= 2) {
+                    console.log("上传小于2M图片");
+                    return;
+                }
+                //获取img对象
+                var img = document.getElementById("RightImage");
+                var src_img =document.getElementById("update_img");
+                var img_label = document.getElementsByClassName("click-change")[0];
+                //建一条文件流来读取图片
+                var reader = new FileReader();
+                //根据url将文件添加的流中
+                reader.readAsDataURL(file);
+                //实现onload接口
+                reader.onload = function(e) {
+                    //获取文件在流中url
+                    url = reader.result;
+                    //将url赋值给img的src属性
+                    img.src = url;
+                    src_img.src = url;
+                    img_label.style.display = "none";
+                    // document.getElementsByClassName("reset")[0].style.display="block";
+                    document.getElementById("update").classList.remove("disabled");
+                    document.getElementById("update").disabled = false;
+                    document.getElementsByClassName("reset")[0].style.display="block";
+                    cache_img = document.querySelector("#input_img").files[0];
+                };
+            }
+        })
+        $("#update").on("click",function () {
+            var dataform = new FormData();
+            dataform.append("myImg",cache_img);
+            $.ajax({
+                url:"/imageUpdate",
+                type:"post",
+                data:dataform,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if(data){
+                        alert("保存成功!")
+                    }else {
+                        alert("请重新上传!")
+                    }
+                },
+                error: function () {
+                    console.log("上传失败！");
+                }
+            })
+        })
+    })
+</script>
+</html>

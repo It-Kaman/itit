@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <style>
+        section>.part2>.search-body>.tagList>ul{
+            overflow: hidden;
+            cursor: default;
+            height: 35px;
+            overflow-y: auto;
+        }
+        section>.part2>.search-body>.tagList>ul>li{
+            float: left;
+            width: 9%;
+            padding: .5% 1%;
+            text-align: center;
+        }
+        section>.part2>.search-body>.tagList>ul>li.active>span{
+            background: rgb(42,161,70);
+        }
+        section>.part2>.search-body>.tagList>ul>li>span {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            color: white;
+            display: inline-block;
+            background: rgba(37,40,43,1);
+            cursor: pointer;
+        }
+        section>.part2>.search-body>.tagList>ul>li>span:active{
+            background: rgba(42,161,70,.8);
+        }
+
+
+
+
+        section>.part2>.search-body>.video-list-box>ul{
+            overflow: hidden;
+            width: 100%;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li{
+            float: left;
+            width: 20%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            /*height: 200px;*/
+            padding: 0 1%;
+            border-radius: 5px;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li:nth-of-type(5n){
+            padding-right: 0.5%;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li:nth-of-type(5n+1){
+            padding-left: 0.5%;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a:hover{
+            text-decoration: none;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a>div.video_box{
+            width: 100%;
+            height: 230px;
+            background: #e8e8e8;
+            border-radius:6px;
+            border: 1px solid #2d2a2a;
+            transition: all .5s;
+            overflow: hidden;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a>div.video_box:hover{
+            box-shadow: 1px 2px 2px 2px rgba(0,0,0,.5);
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a>div.video_box>.img-box{
+            width: 100%;
+            height: 50%;
+            overflow: hidden;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a>div.video_box>.img-box>img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a>div.video_box>.info-box{
+            width: 100%;
+            height: 50%;
+            margin-top: 1%;
+            padding: 0 5%;
+            overflow: hidden;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a>div.video_box>.info-box>p{
+            font-size: 13px;
+            color: #2d2a2a;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a>div.video_box>.info-box>p.name{
+            width: 100%;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 40px;
+            text-overflow: ellipsis;
+            word-wrap: break-word;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a>div.video_box>.info-box>span{
+            margin-bottom: 5px;
+            display: inline-block;
+            width: 50%;
+            color: #99a2aa;
+        }
+        section>.part2>.search-body>.video-list-box>ul>li>a>div.video_box>.info-box>p.author{
+            color: #2ba246;
+        }
+
+        section>.part2>.search-body>.video-list-box>.pagination-box{
+            width: 75%;
+            padding-left: 25%;
+            overflow: hidden;
+        }
+        section>.part2>.search-body>.video-list-box>.pagination-box>span{
+            float: left;
+            display: inline-block;
+            line-height: 34px;
+            margin-top: 20px;
+            padding-right: 2%;
+        }
+
+        section>.part2>.search-body>.article-list-box #tag_Article{
+            margin-top: 5px;
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article>tbody>tr{
+            transition: transform .5s cubic-bezier(0.2, 0.0, 0.2, 1), color .5s cubic-bezier(0.2, 0.0, 0.2, 1), box-shadow .5s cubic-bezier(0.2, 0.0, 0.2, 1);
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article>tbody>tr>td{
+            background: #ffffff;
+            padding: 0px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article>tbody>tr:hover{
+            transform: translateY(-4px);
+            box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.10);
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box{
+            overflow: hidden;
+            border-radius: 5px;
+            background-color: white;
+            padding: 10px 2% 2px 2%;
+            width: 100%;
+            height: 100%;
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box>a{
+            color: #2d2a2a;
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box>a:hover{
+            text-decoration: none;
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box>a>h3{
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            width: 70%;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            /*word-break: break-word;*/
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box>a>p.description{
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            width: 80%;
+            word-break: break-word;
+            height: 40px;
+        }
+
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box>a>.info-box{
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box>a>.info-box>span{
+            width: 10%;
+            display: inline-block;
+            float: left;
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box>a>.info-box>span:hover{
+            color: #2ba246;
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box>a>.info-box>span.tags{
+            width: 20%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: inline-block;
+        }
+        section>.part2>.search-body>.article-list-box #tag_Article .article-box>a>.info-box>.createdate{
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<div class="tagList">
+    <span>标签Tag:</span>
+    <div class="value-box" hidden th:data-tags="${#request.getAttribute('tag')}"></div>
+    <ul class="user-select">
+    </ul>
+</div>
+<a id="seeVideo" href="javascript:;">点击选择视频</a>
+<a id="seeArticle" href="javascript:;">点击选择专栏</a>
+<div class="video-list-box">
+    <input type="hidden" id="pageNum" form="searchForm" name="pageNum">
+    <input type="hidden" id="pageSize" form="searchForm" name="pageSize"/>
+    <ul class="videoList"></ul>
+    <div class="pagination-box">
+        <span>共<span class="page_num">1</span>页</span>
+        <ul class="pagination">
+            <li class="disabled first">
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="disabled last">
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div style="display: none" class="article-list-box">
+    <table id="tag_Article"></table>
+</div>
+<div class="script">
+    <script type="application/javascript" src="../../static/js/search/TagSearch.js"/>
+</div>
+</body>
+</html>

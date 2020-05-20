@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+</head>
+<!-- <script type="application/javascript" th:src="@{../static/js/jquery-1.11.3.min.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{../static/css/bootstrap.css}">
+<link rel="stylesheet" type="text/css" th:href="@{../static/css/bootstrap-select.css}">
+<link rel="stylesheet" type="text/css" th:href="@{../static/css/UserInfoPage.css}">
+<script type="application/javascript" th:src="@{../static/js/bootstrap.js}"></script>
+<script type="application/javascript" th:src="@{../static/js/bootstrap-select.js}"></script> -->
+
+
+<link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../../static/icon/ali-icon/iconfont.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/font.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/common.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/header.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/footer.css">
+
+<!--<link rel="stylesheet" type="text/css" href="../../static/css/UserInfoPage.css">-->
+
+
+<style rel="stylesheet" type="text/css">
+    section{
+        margin-top: 150px;
+        background: white;
+        height: 1000px;
+        border-radius: 5px;
+        border: 1px solid #c6c8ca;
+        box-shadow: 0 2px 4px rgba(0,0,0,.14);
+        overflow: hidden;
+    }
+    section.container{
+        padding: 0px;
+    }
+    section>nav{
+        background: rgb(250,250,250);
+        height: 59px;
+        border-bottom: 1px solid #c6c8ca;
+        overflow: hidden;
+    }
+    section>nav>div{
+        float: left;
+        line-height: 59px;
+    }
+    section>nav>div:first-child{
+        color: rgb(140,140,140);
+        font-size: 16px;
+        width: 15%;
+        text-align: center;
+        border-right: 1px solid #c6c8ca;
+    }
+    section>nav>div.title{
+        font-size: 16px;
+        width: 50%;
+        padding-left: 2%;
+    }
+    section>aside{
+        float: left;
+        width: 15%;
+        border-right: 1px solid #c6c8ca;
+        height: 940px;
+        background: rgb(250,250,250)
+    }
+    section>aside>ul>li{
+        height: 50px;
+        cursor: pointer;
+        line-height: 50px;
+        font-size: 16px;
+        text-align: center;
+    }
+    section>aside>ul>li:hover{
+        background: rgb(238,238,238);
+    }
+    section>aside>ul>li.active{
+        background: rgb(7,193,96);
+        color: white;
+    }
+    section>article.content-body{
+        float: left;
+        width: 84%;
+        height: 940px;
+        padding: 0 5%;
+        padding: 5% 5% 5% 5%;
+    }
+
+
+
+
+</style>
+
+<body>
+<!--头部-->
+<header class="container-fluid">
+    <!--左边部分-->
+    <div class="icon-left">
+        <a href="/index"><i class="zhanku">IT学习网站</i></a>
+        <!--<a class="" href="#">首页</a>-->
+    </div>
+    <div class="air"></div>
+    <!--查询-->
+    <div class="Search-Modular">
+        <input type="text" data-ope="normal" class="search-content" name="search-content" list="search-list" placeholder="请输入搜索关键词">
+        <button class="iconfont icon-sousuo"></button>
+        <datalist id="search-list"></datalist>
+    </div>
+    <!--右边部分-->
+    <div class="header-right-list">
+        <!--未登录-->
+        <!--/*@thymesVar id="user" type="com.itit.entry.User"*/-->
+        <ul th:if="${session.user == null}" class="unlogin">
+            <li>
+                <a href="#">
+                    <button class="contribute-btn">投稿</button>
+                </a>
+                <div class="Contribute-list">
+                    <ul>
+                        <li>
+                            <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'" href="/upload/article/record">
+                                <i class="iconfont icon-nav"></i>
+                                <span>专栏投稿</span>
+                            </a>
+                        <li>
+                            <a th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                <i class="iconfont icon-shipin"></i>视频投稿
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="iconfont icon-yinpin"></i>音频管理
+                            </a>
+                        <li>
+                            <a href="#">
+                                <i class="iconfont icon-guanli"></i>投稿管理
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="/register">注册</a>
+            </li>
+            <li>
+                <a href="/login">登录</a>
+            </li>
+            <li>
+                <div class="header-img">
+                    <img th:src="${#request.getServletContext().getContextPath()}+'/static/img/header/default/akari.jpg'" class="img-circle" width="34px" height="34px"/>
+                    <div class="header-img-list">
+                        <ul>
+                            <li class="btn-group">
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/login'" href="/login"><div class="btn"><span>登录</span></div></a>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/register'" href="/register"><div class="btn"><span>注册</span></div></a>
+                            </li>
+                            <li>选择语言</li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <!--已登录-->
+        <ul th:if="${session.user != null}" class="has-login" th:data-id="${session.user.getId()}">
+            <li>
+                <a href="#">
+                    <button class="contribute-btn">投稿</button>
+                </a>
+                <div class="Contribute-list">
+                    <ul>
+                        <li>
+                            <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'"  href="/upload/article/record">
+                                <i class="iconfont icon-nav"></i>
+                                <span>专栏投稿</span>
+                            </a>
+                        <li>
+                            <a  th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                <i class="iconfont icon-shipin"></i>视频投稿
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="iconfont icon-yinpin"></i>音频管理
+                            </a>
+                        <li>
+                            <a href="#">
+                                <i class="iconfont icon-guanli"></i>投稿管理
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li><a href="#">历史</a></li>
+            <li th:text="${session.user.anothername}"></li>
+            <li><div class="header-img">
+                <img th:src="${session.user.header}" class="img-circle" width="34px" height="34px"/>
+                <div class="header-img-list">
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a th:href="'/UserCenter?id='+${session.user.getId()}">个人中心</a></li>
+                                <li>投稿管理</li>
+                                <li>订单中心</li>
+                                <li>我的课程</li>
+                            </ul>
+                        </li>
+                        <li>选择语言</li>
+                        <li><a style="display: block" th:href="${#request.getServletContext().getContextPath()}+'/logout'">退出</a></li>
+                    </ul>
+                </div>
+            </div></li>
+        </ul>
+    </div>
+</header>
+
+    <section class="container">
+        <i hidden="hidden" class="user_id" th:text="${#request.getAttribute('id')}"></i>
+        <!--导航提示栏-->
+        <nav>
+            <div>个人中心</div>
+            <div class="title">首页</div>
+        </nav>
+        <!--侧边菜单-->
+        <aside>
+            <ul>
+                <li class="active index">首&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页</li>
+                <li>个人信息</li>
+                <!--<li>个人收藏</li>-->
+                <li>个人头像</li>
+                <li>账号安全</li>
+            </ul>
+        </aside>
+        <article class="content-body">
+        </article>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="UserPageInfo">
+        <div class="UserPageInfo-left">
+            <span class="UserPageInfo-left-title">个人中心</span>
+            <ul class="UserPageInfo-ul">
+                <li class="UserPageInfo-li" value="首页"><p class="text-center P-hasClick">首<b style="width: 28px;display: inline-block"></b>页</p></li>
+                <li class="UserPageInfo-li" value="个人信息"><p class="text-center">个人信息</p></li>
+                <!--<li class="UserPageInfo-li" value="个人收藏"><p class="text-center">个人收藏</p></li>-->
+                <li class="UserPageInfo-li" value="个人头像"><p class="text-center">个人头像</p></li>
+                <li class="UserPageInfo-li" value="账号安全"><p class="text-center">账号安全</p></li>
+            </ul>
+        </div>
+        <div class="UserPageInfo-Right">
+            <div class="UserPageInfo-Right-title">
+                <span class="UserPageInfo-Right-title-nameText"></span>
+            </div>
+            <div class="UserPageInfo-Right-body">
+            </div>
+        </div>
+
+    </div>
+</body>
+
+
+<script type="application/javascript" src="../../static/js/jquery-3.4.1.js"></script>
+<script type="application/javascript" src="../../static/js/bootstrap.js"></script>
+<script type="application/javascript" src="../../static/js/bootstrap-select.js"></script>
+<script type="application/javascript" src="../../static/icon/ali-icon/iconfont.js"></script>
+<script type="application/javascript">
+    $(function() {
+        //获取用户id
+        var user_id = $(".user_id").text();
+        //获取右面页面元素
+        var $PageBody = $("article.content-body");
+        //标题
+        var $title = $("nav>div.title");
+        //获取左边页面元素
+        var $PageLeft = $("aside");
+        var $li = $PageLeft.children().eq(0).children();
+		//页面进入
+		$title.html("首页");
+		var src = "/UserCenter/index";
+		$.get(src, function (data) {
+            $PageBody.html(data);
+		});
+		
+		
+        $li.on("click", function () {
+            if($(this).hasClass("active"))
+            {
+                return false;
+            }
+            //获取点击的标题
+            var title = $(this).text();
+            title = title.replace(/\s+/,"");
+            $(this).addClass("active").siblings().removeClass("active");
+            if (title === "个人信息") {
+                $title.html("个人信息");
+                //清空
+                $PageBody.empty();
+                //开始建设
+                var src = "/UserCenter/info";
+                $.get({
+                    url:src,
+                        data:{"id":user_id},
+                    success: function (data) {
+                        $PageBody.html(data);
+                    }
+                });
+            }
+            else if (title == "个人收藏") {
+                $title.html("个人收藏");
+            }
+            else if (title == "首页") {
+                $title.html("首页");
+                //清空
+                $PageBody.empty();
+                var src = "/UserCenter/index";
+                $.get(src, function (data) {
+                    $PageBody.html(data);
+                });
+            }
+            else if (title == "个人头像") {
+                $title.html("个人头像");
+                //清空
+                $PageBody.empty();
+                var src = "/UserCenter/header";
+                $.get(src, function (data) {
+                    $PageBody.html(data);
+                });
+            }
+            else if(title == "账号安全")
+            {
+                $title.html("账号安全");
+                //清空
+                $PageBody.empty();
+                //开始建设
+                 var src = "/UserCenter/security";
+                $.get(src, function (data) {
+                    $PageBody.html(data);
+                });
+            }
+        })
+		
+    })
+</script>
+<script type="application/javascript">
+    $(function() {
+        $("#userli").hover(function () {
+            $("#userinfo").css("display","inline");
+        },function (){
+            $("#userinfo").css("display","none");
+        });
+    })
+</script>
+</html>

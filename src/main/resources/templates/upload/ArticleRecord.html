@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/css/bootstrap.css'" href="../../static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/icon/ali-icon/iconfont.css'" href="../../static/icon/ali-icon/iconfont.css">
+    <link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/css/Page/font.css'" href="../../static/css/Page/font.css">
+    <link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/css/Page/common.css'" href="../../static/css/Page/common.css">
+    <link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/css/Page/header.css'" href="../../static/css/Page/header.css">
+    <link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/css/Page/footer.css'" href="../../static/css/Page/footer.css">
+    <link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/plugins/bootstrap-table/css/bootstrap-table.css'" href="../../static/plugins/bootstrap-table/css/bootstrap-table.css">
+
+    <script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/js/ContextPath.js'" src="../../static/js/ContextPath.js"></script>
+    <script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/js/jquery-3.4.1.js'" src="../../static/js/jquery-3.4.1.js"></script>
+    <!--<script type="application/javascript" src="../../static/js/Page/header.js"></script>-->
+    <script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/js/bootstrap.js'" src="../../static/js/bootstrap.js"></script>
+    <script type="text/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/plugins/bootstrap-table/js/bootstrap-table.js'" src="../../static/plugins/bootstrap-table/js/bootstrap-table.js"></script>
+    <script type="text/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/plugins/bootstrap-table/js/bootstrap-table-locale-all.js'" src="../../static/plugins/bootstrap-table/js/bootstrap-table-locale-all.js"></script>
+    <script type="text/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/plugins/request.js'" src="../../static/plugins/request.js"></script>
+    <title>发表记录</title>
+    <style>
+        section{
+            overflow: hidden;
+            /*margin-top: 20px;*/
+            margin-top: 120px;
+            background: red;
+            padding: 0px !important;
+            background: rgb(255,255,255);
+        }
+        section>aside{
+            float: left;
+            width: 20%;
+            background: rgb(37,40,43);
+            height: 1087px;
+            transition: width .5s;
+        }
+        section>aside.aside_close{
+            width: 3%;
+        }
+        section>aside>nav{
+            padding-left: 10%;
+            color: rgba(255,255,255,.8);
+        }
+        section>aside>nav>span.iconfont:hover{
+            color: white;
+        }
+        section>aside>nav>span.icon-caidan{
+            color: rgba(255,255,255,.8);
+            font-size: 25px;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        section>aside>ul{
+            padding-left: 0px;
+        }
+        section>aside>ul>li{
+            padding-left: 10%;
+            height: 60px;
+            font-size: 18px;
+            overflow: hidden;
+        }
+        section>aside>ul>li>a{
+            color: rgb(255,255,255);
+            font-size: 18px;
+            display: block;
+            opacity: .7;
+        }
+        section>aside>ul>li.active >a{
+            color: rgb(6,192,95);
+            opacity: 1;
+        }
+        section>aside>ul>li:hover >a{
+            opacity: 1;
+            color: whitesmoke;
+        }
+        section>aside>ul>li>a>.iconfont{
+            font-size: 25px;
+            display: inline-block;
+            height: 60px;
+            line-height: 60px;
+            overflow: hidden;
+        }
+        section>aside>ul>li>a>span{
+            height: 60px;
+            display: inline-block;
+            line-height: 60px;
+            overflow: hidden;
+            padding-left: 20%;
+        }
+        section>div.content-body{
+            float: left;
+            width: 80%;
+            transition: all .5s;
+        }
+        section>div.aside_close{
+            width: 97%;;
+        }
+        section>div.content-body>nav{
+            height: 39px;
+            border-bottom: 1px solid #cdcdcd;
+            line-height: 40px;
+            padding-left: 5%;
+            font-size: 17px;
+        }
+        section>div.content-body>.part1{
+            height: 1049px;
+            width: 100%;
+            padding: 60px 10% 60px 10%;
+        }
+
+
+        .btn-weixin-green{
+            background: rgb(43,162,70);
+            color: white;
+        }
+        #table_video>tbody>tr>td>img.record-header{
+            height: 150px;
+            width: 90%;
+            object-fit: cover;
+        }
+        .air{
+            float: right;
+            width: 5%;
+            height: 30px;
+        }
+        .table{
+            table-layout:fixed;
+            word-break:break-all;
+            width: 100% !important;
+        }
+        .fixed-table-border{
+            width: 100% !important;
+        }
+    </style>
+    <script>
+        $(function () {
+            request.ajax(getContextPath()+"search/hot","get","",true,function (data) {
+                if(data.success){
+                    data.datas.forEach(function (element) {
+                        $("<option name='content' value='"+element.searchName+"'></option>").attr("label","搜索次数:"+element.num).appendTo("#search-list");
+                    })
+                    $("input[name='search-content']").attr("placeholder",data.showtag.searchName);
+                }
+            })
+        })
+
+        $("input[name='search-content']").keyup(function () {
+            $(this).attr("data-ope","clear");
+        })
+
+        $(".Search-Modular>button.icon-sousuo").click(function () {
+            var name = $("input[name='search-content']").attr("placeholder");
+            if( $("input[name='search-content']").data("ope") != "clear"){
+                window.location.href = getContextPath()+"search?name="+name;
+            }else {
+                window.location.href = getContextPath()+"search?name="+$("input[name='search-content']").val();
+            }
+        })
+    </script>
+</head>
+<body>
+    <!--头部-->
+    <header class="container-fluid">
+        <!--左边部分-->
+        <div class="icon-left">
+            <a href="/index"><i class="zhanku">IT学习网站</i></a>
+            <!--<a class="" href="#">首页</a>-->
+        </div>
+        <div class="air"></div>
+        <!--查询-->
+        <div class="Search-Modular">
+            <input type="text" data-ope="normal" class="search-content" name="search-content" list="search-list" placeholder="请输入搜索关键词">
+            <button class="iconfont icon-sousuo"></button>
+            <datalist id="search-list"></datalist>
+        </div>
+        <!--右边部分-->
+        <div class="header-right-list">
+            <!--未登录-->
+            <!--/*@thymesVar id="user" type="com.itit.entry.User"*/-->
+            <ul th:if="${session.user == null}" class="unlogin">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'" href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/register">注册</a>
+                </li>
+                <li>
+                    <a href="/login">登录</a>
+                </li>
+                <li>
+                    <div class="header-img">
+                        <img th:src="${#request.getServletContext().getContextPath()}+'/static/img/header/default/akari.jpg'" class="img-circle" width="34px" height="34px"/>
+                        <div class="header-img-list">
+                            <ul>
+                                <li class="btn-group">
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/login'" href="/login"><div class="btn"><span>登录</span></div></a>
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/register'" href="/register"><div class="btn"><span>注册</span></div></a>
+                                </li>
+                                <li>选择语言</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!--已登录-->
+            <ul th:if="${session.user != null}" class="has-login" th:data-id="${session.user.getId()}">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'"  href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a  th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="#">历史</a></li>
+                <li th:text="${session.user.anothername}"></li>
+                <li><div class="header-img">
+                    <img th:src="${session.user.header}" class="img-circle" width="34px" height="34px"/>
+                    <div class="header-img-list">
+                        <ul>
+                            <li>
+                                <ul>
+                                    <li><a th:href="'/UserCenter?id='+${session.user.getId()}">个人中心</a></li>
+                                    <li>投稿管理</li>
+                                    <li>订单中心</li>
+                                    <li>我的课程</li>
+                                </ul>
+                            </li>
+                            <li>选择语言</li>
+                            <li><a style="display: block" th:href="${#request.getServletContext().getContextPath()}+'/logout'">退出</a></li>
+                        </ul>
+                    </div>
+                </div></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+        <!--侧边栏-->
+        <aside>
+            <nav>
+                <span class="iconfont icon-caidan"></span>
+            </nav>
+            <ul class="user-select">
+                <li><a href="/upload/video"><i class="iconfont icon-shangchuan"></i><span>视频投稿</span></a></li>
+                <li><a href="/upload/video/record/"><i class="iconfont icon-lishi"></i><span>投稿记录</span></a></li>
+                <li><a href="/upload/article"><i class="iconfont icon-lunkuodasan-"></i><span>文章发表</span></a></li>
+                <li class="active"><a href="/upload/article/record/"><i class="iconfont icon-lishishuju"></i><span>发表记录</span></a></li>
+            </ul>
+        </aside>
+        <div class="content-body">
+            <nav class="user-select">
+                投稿记录
+            </nav>
+            <div class="part1" style="padding: 0">
+                <div id="toolbar">
+                    <a href="/upload/article" type="button" class="btn btn-weixin-green">投稿</a>
+                    <button type="button" data-ope="delete" class="btn btn-weixin-green">删除/下架/取消</button>
+                    <button type="button" data-ope="edit" class="btn btn-weixin-green">编辑</button>
+                </div>
+                <!-- bootstrap table插件 -->
+                <table id="table_video"></table>
+            </div>
+        </div>
+    </section>
+    <!--底部-->
+    <footer>
+        <label>&COPY;CopyRight From It-Kaman.All Rights Reserved.</label>
+    </footer>
+</body>
+<!--<script type="application/javascript" src="../../static/js/Page/header.js"></script>-->
+<script>
+    $(".icon-caidan").click(function () {
+        $("section>aside").toggleClass("aside_close");
+        $("section>div.content-body").toggleClass("aside_close");
+    })
+
+    $(function () {
+        var queryURL = "/upload/article/record"
+        $table = $('#table_video').bootstrapTable({
+            url: queryURL,
+            method: 'GET',
+            uniqueId: 'id',
+            striped: true,
+            cache: false,
+            sortable: true,
+            sortOrder: "desc",
+            sidePagination: "server",
+            undefinedText: '--',
+            toolbar: '#toolbar',
+            height:1020,
+            pagination: true,                 //是否要分页
+            //是否显示分页
+            pageNumber: 1,
+            //初始化加载第一页，默认第一页,并记录
+            pageSize: 10,                      //默认每页显示多少条记录
+            //每页显示的数量
+            pageList: [5,10, 15, 25],
+            theadClasses:"thead-dark",
+
+
+            //表格加载数据的时候会触发该方法,次方法一般用于添加额外参数或者修改参数名
+            queryParams: function(params) {
+                delete params.search;
+                delete params.sort;
+                delete params.order;
+                params.pageSize=params.limit;
+                delete params.limit;
+                params.pageNum=params.offset;
+                delete params.offset;
+
+
+                var nameParam = $("#searchForm").find("input[name='name']").val();
+                var idParam =$("#toolbar>button[data-ope='back']").attr("data-id");
+                if(nameParam){
+                    params.name=nameParam;
+                }else if(idParam != undefined ){
+                    params.parentId = idParam;
+                }
+                return params;
+            },
+            columns: [{                       //表格显示的列
+                checkbox: true,
+                width:3,
+                widthUnit:"%",
+            },
+                {
+                    field: 'name',
+                    title: '标题',
+                    width:18,
+                    widthUnit:"%",
+                    valign:"middle",
+                    formatter:nameformatter,
+                },
+                {
+                    field:'column',
+                    title: '标签',
+                    formatter:tagFormatter,
+                    width:20,
+                    widthUnit:"%",
+                    valign:"middle",
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    sortable: true,
+                    formatter:statusFormatter,
+                    width:10,
+                    widthUnit:"%",
+                    valign:"middle",
+                },
+                {
+                    field: 'createdate',
+                    title: '创建时间',
+                    sortable: true,
+                    width:24,
+                    widthUnit:"%",
+                    formatter:dateFormatter,
+                },
+                {
+                    field: 'reason',
+                    title: '原因',
+                    width:11,
+                    widthUnit:"%",
+                    valign:"middle",
+                },
+                {
+                    title: '操作',
+                    width:14,
+                    widthUnit:"%",
+                    formatter:buttonmatter,
+                    valign:"middle",
+                }
+              ],
+            onLoadSuccess: function () {
+            },
+            onLoadError: function () {
+            },
+
+            //获取到服务器数据会触发该方法,该方法一般用于处理数据的格式
+            responseHandler: function(res) {
+                //数据响应回来会触发该方法
+                //如果是server分页,数据比如按照如下格式
+                //{“rows”:数据,”total”:总的记录数}
+                return {
+                    "total": res.count,
+                    //总页数
+                    "rows": res.datas //数据
+                };
+                return res;
+            }
+        });
+        function nameformatter(value,row,index) {
+            console.log(row);
+            if(row.status != 2){
+                return "<a href='"+getContextPath()+"articles/page/AC"+row.num+"'>"+row.name+"</a>";
+            }else{
+                return row.name;
+            }
+        }
+        function tagFormatter(value,row,index) {
+           return value;
+        }
+        function statusFormatter(value,row,index) {
+            if (row.status == 0)
+            {
+                return"<span style='color: rgb(38,41,44);'>审核中</span>";
+            }else if(row.status == 1){
+                return"<span style='color: rgb(255,59,48);'>已通过</span>";
+            }else if(row.status == 2){
+                return"<span style='color: rgb(7,193,96);'>不通过</span>";
+            }
+        }
+        function dateFormatter(value,row,index) {
+            var year = row.createdate.slice(0,row.createdate.indexOf("T"));
+            var time = row.createdate.slice(row.createdate.indexOf("T")+1,row.createdate.indexOf("."));
+            return year + " " +time;
+        }
+        function buttonmatter(value,row,index) {
+            var name;
+
+            if(row.status == 0)
+            {
+                return "<a href='/upload/article/record/"+row.id+"/edit' class='btn btn-weixin-green'>修改</a>&nbsp;<button data-ope='delete'  class='btn btn-weixin-green' data-id='"+row.id+"'>取消</button>"
+            }else if (row.status == 2){
+                return "<button data-ope='delete'  class='btn btn-weixin-green' data-id='"+row.id+"'>清除</button>"
+            }else if(row.status == 1){
+                return "<button data-ope='delete'  class='btn btn-weixin-green' data-id='"+row.id+"'>下架</button>"
+            }
+        }
+
+        $("#toolbar>button").click(function () {
+            var selects = $table.bootstrapTable("getAllSelections");
+            var opt = $(this).data("ope");
+            if(opt == "edit"){
+                if (selects.length != 1){
+                    alert("只能选择一个");
+                    return;
+                }
+                window.location.href = "/upload/article/record/"+selects[0].id+"/edit";
+            }else if(opt == "back"){
+                $(this).removeAttr("data-id")
+                $table.bootstrapTable("refresh");
+            }else if(opt == "delete"){
+                var selects = $table.bootstrapTable("getAllSelections");
+                if(selects.length == 0){
+                    alert("至少选择一个");
+                    return;
+                }
+                var arrayMap = selects.map(function (element,index) {
+                    return element.id;
+                })
+                $.ajax({
+                    url:"/upload/article/record/"+arrayMap.join(","),
+                    data:"_method=delete",
+                    type:"post",
+                    success:function (data) {
+                        if (data.success){
+                            //删除成功
+                            alert("删除成功");
+                            $table.bootstrapTable('refresh');
+                        }else {
+                            alert(data.msg)
+                        }
+                    }
+                })
+            }
+        })
+
+        $table.on("click","button",function (){
+            var id = $(this).data("id");
+            data = "_method=delete";
+            if($(this).data("ope") == "delete"){
+                request.ajax("/upload/article/record/"+id,"POST",data,true,function (data) {
+                    if (data.success){
+                        //删除成功
+                        alert("删除成功");
+                        $table.bootstrapTable('refresh');
+                    }else {
+                        alert(data.msg)
+                    }
+                })
+            }
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<!--<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}">-->
+<!--<script type="application/javascript" th:src="@{/js/jquery-1.11.3.min.js}"></script>-->
+<!--<script type="application/javascript" th:src="@{/js/bootstrap.js}"></script>-->
+
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/css/bootstrap.css'" href="../static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/icon/ali-icon/iconfont.css'" href="../static/icon/ali-icon/iconfont.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} + '/static/css/Page/font.css'" href="../static/css/Page/font.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} + '/static/css/Page/common.css'" href="../static/css/Page/common.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} +'/static/css/Page/header.css'" href="../static/css/Page/header.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} + '/static/css/Page/footer.css'" href="../static/css/Page/footer.css">
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()} + '/static/js/jquery-3.4.1.js'" src="../static/js/jquery-3.4.1.js"></script>
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()} +'/static/js/Page/header.js'" src="../static/js/Page/header.js"></script>
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()} +'/static/js/bootstrap.js'" src="../static/js/bootstrap.js"></script>
+
+<style>
+    section>.title-show{
+        width: 100%;
+        padding-left: 5%;
+        padding-right: 5%;
+        /*height: 90px;*/
+        margin-top: 50px;
+        /*background: black;*/
+        /*text-align: center;*/
+        overflow: hidden;
+    }
+    section>.title-show>.title-container{
+        width: 100%;
+        overflow: hidden;
+    }
+    section>.title-show>.title-container>.title-line{
+        width: 40%;
+        margin-top: 44px;
+        float: left;
+    }
+    section>.title-show>.title-container>span{
+        width: 20%;
+        display: inline-block;
+        float: left;
+        line-height: 90px;
+        font-size: 35px;
+        text-align: center;
+    }
+    section>.title-show>.content-label>label{
+        font-size: 20px;
+        display: block;
+    }
+    section>.input-box{
+        /*background: black;*/
+        margin-top: 50px;
+        padding: 0% 10%;
+        position: relative;
+    }
+    section>.input-box>.inner-box{
+        background: white;
+        border-radius: 10px;
+        width: 100%;
+        height: 450px;
+        overflow: hidden;
+        box-shadow: 2px 1px 1px 1px rgba(0,0,0,.05);
+    }
+    section>.input-box>.inner-box>div{
+        margin-top: 30px;
+        width: 100%;
+        padding-left: 30%;
+    }
+    section>.input-box>.inner-box label{
+        font-size: 20px;
+    }
+    section>.input-box>.inner-box input[type="text"],section>.input-box>.inner-box input[type="password"]{
+        width: 65%;
+    }
+    section>.input-box>.inner-box .error{
+        margin-top: 10px;
+    }
+
+    section>.input-box>.inner-box>div>span:nth-of-type(1){
+        float: left;
+    }
+    section>.input-box>.inner-box>div>span:nth-of-type(2){
+        padding-left: 22%;
+    }
+    section>.input-box>.inner-box>div.btn-box{
+        bottom: 20px;
+        position: absolute;
+        width:55%;
+    }
+    section>.input-box>.inner-box>div.btn-box>button{
+        width: 45%;
+    }
+
+    footer{
+        position: fixed;
+        bottom: 0px;
+    }
+    /*.PublicFooter{
+        padding: 20px 0;
+        width: 100%;
+        position: fixed;
+        bottom: 0px;
+        !*margin-top: 70px;*!
+        background-color: #f6f9fa ;
+        min-height: 50px;
+        border: 1px solid transparent;
+    }
+    .Ide-footer-box{
+        display: flex;
+        font-size: 14px;
+    }
+    .Ide-footer-item{
+        flex: 2;
+        !*padding-right: 40px;*!
+        margin-right: 40px;
+        border-right: 1px solid #000000;
+    }
+    .Ide-footer-set{
+        max-width: 75%;
+        max-height: 900px;
+        margin: 0 auto;
+    }
+    .bt{
+        font-size: 16px;
+        color: #999;
+        display: block;
+        height: 20px;
+        margin-bottom: 20px;
+    }
+    .Ide-footer-item ul a{
+        margin-bottom: 10px;
+        cursor: pointer;
+        display: inline-block;
+        color: #222;
+        text-decoration:none
+    }
+    .Ide-footer-item ul a:visited{
+        text-decoration: none;
+    }
+    .Ide-footer-item ul a:hover{
+        text-decoration: none;
+        color: #5bc0de;
+    }
+    .Ide-footer-item ul{
+        height: 65px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }*/
+</style>
+<body>
+    <!--头部-->
+    <header class="container-fluid">
+        <!--左边部分-->
+        <div class="icon-left">
+            <a href="/index"><i class="zhanku">IT学习网站</i></a>
+            <!--<a class="" href="#">首页</a>-->
+        </div>
+        <div class="air"></div>
+        <!--查询-->
+        <div class="Search-Modular">
+            <input type="text" data-ope="normal" class="search-content" name="search-content" list="search-list" placeholder="请输入搜索关键词">
+            <button class="iconfont icon-sousuo"></button>
+            <datalist id="search-list"></datalist>
+        </div>
+        <!--右边部分-->
+        <div class="header-right-list">
+            <!--未登录-->
+            <!--/*@thymesVar id="user" type="com.itit.entry.User"*/-->
+            <ul th:if="${session.user == null}" class="unlogin">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'" href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/register">注册</a>
+                </li>
+                <li>
+                    <a href="/login">登录</a>
+                </li>
+                <li>
+                    <div class="header-img">
+                        <img th:src="${#request.getServletContext().getContextPath()}+'/static/img/header/default/akari.jpg'" class="img-circle" width="34px" height="34px"/>
+                        <div class="header-img-list">
+                            <ul>
+                                <li class="btn-group">
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/login'" href="/login"><div class="btn"><span>登录</span></div></a>
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/register'" href="/register"><div class="btn"><span>注册</span></div></a>
+                                </li>
+                                <li>选择语言</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!--已登录-->
+            <ul th:if="${session.user != null}" class="has-login" th:data-id="${session.user.getId()}">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'"  href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a  th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="#">历史</a></li>
+                <li th:text="${session.user.anothername}"></li>
+                <li><div class="header-img">
+                    <img th:src="${session.user.header}" class="img-circle" width="34px" height="34px"/>
+                    <div class="header-img-list">
+                        <ul>
+                            <li>
+                                <ul>
+                                    <li><a th:href="'/UserCenter?id='+${session.user.getId()}">个人中心</a></li>
+                                    <li>投稿管理</li>
+                                    <li>订单中心</li>
+                                    <li>我的课程</li>
+                                </ul>
+                            </li>
+                            <li>选择语言</li>
+                            <li><a style="display: block" th:href="${#request.getServletContext().getContextPath()}+'/logout'">退出</a></li>
+                        </ul>
+                    </div>
+                </div></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container login-box"><!--width 100% -->
+        <div class="title-show">
+            <div class="title-container">
+                <div class="line title-line"></div>
+                <span style="display: inline-block">用户登录</span>
+                <div class="line title-line"></div>
+            </div>
+        </div>
+        <div class="input-box">
+            <div class="inner-box">
+                <div>
+                    <label for="username">帐号:</label>
+                    <input type="text" class="form-control" id="username" placeholder="Username">
+                </div>
+                <div id="usernameError" hidden="hidden" class="alert alert-danger alert-dismissable error" role="alert">
+                    <button type="button" class="close" aria-label="Close"><span class="errorLcon" aria-hidden="true">&times;</span></button></button>
+                    <strong>错误!</strong><span></span>
+                </div>
+
+                <div>
+                    <label for="password">密码:</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password">
+                </div>
+                <div id="passwordError" hidden="hidden" class="alert alert-danger alert-dismissable error" role="alert">
+                    <button type="button" class="close" aria-label="Close"><span class="errorLcon" aria-hidden="true">&times;</span></button></button>
+                    <strong>错误!</strong><span></span>
+                </div>
+
+                <div class="think">
+                    <span>没有账号？<a href="#">立即注册</a></span>
+                    <span><input type="checkbox" name="remember">记住密码</span>
+                    <span><a href="#">忘记密码>></a></span>
+                </div>
+                <div class="btn-box">
+                    <button id="submit" type="submit" class="btn btn-info btn-lg">登录</button>
+                    <button id="reset" type="reset" class="btn btn-lg">重置</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--底部-->
+    <footer>
+        <label>&COPY;CopyRight From It-Kaman.All Rights Reserved.</label>
+    </footer>
+    <!--<div class="PublicFooter">
+        <div class="Ide-footer-box Ide-footer-set">
+            <div class="Ide-footer-item">
+                <span class="bt">It学习网站</span>
+                <ul>
+                    <a target="_blank">联系我们</a>
+                    <a target="_blank">加入我们</a>
+                    <a target="_blank">关于我们</a>
+                </ul>
+            </div>
+            <div class="Ide-footer-item">
+                <span class="bt">部分功能</span>
+                <ul>
+                    <a>帮助中心</a>
+                    <a>小问卷(待研发)</a>
+                    <a>相关功能</a>
+                    <a>相关功能</a>
+                    <a>相关功能</a>
+                    <a>相关功能</a>
+                    <a>相关功能</a>
+                </ul>
+            </div>
+        </div>
+    </div>-->
+
+    <script type="application/javascript">
+        $(function(){
+            $username = $("#username");
+            $password = $("#password");
+            $submit = $("#submit");
+            $usernameError = $("#usernameError");
+            $passwordError = $("#passwordError");
+            //错误提示关闭按钮
+            $lcon = $(".errorLcon");
+            $("#userli").hover(function () {
+                $("#userinfo").css("display","inline");
+            },function (){
+                $("#userinfo").css("display","none");
+            });
+
+            $submit.click(function () {
+                var username = $username.val();
+                var password = $password.val();
+                console.log(username == "");
+                if(username != "" && password != "")
+                {
+                    $.ajax({
+                        url: "/login",
+                        type:"post",
+                        data:{"username":username,"password":password},
+                        contentType : "application/x-www-form-urlencoded",
+                        success:function (data) {
+                            if(data === "success"){
+                                window.location.href = "/";
+                            }else{
+                                $passwordError.removeAttr("hidden");
+                                $("#passwordError span:last").html("用户或密码错误！");
+                            }
+                        }
+                    })
+                }else {
+                    if (username == "") {
+                        $usernameError.removeAttr("hidden");
+                        $("#usernameError span:last").html("用户账号不能为空！");
+                    }
+                    if(password == "")
+                        $passwordError.removeAttr("hidden");
+                        $("#passwordError span:last").html("用户密码不能为空！");
+                    }
+            })
+
+
+            //    关闭图标隐藏
+            $lcon.click(function () {
+                $(this.parentElement.parentElement).attr({hidden:"hidden"});
+            })
+
+        })
+    </script>
+
+</body>
+</html>

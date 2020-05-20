@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.UserDao">
+    <select id="SelectAllByUserId" parameterType="int" resultType="User">
+        select id,username,password,sex,age,anothername,role,phone,sign,website,header,email from itit_user where id = #{id}
+    </select>
+    <select id="SelectUserByUsernameAndPassword" resultType="User" parameterType="String">
+        select id,username,role,anothername,header from itit_user where username = #{username} and password = #{password}
+    </select>
+
+    <select id="selectUserByUser" resultType="User" parameterType="User">
+        select id,username,password,name,sex from itit_user
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="username != null">
+                and username = #{username}
+            </if>
+            <if test="password != null">
+                and password = #{password}
+            </if>
+            <if test="name != null">
+                and name = #{name}
+            </if>
+            <if test="sex != null">
+                and sex = #{sex}
+            </if>
+        </trim>
+    </select>
+    
+    <select id="SelectCountByUser" parameterType="User" resultType="int">
+        select count(1) from itit_user
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="username != null">
+                and username = #{username}
+            </if>
+            <if test="password != null">
+                and password = #{password}
+            </if>
+            <if test="sex != null">
+                and sex = #{sex}
+            </if>
+            <if test="age != null">
+                and age = #{age}
+            </if>
+            <if test="anothername != null">
+                and anothername = #{anothername}
+            </if>
+            <if test="role != null">
+                and role = #{role}
+            </if>
+            <if test="phone != null">
+                and phone = #{phone}
+            </if>
+            <if test="sign != null">
+                and sign = #{sign}
+            </if>
+            <if test="website != null">
+                and website = #{website}
+            </if>
+            <if test="header != null">
+                and header = #{header}
+            </if>
+            <if test="email != null">
+                and email = #{email}
+            </if>
+        </trim>
+    </select>
+    <insert id="InsertIntoUserByRegister" parameterType="User" useGeneratedKeys="true">
+        Insert into itit_user(username,password,sex,anothername,role,phone,header,email,job_id) values
+        (#{username},#{password},#{sex},#{anothername},#{role},#{phone},#{header},#{email},#{job_id})
+    </insert>
+    
+    <update id="UpdateByUser" parameterType="User">
+        update itit_user
+        <set>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex = #{sex},
+            </if>
+            <if test="anothername != null and anothername != ''">
+                anothername = #{anothername},
+            </if>
+            <if test="role != null and role != ''">
+                role = #{role},
+            </if>
+            <if test="sign != null and sign != ''">
+                sign = #{sign},
+            </if>
+            <if test="website != null and website !=''">
+                website = #{website},
+            </if>
+            <if test="header != null and header != ''">
+                header = #{header},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+        </set>
+        where id= #{id}
+    </update>
+
+    <resultMap id="SecurityUserMap" type="User">
+        <id property="id" column="id"></id>
+        <association property="security" column="security_id" javaType="security" select="com.itit.dao.Ifac.SecurityDao.GetSecurityById"></association>
+    </resultMap>
+    <select id="selectSecurityByUserId" parameterType="int" resultMap="SecurityUserMap">
+        select id,security_id from itit_user where id = #{id}
+    </select>
+
+    <update id="updateSecruityId" parameterType="int">
+        update itit_user set security_id = #{security_id} where id = #{id}
+    </update>
+
+    <resultMap id="searchUser" type="UserSearchVo">
+        <id property="id" column="id"></id>
+        <result column="anothername" property="anothername"></result>
+        <result column="username" property="username"/>
+        <result property="role" column="role"/>
+        <result property="sign" column="sign"/>
+        <result property="sex" column="sex"/>
+        <result column="header" property="header"/>
+        <result column="videoNum" property="videoNum"/>
+        <result column="articleNum" property="articleNum"/>
+    </resultMap>
+    <select id="queryByUserQuery" parameterType="UserQuery" resultMap="searchUser">
+        select
+        u.id,u.username,u.anothername,u.role,u.sign,u.sex,u.header,
+        (select count(1) from itit_video v where v.author = u.id) as videoNum,
+        (select count(1) from itit_article a where a.author = u.id)as articleNum,
+        (select count(1) from itit_user_fans f where f.User_id = u.id) as fansNum
+        from itit_user u
+          <where>
+              <if test="anothername != null and anothername != ''">
+                  <bind name="likeName" value="'%' + _parameter.anothername + '%'" />
+                  anothername like #{likeName}
+              </if>
+          </where>
+          <trim prefix=" order by " suffixOverrides=",">
+              <choose>
+                  <when test="fans != null and fans != false">
+                      fansNum desc,
+                  </when>
+                  <otherwise>
+                      createdate desc
+                  </otherwise>
+              </choose>
+          </trim>
+    </select>
+
+    <select id="queryUserById" resultMap="searchUser" parameterType="int">
+         select
+        u.id,u.username,u.anothername,u.role,u.sign,u.sex,u.header,
+        (select count(1) from itit_video v where v.author = u.id) as videoNum,
+        (select count(1) from itit_article a where a.author = u.id)as articleNum,
+        (select count(1) from itit_user_fans f where f.User_id = u.id) as fansNum
+        from itit_user u where id = #{id}
+    </select>
+</mapper>

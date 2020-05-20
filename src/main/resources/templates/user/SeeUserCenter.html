@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+</head>
+<!-- <script type="application/javascript" th:src="@{../static/js/jquery-1.11.3.min.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{../static/css/bootstrap.css}">
+<link rel="stylesheet" type="text/css" th:href="@{../static/css/bootstrap-select.css}">
+<link rel="stylesheet" type="text/css" th:href="@{../static/css/UserInfoPage.css}">
+<script type="application/javascript" th:src="@{../static/js/bootstrap.js}"></script>
+<script type="application/javascript" th:src="@{../static/js/bootstrap-select.js}"></script> -->
+
+
+<link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../../static/icon/ali-icon/iconfont.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/font.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/common.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/header.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/footer.css">
+
+<!--<link rel="stylesheet" href="../../static/css/User/index.css">-->
+<!--<link rel="stylesheet" type="text/css" href="../../static/css/UserInfoPage.css">-->
+
+
+<style rel="stylesheet" type="text/css">
+    /*首页*/
+    section{
+        margin-top: 150px;
+        background: white;
+        border-radius: 5px;
+        border: 1px solid #c6c8ca;
+        box-shadow: 0 2px 4px rgba(0,0,0,.14);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+    section.container{
+        padding: 0px;
+    }
+    section>nav{
+        background: rgb(250,250,250);
+        height: 59px;
+        border-bottom: 1px solid #c6c8ca;
+        overflow: hidden;
+    }
+    section>nav>div{
+        float: left;
+        line-height: 59px;
+    }
+    section>nav>div:first-child{
+        color: rgb(140,140,140);
+        font-size: 16px;
+        width: 15%;
+        text-align: center;
+        border-right: 1px solid #c6c8ca;
+    }
+    section>nav>div.title{
+        font-size: 16px;
+        width: 50%;
+        padding-left: 2%;
+    }
+    section>aside{
+        float: left;
+        width: 15%;
+        border-right: 1px solid #c6c8ca;
+        height: 1417px;
+        background: rgb(250,250,250);
+    }
+    section>aside>ul>li{
+        height: 50px;
+        cursor: pointer;
+        line-height: 50px;
+        font-size: 16px;
+        text-align: center;
+    }
+    section>aside>ul>li:hover{
+        background: rgb(238,238,238);
+    }
+    section>aside>ul>li.active{
+        background: rgb(7,193,96);
+        color: white;
+    }
+    section>article.content-body{
+        float: left;
+        width: 84%;
+        /*height: 940px;*/
+        padding: 0 5%;
+        padding: 5% 5% 5% 5%;
+        overflow: hidden;
+    }
+
+    section>article.content-body>.inner-box{
+        height: 300px;
+        border-bottom: 1px solid #c6c8ca;
+    }
+    section>article.content-body>.box-part1{
+        height: 300px;
+    }
+    section>article.content-body>.box-part1>.part1-content{
+        float: left;
+        width: 40%;
+        height: 100%;
+    }
+    section>article.content-body>.box-part1>.part1-content>ul{
+        width: 80%;
+        padding-left: 10%;
+        margin-top: 50px;
+    }
+    section>article.content-body>.box-part1>.part1-content>ul>li{
+        margin-bottom: 15px;
+    }
+    section>article.content-body>.box-part1>.part1-content>ul>li.username{
+        font-size: 25px;
+        font-family: 黑体;
+        color: rgb(42,42,44);
+    }
+    section>article.content-body>.box-part1>.part1-content>ul>li.userId{
+        font-size: 17px;
+        color: rgb(191,192,194);
+    }
+    section>article.content-body>.box-part1>.part1-content>ul>li>button:nth-of-type(1){
+        border: 1px solid rgb(42,42,44);
+        border-radius: 5px;
+        background: white;
+        height: 30px;
+        outline: none;
+        width:25%;
+    }
+
+    section>article.content-body>.box-part1>.part1-content>ul>li>button.has{
+        border: 1px solid rgb(42,42,44);
+        border-radius: 5px;
+        background:rgb(42,42,44);
+        height: 30px;
+        outline: none;
+        color:white;
+        width:25%;
+    }
+
+
+    section>article.content-body>.box-part1>.part1-content>ul>li>button:hover{
+        background: rgb(48,48,51);
+        color: white;
+    }
+    section>article.content-body>.box-part1>.part1-content>ul>li>button.has:hover{
+        background: white;
+        color: rgb(48,48,51);
+    }
+
+    section>article.content-body>.box-part1>.part1-header{
+        width: 40%;
+        float: right;
+        height: 100%;
+        position: relative;
+    }
+    section>article.content-body>.box-part1>.part1-header>.header{
+        position: absolute;
+        width: 50%;
+        height: 50%;
+        top: 50%;
+        left: 50%;
+        margin-left: -22%;
+        margin-top: -40%;
+    }
+    section>article.content-body>.box-part1>.part1-header>.header>img{
+        width: 100%;
+        position: center;
+        height: 100%;
+        object-fit: cover;
+        border: 1px solid rgb(46,41,40);
+        border-radius: 50%;
+    }
+
+    section>article.content-body>.box-part2>.form-group>ul{
+        overflow: hidden;
+    }
+    section>article.content-body>.box-part2{
+        height: 400px;
+    }
+    section>article.content-body>.box-part2>.form-group>ul>li{
+        float: left;
+        width: 50%;
+        overflow: hidden;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+    section>article.content-body>.box-part2>.form-group>ul>li:nth-of-type(3), section>article.content-body>.box-part2>.form-group>ul>li:nth-of-type(4){
+        width: 100%;
+
+    }
+    section>article.content-body>.box-part2>.form-group>ul>li:nth-of-type(3)>span, section>article.content-body>.box-part2>.form-group>ul>li:nth-of-type(4)>span{
+        display: block;
+    }
+    section>article.content-body>.box-part2>.form-group>ul>li>span{
+        font-size: 16px;
+    }
+    section>article.content-body>.box-part2>.form-group>ul>li:nth-of-type(3)>div{
+        margin-top: 10px;
+    }
+    section>article.content-body>.box-part2>.form-group>ul>li:nth-of-type(3)>div.sex-btn{
+        float: left;
+        width: 5%;
+        height: 34px;
+        text-align: center;
+        border-radius: 5px;
+        border: 1px solid silver;
+        line-height: 34px;
+        cursor: default;
+    }
+    section>article.content-body>.box-part2>.form-group>ul>li:nth-of-type(3)>div.active {
+        background: #07c160;
+        color: white;
+        border: 1px solid #07c160;
+    }
+    section>article.content-body>.box-part2>.form-group>ul>li>div.textarea{
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 60px;
+        -webkit-line-clamp:3;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        text-indent:2em;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+
+    section>article.content-body>.box-part4>.like-num,section>article.content-body>.box-part4>.send-num,section>article.content-body>.box-part4>.video-num{
+        width: 33%;
+        padding-right: 3%;
+        height: 100%;
+        float: left;
+        text-align: center;
+        position: relative;
+        transition: all 1s;
+    }
+    section>article.content-body>.box-part4>.like-num>div{
+        width: 100px;
+        height: 100px;
+        background: deeppink;
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        margin-left: -50px;
+        top: 50%;
+        margin-top: -70px;
+    }
+    section>article.content-body>.box-part4>div:hover >div{
+        opacity: .8;
+    }
+    section>article.content-body>.box-part4>.like-num>span{
+        color: deeppink;
+        position: absolute;
+        width: 100px;
+        height: 50px;
+        left: 50%;
+        margin-left: -50px;
+        top: 50%;
+        margin-top: 50px;
+        font-size: 16px;
+    }
+    section>article.content-body>.box-part4>div:hover >span{
+        opacity: .8;
+    }
+    section>article.content-body>.box-part4>.like-num>div>span{
+        display: block;
+        font-size: 50px;
+        color: white;
+        height: 100px;
+        line-height: 100px;
+    }
+
+    section>article.content-body>.box-part4>.send-num>div{
+        width: 100px;
+        height: 100px;
+        background: rgb(7,193,96);
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        margin-left: -50px;
+        top: 50%;
+        margin-top: -70px;
+    }
+    section>article.content-body>.box-part4>.send-num>span {
+        color: rgb(7, 193, 96);
+        position: absolute;
+        width: 100px;
+        height: 50px;
+        left: 50%;
+        margin-left: -50px;
+        top: 50%;
+        margin-top: 50px;
+        font-size: 16px;
+    }
+    section>article.content-body>.box-part4>.send-num>div>span{
+        display: block;
+        font-size: 50px;
+        color: white;
+        height: 100px;
+        line-height: 100px;
+    }
+    section>article.content-body>.box-part4>.video-num>div{
+        width: 100px;
+        height: 100px;
+        background: #5bc0de;
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        margin-left: -50px;
+        top: 50%;
+        margin-top: -70px;
+    }
+    section>article.content-body>.box-part4>.video-num>span {
+        color: #5bc0de;
+        position: absolute;
+        width: 100px;
+        height: 50px;
+        left: 50%;
+        margin-left: -50px;
+        top: 50%;
+        margin-top: 50px;
+        font-size: 16px;
+    }
+    section>article.content-body>.box-part4>.video-num>div>span{
+        display: block;
+        font-size: 50px;
+        color: white;
+        height: 100px;
+        line-height: 100px;
+    }
+    .air{
+        width: 4%;
+        float: left;
+        height: 34px;
+    }
+
+</style>
+
+<body>
+    <!--头部-->
+    <header class="container-fluid">
+        <!--左边部分-->
+        <div class="icon-left">
+            <a href="/index"><i class="zhanku">IT学习网站</i></a>
+            <!--<a class="" href="#">首页</a>-->
+        </div>
+        <div class="air"></div>
+        <!--查询-->
+        <div class="Search-Modular">
+            <input type="text" data-ope="normal" class="search-content" name="search-content" list="search-list" placeholder="请输入搜索关键词">
+            <button class="iconfont icon-sousuo"></button>
+            <datalist id="search-list"></datalist>
+        </div>
+        <!--右边部分-->
+        <div class="header-right-list">
+            <!--未登录-->
+            <!--/*@thymesVar id="user" type="com.itit.entry.User"*/-->
+            <ul th:if="${session.user == null}" class="unlogin">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'" href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/register">注册</a>
+                </li>
+                <li>
+                    <a href="/login">登录</a>
+                </li>
+                <li>
+                    <div class="header-img">
+                        <img th:src="${#request.getServletContext().getContextPath()}+'/static/img/header/default/akari.jpg'" class="img-circle" width="34px" height="34px"/>
+                        <div class="header-img-list">
+                            <ul>
+                                <li class="btn-group">
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/login'" href="/login"><div class="btn"><span>登录</span></div></a>
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/register'" href="/register"><div class="btn"><span>注册</span></div></a>
+                                </li>
+                                <li>选择语言</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!--已登录-->
+            <ul th:if="${session.user != null}" class="has-login" th:data-id="${session.user.getId()}">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'"  href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a  th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="#">历史</a></li>
+                <li th:text="${session.user.anothername}"></li>
+                <li><div class="header-img">
+                    <img th:src="${session.user.header}" class="img-circle" width="34px" height="34px"/>
+                    <div class="header-img-list">
+                        <ul>
+                            <li>
+                                <ul>
+                                    <li><a th:href="'/UserCenter?id='+${session.user.getId()}">个人中心</a></li>
+                                    <li>投稿管理</li>
+                                    <li>订单中心</li>
+                                    <li>我的课程</li>
+                                </ul>
+                            </li>
+                            <li>选择语言</li>
+                            <li><a style="display: block" th:href="${#request.getServletContext().getContextPath()}+'/logout'">退出</a></li>
+                        </ul>
+                    </div>
+                </div></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+        <i hidden="hidden" class="user_id" th:text="${#request.getAttribute('id')}"></i>
+        <!--导航提示栏-->
+        <nav>
+            <div>个人中心</div>
+            <div class="title">首页</div>
+        </nav>
+        <!--侧边菜单-->
+        <aside>
+            <ul>
+                <li class="active index">首&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页</li>
+            </ul>
+        </aside>
+        <article class="content-body">
+            <div class="inner-box box-part1">
+                <div class="part1-content">
+                    <ul>
+                        <li class="username" th:text="${#request.getAttribute('user').anothername}">游客</li>
+                        <li class="userId" th:value="${#request.getAttribute('user').id}" th:text="'ID: '+${#request.getAttribute('user').id}">ID:000</li>
+                        <li th:if="${session.user != null}" class="fansbtn">
+                            <button th:if="${#request.getAttribute('Isfans') == 0}">关注</button>
+                            <button th:if="${#request.getAttribute('Isfans') == 1}" class="has">已关注</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="part1-header">
+                    <div class="header">
+                        <img th:src="${#request.getAttribute('user').header}" src="../../static/img/用户头像.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="inner-box box-part2">
+                <div class="form-group">
+                    <ul>
+                        <li>
+                            <span>邮箱：</span><span class="email" th:text="${#request.getAttribute('user').email}"></span>
+                        </li>
+                        <li>
+                            <span>昵称：</span><span class="email" th:text="${#request.getAttribute('user').anothername}"></span>
+                        </li>
+                        <li>
+                            <span>性别:</span>
+                            <div class="sex-btn active">男</div>
+                            <div class="air"></div>
+                            <div class="sex-btn">女</div>
+                            <div class="air"></div>
+                            <div class="sex-btn">秘密</div>
+                            <i hidden="hidden" class="sex-radio" th:text="${#request.getAttribute('user').sex}"></i>
+                        </li>
+                        <li>
+                            <span>个人签名：</span>
+                            <div class="textarea" th:value="${#request.getAttribute('user').sign}">
+                            </div>
+                        </li>
+                        <li>
+                            <span>个人网站：</span>
+                            <span th:value="${#request.getAttribute('user').website}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="inner-box box-part3"></div>
+            <div class="inner-box box-part4">
+                <div class="like-num">
+                    <div>
+                        <span class="iconfont icon-follow"></span>
+                    </div>
+                    <span th:text="'粉丝数: ' + ${#request.getAttribute('fans')}">粉丝数:0</span>
+                </div>
+                <div class="send-num">
+                    <div>
+                        <span class="iconfont icon-fabiaowenzhang"></span>
+                    </div>
+                    <span th:text="'发表数:'+ ${#request.getAttribute('article')} ">发表数:0</span>
+                </div>
+                <div class="video-num">
+                    <div>
+                        <span class="iconfont icon-bofang"></span>
+                    </div>
+                    <span th:text="'上传数:'+ ${#request.getAttribute('video')} ">上传数:0</span>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <!--底部-->
+    <footer>
+        <label>&COPY;CopyRight From It-Kaman.All Rights Reserved.</label>
+    </footer>
+</body>
+
+
+<script type="application/javascript" src="../../static/js/jquery-3.4.1.js"></script>
+<script type="application/javascript" src="../../static/js/bootstrap.js"></script>
+<script type="application/javascript" src="../../static/js/bootstrap-select.js"></script>
+<script type="application/javascript" src="../../static/icon/ali-icon/iconfont.js"></script>
+<script>
+    $(function () {
+        $(".fansbtn>button").click(function () {
+            $(this).toggleClass("has");
+            if($(this).hasClass("has")){
+                $(this).html("已关注");
+            }else {
+                $(this).html("关注");
+            }
+            var userId = $(".userId").val();
+            if($(this).hasClass("has")){
+                //关注
+                $.ajax({
+                    url:"/UserCenter/follow",
+                    type:"get",
+                    data:{"user_id":userId},
+                })
+            }else {
+                //删除
+                $.ajax({
+                    url:"/UserCenter/unfollow",
+                    type:"get",
+                    data:{"user_id":userId},
+                })
+            }
+        })
+    })
+</script>
+</html>

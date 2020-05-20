@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../../static/icon/ali-icon/iconfont.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/font.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/common.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/header.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/Page/footer.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../../static/plugins/bootstrap-table/css/bootstrap-table.css">
+
+
+
+<script type="application/javascript" src="../../static/js/jquery-1.11.3.min.js"></script>
+<script type="application/javascript" src="../../static/js/bootstrap.js"></script>
+<script type="application/javascript" src="../../static/js/ContextPath.js"></script>
+<script type="application/javascript" src="../../static/plugins/bootstrap-table/js/bootstrap-table.js"/>
+<script type="application/javascript" src="../../static/plugins/bootstrap-table/js/bootstrap-table-locale-all.js"/>
+<script type="application/javascript" src="../../static/js/util/dateFomat.js"></script>
+<script type="application/javascript" src="../../static/plugins/request.js"></script>
+<script>
+    $(function () {
+        request.ajax(getContextPath()+"search/hot","get","",true,function (data) {
+            if(data.success){
+                data.datas.forEach(function (element) {
+                    $("<option name='content' value='"+element.searchName+"'></option>").attr("label","搜索次数:"+element.num).appendTo("#search-list");
+                })
+                $("input[name='search-content']").attr("placeholder",data.showtag.searchName);
+            }
+        })
+    })
+
+    $("input[name='search-content']").keyup(function () {
+        $(this).attr("data-ope","clear");
+    })
+
+    $(".Search-Modular>button.icon-sousuo").click(function () {
+        var name = $("input[name='search-content']").attr("placeholder");
+        if( $("input[name='search-content']").data("ope") != "clear"){
+            window.location.href = getContextPath()+"search?name="+name;
+        }else {
+            window.location.href = getContextPath()+"search?name="+$("input[name='search-content']").val();
+        }
+    })
+</script>
+<style type="text/css">
+    section{
+        /*background: red;*/
+        height: auto;
+        margin-top: 60px;
+    }
+    section.container{
+        padding: 0px 0px;
+    }
+    section>.part1{
+        width: 80%;
+        padding-left: 20%;
+    }
+    section>.part1>.search-box{
+        width: 100%;
+    }
+    section>.part1>.search-box>.search-tit-list{
+        /*height: 50px;*/
+        width: 100%;
+        margin-top: 20px;
+        /*overflow: hidden;*/
+        /*background: #1c1c1c;*/
+        font-size: 18px;
+        font-weight: bold;
+    }
+    section>.part1>.search-box>.search-tit-list>ul{
+        /*overflow: hidden;*/
+        border-bottom: 2px solid rgb(209,208,208);
+        height: 35px;
+    }
+    section>.part1>.search-box>.search-tit-list>ul>li{
+        height: 37px;
+        float: left;
+        line-height: 37px;
+        width: 20%;
+        text-align: center;
+    }
+    section>.part1>.search-box>.search-tit-list>ul>li>label{
+        text-align: center;
+        height: 100%;
+    }
+    section>.part1>.search-box>.search-tit-list>ul>li>label:hover{
+        border-bottom: 4px solid rgb(42,161,70);
+    }
+    section>.part1>.search-box>.search-tit-list>ul>li>label.click{
+        border-bottom: 4px solid rgb(42,161,70);
+    }
+    section>.part1>.search-box>.search-body{
+        width: 90%;
+        padding-left: 10%;
+        margin-top: 30px;
+    }
+    section>.part1>.search-box>.search-body>form{
+        overflow: hidden;
+    }
+    section>.part1>.search-box>.search-body>form>input[type="text"]{
+        width: 80%;
+        height: 45px;
+        font-size: 18px;
+        border: none;
+        outline: none;
+        padding-left: 5%;
+        border-bottom-left-radius: 10px;
+        border-top-left-radius: 10px;
+        float: left;
+        border: 2px solid transparent;
+    }
+    section>.part1>.search-box>.search-body>form>button[type="submit"]{
+        width: 19%;
+        height: 45px;
+        background: rgb(39,42,45);
+        border: none;
+        color: white;
+        float: left;
+        border-bottom-right-radius: 10px;
+        border-top-right-radius: 10px;
+        outline: none;
+    }
+    section>.part1>.search-box>.search-body>form>button[type="submit"]:active{
+        background: rgba(39,42,45,.7);
+    }
+    section>.part2{
+        /*background: blue;*/
+        /*height: 500px;*/
+        margin-top: 50px;
+        border-top: 1px solid #26292c;
+    }
+    section>.part2>.search-body{
+        margin-top: 50px;
+        margin-bottom: 120px;
+        /*background: green;*/
+    }
+
+
+
+    section>.part2>.search-body>div{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    section>.part2>.search-body>div:last-of-type{
+        margin-bottom: 120px;
+    }
+
+    .table > tbody > tr:hover{
+        background: #ffffff;
+    }
+    .table > tbody > tr > td{
+        border-top: none;
+        border-bottom: 1px solid #e5e9ef;
+    }
+    .table > tbody > tr > td:first-of-type{
+        padding-left: 5%;
+    }
+
+
+    footer{
+        position: fixed;
+        bottom: 0px;
+    }
+</style>
+
+<body>
+    <!--头部-->
+    <header class="container-fluid">
+        <!--左边部分-->
+        <div class="icon-left">
+            <a href="/index"><i class="zhanku">IT学习网站</i></a>
+            <!--<a class="" href="#">首页</a>-->
+        </div>
+        <div class="air"></div>
+        <!--查询-->
+        <div class="Search-Modular">
+            <input type="text" data-ope="normal" class="search-content" name="search-content" list="search-list" placeholder="请输入搜索关键词">
+            <button class="iconfont icon-sousuo"></button>
+            <datalist id="search-list"></datalist>
+        </div>
+        <!--右边部分-->
+        <div class="header-right-list">
+            <!--未登录-->
+            <!--/*@thymesVar id="user" type="com.itit.entry.User"*/-->
+            <ul th:if="${session.user == null}" class="unlogin">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'" href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/register">注册</a>
+                </li>
+                <li>
+                    <a href="/login">登录</a>
+                </li>
+                <li>
+                    <div class="header-img">
+                        <img th:src="${#request.getServletContext().getContextPath()}+'/static/img/header/default/akari.jpg'" class="img-circle" width="34px" height="34px"/>
+                        <div class="header-img-list">
+                            <ul>
+                                <li class="btn-group">
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/login'" href="/login"><div class="btn"><span>登录</span></div></a>
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/register'" href="/register"><div class="btn"><span>注册</span></div></a>
+                                </li>
+                                <li>选择语言</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!--已登录-->
+            <ul th:if="${session.user != null}" class="has-login" th:data-id="${session.user.getId()}">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'"  href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a  th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="#">历史</a></li>
+                <li th:text="${session.user.anothername}"></li>
+                <li><div class="header-img">
+                    <img th:src="${session.user.header}" class="img-circle" width="34px" height="34px"/>
+                    <div class="header-img-list">
+                        <ul>
+                            <li>
+                                <ul>
+                                    <li><a th:href="'/UserCenter?id='+${session.user.getId()}">个人中心</a></li>
+                                    <li>投稿管理</li>
+                                    <li>订单中心</li>
+                                    <li>我的课程</li>
+                                </ul>
+                            </li>
+                            <li>选择语言</li>
+                            <li><a style="display: block" th:href="${#request.getServletContext().getContextPath()}+'/logout'">退出</a></li>
+                        </ul>
+                    </div>
+                </div></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+        <div class="part1">
+            <div class="search-box">
+                <div class="search-body">
+                    <form id="searchForm" action="" onsubmit="return false;">
+                        <input type="hidden" name="status" id="status" />
+                        <input type="text" name="name" th:value="${#request.getAttribute('name')}" placeholder="请输入关键词" list="search-hot-list">
+                        <button type="submit">搜索</button>
+                    </form>
+                </div>
+                <datalist id="search-hot-list">
+                    <option value="JAVA" name="1">1000次</option>
+                </datalist>
+                <div class="search-tit-list">
+                    <ul>
+                        <li>
+                            <input hidden  form="searchForm" type="radio" value="0" name="tit_list" id="all"/>
+                            <label th:class="${#request.getAttribute('status')!= null && #request.getAttribute('status') == 0 }?'click':''"  for="user">综合</label>
+                        </li>
+                        <li>
+                            <input hidden  form="searchForm" type="radio" value="1" name="tit_list" id="user"/>
+                            <label th:class="${#request.getAttribute('status')!= null && #request.getAttribute('status') == 1 }?'click':''" for="user">用户</label>
+                        </li>
+                        <li>
+                            <input hidden form="searchForm" type="radio" name="tit_list" id="video" value="2">
+                            <label th:class="${#request.getAttribute('status')!= null && #request.getAttribute('status') == 2 }?'click':''" for="video">视频</label>
+                        </li>
+                        <li>
+                            <input hidden form="searchForm"  type="radio" name="tit_list" id="article" value="3">
+                            <label th:class="${#request.getAttribute('status')!= null && #request.getAttribute('status') == 3 }?'click':''" for="article">专栏</label>
+                        </li>
+                        <li>
+                            <input hidden form="searchForm"  type="radio" name="tit_list" id="tag" value="4">
+                            <label th:class="${#request.getAttribute('status')!= null && #request.getAttribute('status') == 4 }?'click':''" for="article">标签</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="part2">
+            <div class="search-body">
+            </div>
+        </div>
+    </section>
+    <!--底部-->
+    <footer>
+        <label>&COPY;CopyRight From It-Kaman.All Rights Reserved.</label>
+    </footer>
+</body>
+<script>
+    $(function () {
+        $(".search-tit-list>ul>li>label").click(function () {
+           var $check = $(this).siblings("input").prop("checked",true);
+           $(this).addClass("click").parent().siblings().children("label").removeClass("click");
+           $("#status").val($check.val());
+            $.ajax({
+                url:"/search/toolbar",
+                data:$("#searchForm").serialize(),
+                type:"get",
+                success:function (data) {
+                    $("#searchForm").unbind();
+                    $(".part2>.search-body").children().remove()
+                    $(".part2>.search-body").html(data);
+                }
+            })
+        })
+
+        var togo = function (){
+            var flag = $("label.click").parent().index();
+            $("#status").val(flag);
+            $.ajax({
+                url:"/search/toolbar",
+                data:$("#searchForm").serialize(),
+                type:"get",
+                success:function (data) {
+                    $("#searchForm").unbind();
+                    $(".part2>.search-body").children().remove()
+                    $(".part2>.search-body").html(data);
+                }
+            })
+        }
+        togo();
+    })
+</script>
+</html>

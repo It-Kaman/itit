@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../static/icon/ali-icon/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/Page/font.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/Page/common.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/Page/header.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/Page/footer.css">
+    <link rel="stylesheet" href="../../static/plugins/validator/css/bootstrapValidator.min.css">
+
+    <!--<link rel="stylesheet" href="../../static/editormd/css/style.css" />-->
+    <link rel="stylesheet" href="../../static/editormd/css/editormd.css" />
+    <script type="application/javascript" src="../../static/js/jquery-3.4.1.js"></script>
+    <!--<script type="application/javascript" src="../../static/js/Page/header.js"></script>-->
+    <script type="application/javascript" src="../../static/js/bootstrap.js"></script>
+    <script type="application/javascript" src="../../static/plugins/validator/js/bootstrapValidator.min.js"></script>
+    <script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/js/ContextPath.js'" src="../../static/js/ContextPath.js"></script>
+    <title>文章投稿</title>
+    <style>
+        section{
+            overflow: hidden;
+            /*margin-top: 20px;*/
+            margin-top: 120px;
+            background: red;
+            padding: 0px !important;
+            background: rgb(255,255,255);
+        }
+        section>aside{
+            float: left;
+            width: 20%;
+            background: rgb(37,40,43);
+            height: 1087px;
+            transition: width .5s;
+        }
+        section>aside.aside_close{
+            width: 3%;
+        }
+        section>aside>nav{
+            padding-left: 10%;
+            color: rgba(255,255,255,.8);
+        }
+        section>aside>nav>span.iconfont:hover{
+            color: white;
+        }
+        section>aside>nav>span.icon-caidan{
+            color: rgba(255,255,255,.8);
+            font-size: 25px;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        section>aside>ul>li{
+            padding-left: 10%;
+            height: 60px;
+            font-size: 18px;
+            overflow: hidden;
+        }
+        section>aside>ul>li>a{
+            color: rgb(255,255,255);
+            font-size: 18px;
+            display: block;
+            opacity: .7;
+        }
+        section>aside>ul>li.active >a{
+            color: rgb(6,192,95);
+            opacity: 1;
+        }
+        section>aside>ul>li:hover >a{
+            opacity: 1;
+            color: whitesmoke;
+        }
+        section>aside>ul>li>a>.iconfont{
+            font-size: 25px;
+            display: inline-block;
+            height: 60px;
+            line-height: 60px;
+            overflow: hidden;
+        }
+        section>aside>ul>li>a>span{
+            height: 60px;
+            display: inline-block;
+            line-height: 60px;
+            overflow: hidden;
+            padding-left: 20%;
+        }
+        section>div.content-body{
+            float: left;
+            width: 80%;
+            transition: all .5s;
+        }
+        section>div.aside_close{
+            width: 97%;;
+        }
+        section>div.content-body>nav{
+            height: 39px;
+            border-bottom: 1px solid #cdcdcd;
+            line-height: 40px;
+            padding-left: 5%;
+            font-size: 17px;
+        }
+        section>div.content-body>.part1{
+            overflow: hidden;
+            height: 1049px;
+            width: 100%;
+            padding: 60px 10% 60px 10%;
+        }
+        section>div.content-body>.part1>form>.form-group>textarea{
+            resize: none;
+        }
+
+
+        .modal-body>.form-group>.value-box-show{
+            width: 100%;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type{
+            height: 35px;
+            width: 50%;
+            border: 1px solid rgb(37,40,43);
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>span{
+            line-height: 35px;
+            font-size: 16px;
+            padding-left: 5%;
+            display: block;
+            cursor: pointer;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables{
+            position: absolute;
+            top: 36px;
+            left: 0px;
+            width: 100%;
+            height: 180px;
+            border: 1px solid rgb(37,40,43);
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+            background: white;
+            z-index: 3;
+            display: none;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>div.select{
+            height: 30px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>div.select>input{
+            float: right;
+            border-radius: 5px;
+            border: 1px solid rgb(37,40,43);
+            outline: none;
+            width: 40%;
+            padding-left: 5%;
+            position: relative;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>div.select>input:before{
+            content: "";
+            width: 16px;
+            height: 16px;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>ul{
+            overflow: hidden;
+            cursor: default;
+            height: 100px;
+            overflow-y: auto;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>ul>li{
+            float: left;
+            width: 20%;
+            padding: 2% 3%;
+            text-align: center;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>ul>li.active>span{
+            background: rgb(42,161,70);
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>ul>li>span {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            color: white;
+            display: inline-block;
+            background: rgba(37,40,43,1);
+            cursor: pointer;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>ul>li>span:active{
+            background: rgba(42,161,70,.8);
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>.tagButtons{
+            height: 30px;
+            overflow: hidden;
+            padding-right: 5%;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>.tagButtons>button{
+            float: right;
+            width: 20%;
+            background: rgb(37,40,43);
+            color: white;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+        .modal-body>.form-group>.value-box-show>div:first-of-type>.tagTables>.tagButtons>button:active{
+            opacity: .7;
+        }
+
+        .modal-body>.form-group>.tagHasChecked{
+            /*background: red;*/
+            width: 70%;
+            height: 40px;
+        }
+
+        .modal-body>.form-group>.tagHasChecked>ul{
+            width: 100%;
+            height: 48px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .modal-body>.form-group>.tagHasChecked>ul>li{
+            height: 24px;
+            float: left;
+            width: 15%;
+            /*background: red;*/
+            padding: 2px 1%;
+            text-align: center;
+        }
+        .modal-body>.form-group>.tagHasChecked>ul>li>span{
+            background: rgb(43,162,70);
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            white-space: nowrap;
+            color: white;
+            border-radius: 5px;
+        }
+
+        section>div.content-body>.part1>form>.form-group>label[for='video_img']{
+            width: 30%;
+        }
+        section>div.content-body>.part1>form>.form-group>label>.img-floor1{
+            display: inline-block;
+            width: 100%;
+            height: 150px;
+            border: 1px solid rgb(46,42,41);
+            border-radius: 5px;
+            background: url("../../static/icon/updateImg.png") no-repeat center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        section>div.content-body>.part1>form>.form-group>label>.img-floor1>img{
+            width: 100%;
+            height: 148px;
+            object-fit: cover;
+        }
+        section>div.content-body>.part1>form>.form-group>.header_clear{
+            width: 20%;
+            height: 30px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            background: rgb(43,162,70);
+            color: white;
+            font-size: 17px;
+        }
+        section>div.content-body>.part1>form>.form-group>.header_clear:active{
+            background:rgb(158,234,106);
+        }
+        section>div.content-body>.part1>form>.form-group>.uploader-btn>div:first-of-type{
+            background: rgb(43,162,70);
+            width: 20%;
+        }
+        section>div.content-body>.part1>form>.form-group:last-of-type{
+            margin-top: 20px;
+        }
+        section>div.content-body>.part1>form>.form-group:last-of-type>.btn{
+            background: rgb(245,245,245);
+            border: 1px solid rgb(37,40,43);
+            padding-left: 4%;
+            padding-right: 4%;
+        }
+        section>div.content-body>.part3{
+            overflow: hidden;
+            height: auto;
+            width: 100%;
+            padding: 30px 10% 0px 10%;
+        }
+        .air{
+            float: right;
+            width: 5%;
+            height: 30px;
+        }
+/*新的修改样式*/
+        section>div.content-body>.part1{
+            overflow: hidden;
+            height: auto;
+            width: 100%;
+            padding: 30px 10% 0px 10%;
+        }
+        .btn-weixin-green{
+            background: rgb(43,162,70);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!--头部-->
+    <header class="container-fluid">
+        <!--左边部分-->
+        <div class="icon-left">
+            <a href="/index"><i class="zhanku">IT学习网站</i></a>
+            <!--<a class="" href="#">首页</a>-->
+        </div>
+        <div class="air"></div>
+        <!--查询-->
+        <div class="Search-Modular">
+            <input type="text" data-ope="normal" class="search-content" name="search-content" list="search-list" placeholder="请输入搜索关键词">
+            <button class="iconfont icon-sousuo"></button>
+            <datalist id="search-list"></datalist>
+        </div>
+        <!--右边部分-->
+        <div class="header-right-list">
+            <!--未登录-->
+            <!--/*@thymesVar id="user" type="com.itit.entry.User"*/-->
+            <ul th:if="${session.user == null}" class="unlogin">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'" href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/register">注册</a>
+                </li>
+                <li>
+                    <a href="/login">登录</a>
+                </li>
+                <li>
+                    <div class="header-img">
+                        <img th:src="${#request.getServletContext().getContextPath()}+'/static/img/header/default/akari.jpg'" class="img-circle" width="34px" height="34px"/>
+                        <div class="header-img-list">
+                            <ul>
+                                <li class="btn-group">
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/login'" href="/login"><div class="btn"><span>登录</span></div></a>
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/register'" href="/register"><div class="btn"><span>注册</span></div></a>
+                                </li>
+                                <li>选择语言</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!--已登录-->
+            <ul th:if="${session.user != null}" class="has-login" th:data-id="${session.user.getId()}">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'"  href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a  th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="#">历史</a></li>
+                <li th:text="${session.user.anothername}"></li>
+                <li><div class="header-img">
+                    <img th:src="${session.user.header}" class="img-circle" width="34px" height="34px"/>
+                    <div class="header-img-list">
+                        <ul>
+                            <li>
+                                <ul>
+                                    <li><a th:href="'/UserCenter?id='+${session.user.getId()}">个人中心</a></li>
+                                    <li>投稿管理</li>
+                                    <li>订单中心</li>
+                                    <li>我的课程</li>
+                                </ul>
+                            </li>
+                            <li>选择语言</li>
+                            <li><a style="display: block" th:href="${#request.getServletContext().getContextPath()}+'/logout'">退出</a></li>
+                        </ul>
+                    </div>
+                </div></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+        <!--侧边栏-->
+        <aside>
+            <nav>
+                <span class="iconfont icon-caidan"></span>
+            </nav>
+            <ul class="user-select">
+                <li><a href="/upload/video"><i class="iconfont icon-shangchuan"></i><span>视频投稿</span></a></li>
+                <li><a href="/upload/video/record/"><i class="iconfont icon-lishi"></i><span>投稿记录</span></a></li>
+                <li class="active"><a href="/upload/article"><i class="iconfont icon-lunkuodasan-"></i><span>文章发表</span></a></li>
+                <li><a href="/upload/article/record/"><i class="iconfont icon-lishishuju"></i><span>发表记录</span></a></li>
+            </ul>
+        </aside>
+        <div class="content-body">
+            <nav class="user-select">
+                文章投稿
+            </nav>
+            <div class="part1">
+                <form method="post" id="upload_form" enctype="multipart/form-data">
+                    <!--视频名字-->
+                    <div class="form-group has-feedback">
+                        <label for="article_name">标题：（请不要超过20个字）</label>
+                        <input title="请输入标题名" required class="form-control" type="text" name="name" id="article_name" form="upload_form">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">文章描述:</label>
+                        <textarea class="form-control" name="article_description" id="description" cols="30" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="article_content">发表内容:</label>
+                    </div>
+                </form>
+            </div>
+            <div class="part2">
+                <div class="form-group">
+                    <div id="article_content">
+        <textarea style="display:none;">[TOC]
+
+        #### Disabled options
+
+        - TeX (Based on KaTeX);
+        - Emoji;
+        - Task lists;
+        - HTML tags decode;
+        - Flowchart and Sequence Diagram;
+
+        #### Editor.md directory
+
+            editor.md/
+                    lib/
+                    css/
+                    scss/
+                    tests/
+                    fonts/
+                    images/
+                    plugins/
+                    examples/
+                    languages/
+                    editormd.js
+                    ...
+
+        ```html
+        &lt;!-- English --&gt;
+        &lt;script src="../dist/js/languages/en.js"&gt;&lt;/script&gt;
+
+        &lt;!-- 繁體中文 --&gt;
+        &lt;script src="../dist/js/languages/zh-tw.js"&gt;&lt;/script&gt;
+        ```
+        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="part3">
+                <div class="line"></div>
+                <div class="form-group">
+                    <button type="submit" class="btn" form="upload_form">发表</button>
+                    <a href="/index" class="btn">返回首页</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--底部-->
+    <footer>
+        <label>&COPY;CopyRight From It-Kaman.All Rights Reserved.</label>
+    </footer>
+    <div id="tagBox" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">选择发表的标签</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <span>标签Tag:</span>
+                        <div class="value-box" hidden>
+                        </div>
+                        <div class="value-box-show">
+                            <div>
+                                <span>请点击选择标签</span>
+                                <div class="tagTables">
+                                    <div class="select">
+                                        <input type="text" name="tagName" id="tagName" placeholder="搜索关键词"/>
+                                    </div>
+                                    <ul class="user-select">
+                                    </ul>
+                                    <div class="tagButtons">
+                                        <button type="button" id="submit">确定</button>
+                                        <div class="air"></div>
+                                        <button type="button" id="cancle">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tagHasChecked">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="close" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-weixin-green" id="send">发表</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</body>
+<!--<script type="application/javascript" src="../../static/js/Page/header.js"></script>-->
+<script>
+    $(".icon-caidan").click(function () {
+        $("section>aside").toggleClass("aside_close");
+        $("section>div.content-body").toggleClass("aside_close");
+    })
+    $(function () {
+        var mapKey;
+        $(".value-box-show>div>span").click(function () {
+            $(".tagTables").css({"display": "block"});
+            $.ajax({
+                url: "/tags",
+                type: "post",
+                success: function (data) {
+                    $(".value-box").empty();
+                    $(".tagTables>ul").empty();
+                    if (data.success) {
+                        data.datas.forEach(function (element) {
+                            $(".value-box").append("<input type='checkbox' name='column' value='" + element.id + "' form='upload_form'/>" + element.name);
+                            $(".tagTables>ul").append("<li><span>" + element.name + "</span></li>");
+                        })
+                    } else {
+                        alert("系统繁忙，请稍候再试");
+                    }
+                    mapKey = $(".tagTables>ul>li>span").map(function () {
+                        return $(this).text();
+                    })
+                    clickTag();
+                    tagSubmit();
+                    cancle();
+                    searchTag();
+                }
+            })
+        })
+
+        //点击事件---点击tag标签
+        var clickTag = function () {
+            $(".tagTables>ul>li>span").click(function () {
+                var index = $(this).parent().index();
+                var checkbox = $(".value-box>input").eq(index);
+                console.log(checkbox)
+                if (checkbox.get(0).checked) {
+                    checkbox.get(0).checked = false;
+                    $(this).parent().removeClass("active");
+                } else {
+                    checkbox.get(0).checked = true;
+                    $(this).parent().addClass("active");
+                }
+            })
+        }
+        //取消事件
+        var cancle = function () {
+            $("#cancle").click(function () {
+                for (var i = 0; i < $(".value-box>input").length; i++) {
+                    $(".value-box>input").get(i).checked = false;
+                }
+                $(".tagTables>ul>li").removeClass("active");
+                $(".tagTables").removeAttr("style");
+                var $tagHasChecked = $(".tagHasChecked");
+                $tagHasChecked.children().empty();
+            })
+        }
+        //点击确认事件
+        var tagSubmit = function () {
+            $("#submit").click(function () {
+                var $tagHasChecked = $(".tagHasChecked");
+                $tagHasChecked.children().empty();
+                $(".tagTables>ul>li.active").each(function () {
+                    $tagHasChecked.children().append("<li><span>" + $(this).children().eq(0).text() + "</span></li>");
+                })
+                $(".tagTables").removeAttr("style");
+            })
+        }
+        //搜索Tag事件
+        var searchTag = function () {
+            $("#tagName").keyup(function () {
+                $(".tagTables>ul>li").css({"display": "none"});
+                for (var i = 0; i < mapKey.length; i++) {
+                    if (mapKey.get(i).toUpperCase().indexOf($(this).val().toUpperCase()) >= 0) {
+                        $(".tagTables>ul>li").eq(i).removeAttr("style");
+                    }
+                }
+            })
+        }
+    })
+</script>
+
+
+<script src="../../static/editormd/editormd.js"></script>
+<script type="text/javascript">
+    var testEditor;
+
+    $(function() {
+        editormd.emoji = {
+            path : "https://www.webfx.com/tools/emoji-cheat-sheet/",
+            ext:".png"
+        };
+
+        testEditor = editormd("article_content", {
+            width   : "90%",
+            height  : 640,
+            delay   : 1000,
+            syncScrolling : "single",
+            saveHTMLToTextarea:true,
+            path    : getContextPath()+"static/editormd/lib/",
+            emoji : true,
+            imageUpload:true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: getContextPath()+"imageUpload",
+            taskList        : true,
+            tex             : true,  // 默认不解析
+            flowChart       : true,  // 默认不解析
+            sequenceDiagram : true,  // 默认不解析
+            placeholder:"请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论",
+        });
+
+
+        $(".transform").click(function () {
+            console.log(testEditor.getMarkdown())
+        })
+    });
+</script>
+<script>
+    $(function () {
+        $("#upload_form").bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },fields: {
+                name: {
+                    validators: { //校验规则
+                        notEmpty: {
+                            message:'不能为空',
+                        },
+                        stringLength: {
+                            min: 4,
+                            max: 20,
+                            message: '请输入长度为4-20的名字'
+                        },
+                    }
+                }
+            }
+        }).on('success.form.bv',function (e) {
+            console.log(123);
+            e.preventDefault();
+            console.log(testEditor.getMarkdown());
+            $('#tagBox').modal("show");
+            /*if($("input:checked").length == 0){
+                alert("请选择标签");
+                return;
+            }*/
+        });
+
+        $("#close").click(function(){
+            $("#tagBox").modal("hide");
+        })
+        $("#send").click(function(){
+            var ids=[];
+            if( $("input[name='column']:checked").length==0){
+                alert("请选择标签")
+                return;
+            }
+            var content = testEditor.getHTML();
+            console.log( $("#article_name").get(0));
+            if(content.trim() === "" || $("#article_name").get(0).value.trim() === ""){
+                alert("请补全内容");
+                return;
+            }
+            if (confirm("确定提交？")){
+                $("input[name='column']:checked").each(function(index,value) {
+                    ids[index] = $(value).val();
+                });
+                var data = new FormData();
+                data.append("name",$("#article_name").val());
+                data.append("description",$("#description").val());
+                data.append("content",content);
+                data.append("column",ids);
+                $.ajax({
+                    url:"/articles/add",
+                    type:"post",
+                    data:data,
+                    contentType: false,
+                    processData: false,
+                    success:function(data){
+                        if(data.success){
+                            alert("提交成功");
+                            window.location.href="/upload/article/record";
+                        }else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+        })
+        console.log($("#description").val());
+    })
+</script>
+</html>

@@ -1,0 +1,59 @@
+section>article.content-body>.inner-box{
+    height: 500px;
+    border-bottom: 1px solid #c6c8ca;
+}
+section>article.content-body>.inner-box>.form-group>ul>li{
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+section>article.content-body>.inner-box>.form-group>ul>li>span{
+    font-size: 16px;
+}
+section>article.content-body>.inner-box>.form-group>ul>li>label{
+    float: left;
+    width: 13%;
+    font-size: 16px;
+    line-height: 34px;
+    font-weight: normal;
+}
+section>article.content-body>.inner-box>.form-group>ul>li>input[type="text"]{
+    width: 20%;
+}
+section>article.content-body>.inner-box>.form-group>ul>li>textarea{
+    width: 60%;
+    resize: none;
+}
+section>article.content-body>.inner-box>.form-group>ul>li:nth-of-type(5)>div.sex-btn{
+    float: left;
+    width: 5%;
+    height: 34px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid silver;
+    cursor: pointer;
+    line-height: 34px;
+}
+section>article.content-body>.inner-box>.form-group>ul>li:nth-of-type(5)>div.active {
+    background: #07c160;
+    color: white;
+    border: 1px solid #07c160;
+}
+section>article.content-body>div>button.update-btn{
+    width: 114px;
+    height: 34px;
+    position: unset;
+    margin-top: 20px;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #1c1c1c;
+    outline: none;
+}
+section>article.content-body>div>button.update-btn:active{
+    background:#31b0d5;
+    color: white;
+}
+.air{
+    width: 4%;
+    float: left;
+    height: 34px;
+}

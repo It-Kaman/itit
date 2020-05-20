@@ -1,0 +1,14 @@
+footer{
+    margin-top: 100px;
+    height: 40px;
+    background: black;
+    width: 100%;
+    color: white;
+    position: fixed;
+    bottom: 0px;
+    z-index: 999;
+}
+footer>label{
+    line-height: 40px;
+    font-size: 15px;
+}

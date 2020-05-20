@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册-教师用户</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-select.css">
+    <link rel="stylesheet" type="text/css" href="../static/icon/ali-icon/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Page/font.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Page/common.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Page/header.css">
+    <script type="application/javascript" src="../static/js/jquery-3.4.1.js"></script>
+    <script type="application/javascript" src="../static/js/bootstrap-select.js"></script>
+    <script type="application/javascript" src="../static/js/bootstrap.js"></script>
+    <script type="application/javascript" src="../static/js/Page/header.js"></script>
+</head>
+<style>
+    /*版心部分 与注册指引一致*/
+    section{
+        /*height: 500px;*/
+        /*background: black;*/
+    }
+    section>.title-show{
+        width: 100%;
+        padding-left: 5%;
+        padding-right: 5%;
+        /*height: 90px;*/
+        margin-top: 50px;
+        /*background: black;*/
+        /*text-align: center;*/
+        overflow: hidden;
+    }
+    section>.title-show>.title-container{
+        width: 100%;
+        overflow: hidden;
+    }
+    section>.title-show>.title-container>.title-line{
+        width: 40%;
+        margin-top: 44px;
+        float: left;
+    }
+    section>.title-show>.title-container>span{
+        width: 20%;
+        display: inline-block;
+        float: left;
+        line-height: 90px;
+        font-size: 35px;
+        text-align: center;
+    }
+    section>.title-show>.content-label>label{
+        font-size: 20px;
+        display: block;
+    }
+
+    section>.register-content{
+        width: 100%;
+        padding: 0 25%;
+        /*background: red;*/
+        overflow: hidden;
+        height: auto;
+    }
+    section>.register-content>.form-group{
+        margin-bottom: 30px;
+    }
+    section>.register-content>.form-group>label{
+        font-size: 20px;
+    }
+    section>.register-content>.form-group>input{
+        width: 100%;
+    }
+    section>.register-content>.form-group>div.alert{
+        display: none;
+    }
+    section>.register-content>.form-group>select{
+        width: 30%;
+    }
+    /*checkbox*/
+    section>.register-content>.commit-before>span>a{
+        color: #2ba245;
+    }
+    section>.register-content>.btns{
+        margin-top: 10px;
+    }
+    section>.register-content>.btns>.btn{
+        width: 40%;
+        height: 35px;
+    }
+    section>.register-content>.btns>.btn:nth-of-type(1){
+        background: #07c160;
+        color: white;
+    }
+
+
+    footer{
+        margin-top: 100px;
+        height: 40px;
+        background: black;
+        width: 100%;
+        color: white;
+    }
+    footer>label{
+        line-height: 40px;
+        font-size: 15px;
+    }
+
+
+    /*须知模块*/
+    .black-ball{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: rgba(0,0,0,.5);
+        z-index: 999;
+        top: 0;
+        display: none;
+    }
+    .agree-thing{
+        position: fixed;
+        z-index: 999;
+        width: 600px;
+        height: 600px;
+        box-shadow:2px 2px 3px 4px rgba(0,0,0,.2);
+        top: 50%;
+        margin-top: -300px;
+        margin-left: -300px;
+        left: 50%;
+        background: white;
+        display: none;
+    }
+    .agree-thing>.content{
+        width: 100%;
+        height: 90%;
+        padding: 1% 5% 10%;
+        overflow: auto;
+    }
+    .agree-thing>i.guanbi{
+        position: absolute;
+        right: -50px;
+        top: -50px;
+        font-size: 50px;
+        color: #282a2d;
+        cursor: pointer;
+    }
+    .agree-thing>i.guanbi:active{
+        color: white;
+    }
+</style>
+<body>
+    <!--头部-->
+    <header class="container-fluid">
+        <!--左边部分-->
+        <div class="icon-left">
+            <a href="/index"><i class="zhanku">IT学习网站</i></a>
+            <!--<a class="" href="#">首页</a>-->
+        </div>
+        <div class="air"></div>
+        <!--查询-->
+        <div class="Search-Modular">
+            <input type="text" data-ope="normal" class="search-content" name="search-content" list="search-list" placeholder="请输入搜索关键词">
+            <button class="iconfont icon-sousuo"></button>
+            <datalist id="search-list"></datalist>
+        </div>
+        <!--右边部分-->
+        <div class="header-right-list">
+            <!--未登录-->
+            <!--/*@thymesVar id="user" type="com.itit.entry.User"*/-->
+            <ul th:if="${session.user == null}" class="unlogin">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'" href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/register">注册</a>
+                </li>
+                <li>
+                    <a href="/login">登录</a>
+                </li>
+                <li>
+                    <div class="header-img">
+                        <img th:src="${#request.getServletContext().getContextPath()}+'/static/img/header/default/akari.jpg'" class="img-circle" width="34px" height="34px"/>
+                        <div class="header-img-list">
+                            <ul>
+                                <li class="btn-group">
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/login'" href="/login"><div class="btn"><span>登录</span></div></a>
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/register'" href="/register"><div class="btn"><span>注册</span></div></a>
+                                </li>
+                                <li>选择语言</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!--已登录-->
+            <ul th:if="${session.user != null}" class="has-login" th:data-id="${session.user.getId()}">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'"  href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a  th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="#">历史</a></li>
+                <li th:text="${session.user.anothername}"></li>
+                <li><div class="header-img">
+                    <img th:src="${session.user.header}" class="img-circle" width="34px" height="34px"/>
+                    <div class="header-img-list">
+                        <ul>
+                            <li>
+                                <ul>
+                                    <li><a th:href="'/UserCenter?id='+${session.user.getId()}">个人中心</a></li>
+                                    <li>投稿管理</li>
+                                    <li>订单中心</li>
+                                    <li>我的课程</li>
+                                </ul>
+                            </li>
+                            <li>选择语言</li>
+                            <li><a style="display: block" th:href="${#request.getServletContext().getContextPath()}+'/logout'">退出</a></li>
+                        </ul>
+                    </div>
+                </div></li>
+            </ul>
+        </div>
+    </header>
+
+    <!--版心-->
+    <section class="container">
+        <div class="title-show">
+            <div class="title-container">
+                <div class="line title-line"></div>
+                <span style="display: inline-block;font-size: 25px">教师用户注册</span>
+                <div class="line title-line"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <form action="/register" method="post" id="register" hidden="hidden"></form>
+        <div class="register-content">
+            <div class="form-group">
+                <label class="control-label" for="username">用户名:</label>
+                <input type="text" class="form-control" id="username" name="username"  form="register">
+                <br>
+                <div class="alert alert-danger" role="alert">请输入大于5位小于16位的数字、大小写字母</div>
+                <div class="alert alert-danger" role="alert">用户名已存在，请更换</div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="password">密码:(长度为8-16位数字字母)</label>
+                <input type="password" class="form-control" id="password" form="register" name="password">
+                <br>
+                <div class="alert alert-danger" role="alert">请填写长度为8-16位的密码</div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="anothername">昵称:(10个字以内）</label>
+                <input type="text" class="form-control" id="anothername" form="register" name="anothername">
+                <br>
+                <div class="alert alert-danger" role="alert">昵称不能为空</div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="email">邮箱:</label>
+                <input type="email" class="form-control" id="email" form="register" name="email">
+                <br>
+                <div class="alert alert-danger" role="alert">请填写正确的邮箱号码</div>
+                <div class="alert alert-danger" role="alert">邮箱已被注册</div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="sex">性别:</label>
+                <select class="form-control" name="sex" id="sex" form="register">
+                    <option value="1">男</option>
+                    <option value="0">女</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="phone">手机号码:</label>
+                <input type="phone" maxlength="11" class="form-control" id="phone" form="register" name="phone">
+                <br>
+                <div class="alert alert-danger" role="alert">请填写正确的手机号码</div>
+                <div class="alert alert-danger" role="alert">已存在当前手机号码</div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="job">你现在的身份是:</label>
+                <select class="form-control" name="job" id="job" form="register">
+                    <option value="0">教师</option>
+                    <option value="1">企业人员</option>
+                    <option value="2">其他</option>
+                </select>
+            </div>
+            <!--验证码-->
+            <div class="yanzhenma"></div>
+            <input type="text" form="register" name="role" id="role" style="width: 0px;height: 0px;border: none;" th:value="${#request.getParameter('role')}">
+
+            <div class="commit-before">
+                <input type="checkbox" class="agree" id="agree">
+                <span>我已同意<a href="#" id="default">《IT学习网站注册须知》</a>和<a href="#" id="teacher">《教师用户注册须知》</a></span>
+            </div>
+            <div class="btns">
+                <input type="submit" class="btn commit" disabled onsubmit="isAgree()" form="register" value="注册"></input>
+                <input type="reset" class="btn reset" form="register"></input>
+            </div>
+            <div class="link">
+                <a href="#">已有账号，直接登录></a>
+            </div>
+        </div>
+
+    </section>
+
+    <!--底部-->
+    <footer>
+        <label>&COPY;CopyRight From It-Kaman.All Rights Reserved.</label>
+    </footer>
+
+    <div class="black-ball"></div>
+    <div class="teacher-agree agree-thing">
+        <h3>教师用户注册须知：</h3>
+        <div class="content">
+            <h1>项目测试，不做任何商业用途</h1>
+            <p>1.普通用户只能发布相关文章，允许发表视频评论，可以进行相关视频的学习</p>
+            <p>4. 禁止用户从事以下行为：</p>
+            <p>4.3.1 制作、上传、复制、传送、传播包含任何反对宪法所确定的基本原则、危害国家安全、泄露国家秘密、颠覆国家政权、
+                破坏国家统一、破坏民族团结、损害国家荣誉和利益、煽动民族仇恨、民族歧视、破坏民族团结、破坏国家宗教政策、
+                宣扬邪教和封建迷信、淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪、侮辱或者诽谤他人，侵害他人合法权益的等法律、
+                行政法规禁止的内容或其他令人反感的包括但不限于资讯、资料、文字、软件、音乐、照片、图形、信息或其他资料；
+            </p>
+            <p>
+                4.3.2 以任何方式危害未成年人；
+            </p>
+            <p>
+                4.3.3 冒充任何人或机构，或以虚伪不实的方式谎称或使人误认为与任何人或任何机构有关；
+            </p>
+            <p>
+                4.3.4 伪造标题或以其他方式操控识别资料，使人误认为该内容为哔哩哔哩所传送
+            </p>
+            <p>
+                4.3.5 将无权传送的内容（例如内部资料、机密资料）进行上载、张贴、发送电子邮件或以其他方式传送；
+            </p>
+            <p>
+                4.3.6 将侵犯任何人的专利、商标、著作权、商业秘密等知识产权的内容加以上载、张贴、发送电子邮件或以其他方式传送；
+            </p>
+            <p>
+                4.3.7 将广告函件、促销资料、"垃圾邮件"等，加以上载、张贴、发送电子邮件或以其他方式传送；
+            </p>
+            <p>
+                4.3.8 跟踪或以其他方式骚扰他人；
+            </p>
+            <p>
+                4.3.9 将有关干扰、破坏或限制任何计算机软件、硬件或通讯设备功能的软件病毒或其他计算机代码、档案和程序之资料，加以上载、张贴、发送电子邮件或以其他方式传送；
+            </p>
+            <p>
+                4.3.10 故意或非故意违反任何相关的中国法律、法规、规章、条例等其他具有法律效力的规范；
+            </p>
+            <p>
+                4.3.11 用户需保证其上传内容不得违反广电总局的相关规定，包括但不限于《互联网视听节目服务管理规定》（广电总局56号令）等，其上传节目应当符合法律、行政法规、部门规章的规定，上传内容不得含有以下内容：
+            </p>
+            <p>
+                （1） 反对宪法确定的基本原则的；
+            </p>
+            <p>
+                （2） 危害国家统一、主权和领土完整的；
+            </p>
+            <p>
+                （3） 泄露国家秘密、危害国家安全或者损害国家荣誉和利益的；
+            </p>
+            <p>
+                （4） 煽动民族仇恨、民族歧视，破坏民族团结，或者侵害民族风俗、习惯的；
+            </p>
+            <p>
+                （5） 扰乱社会秩序，破坏社会稳定的；
+            </p>
+            <p>
+                （6） 诱导未成年人违法犯罪和渲染暴力、色情、赌博、恐怖活动的；
+            </p>
+            <p>
+                （7） 侮辱或者诽谤他人，侵害公民个人隐私等他人合法权益的；
+            </p>
+            <p>
+                （8） 危害社会公德，损害民族优秀文化传统的；
+            </p>
+            <p>
+                （9） 有关法律、行政法规和国家规定禁止的其他内容。
+            </p>
+            <p>
+                4.3.12 如用户提供的上传内容含有以上违反政策法律法规的信息或者内容的，由用户直接承担以上导致的一切不利后果，如因此给哔哩哔哩造成不利后果的，用户应负责消除影响，并且赔偿因此导致的一切损失
+            </p>
+        </div>
+        <i class="guanbi iconfont icon-guanbi"></i>
+    </div>
+    <div class="default-agree agree-thing">
+        <h3>默认注册须知：</h3>
+        <div class="content">
+            <h1>项目测试，不做任何商业用途</h1>
+            <p>1.普通用户只能发布相关文章，允许发表视频评论，可以进行相关视频的学习</p>
+            <p>4. 禁止用户从事以下行为：</p>
+            <p>4.3.1 制作、上传、复制、传送、传播包含任何反对宪法所确定的基本原则、危害国家安全、泄露国家秘密、颠覆国家政权、
+                破坏国家统一、破坏民族团结、损害国家荣誉和利益、煽动民族仇恨、民族歧视、破坏民族团结、破坏国家宗教政策、
+                宣扬邪教和封建迷信、淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪、侮辱或者诽谤他人，侵害他人合法权益的等法律、
+                行政法规禁止的内容或其他令人反感的包括但不限于资讯、资料、文字、软件、音乐、照片、图形、信息或其他资料；
+            </p>
+            <p>
+                4.3.2 以任何方式危害未成年人；
+            </p>
+            <p>
+                4.3.3 冒充任何人或机构，或以虚伪不实的方式谎称或使人误认为与任何人或任何机构有关；
+            </p>
+            <p>
+                4.3.4 伪造标题或以其他方式操控识别资料，使人误认为该内容为哔哩哔哩所传送
+            </p>
+            <p>
+                4.3.5 将无权传送的内容（例如内部资料、机密资料）进行上载、张贴、发送电子邮件或以其他方式传送；
+            </p>
+            <p>
+                4.3.6 将侵犯任何人的专利、商标、著作权、商业秘密等知识产权的内容加以上载、张贴、发送电子邮件或以其他方式传送；
+            </p>
+            <p>
+                4.3.7 将广告函件、促销资料、"垃圾邮件"等，加以上载、张贴、发送电子邮件或以其他方式传送；
+            </p>
+            <p>
+                4.3.8 跟踪或以其他方式骚扰他人；
+            </p>
+            <p>
+                4.3.9 将有关干扰、破坏或限制任何计算机软件、硬件或通讯设备功能的软件病毒或其他计算机代码、档案和程序之资料，加以上载、张贴、发送电子邮件或以其他方式传送；
+            </p>
+            <p>
+                4.3.10 故意或非故意违反任何相关的中国法律、法规、规章、条例等其他具有法律效力的规范；
+            </p>
+            <p>
+                4.3.11 用户需保证其上传内容不得违反广电总局的相关规定，包括但不限于《互联网视听节目服务管理规定》（广电总局56号令）等，其上传节目应当符合法律、行政法规、部门规章的规定，上传内容不得含有以下内容：
+            </p>
+            <p>
+                （1） 反对宪法确定的基本原则的；
+            </p>
+            <p>
+                （2） 危害国家统一、主权和领土完整的；
+            </p>
+            <p>
+                （3） 泄露国家秘密、危害国家安全或者损害国家荣誉和利益的；
+            </p>
+            <p>
+                （4） 煽动民族仇恨、民族歧视，破坏民族团结，或者侵害民族风俗、习惯的；
+            </p>
+            <p>
+                （5） 扰乱社会秩序，破坏社会稳定的；
+            </p>
+            <p>
+                （6） 诱导未成年人违法犯罪和渲染暴力、色情、赌博、恐怖活动的；
+            </p>
+            <p>
+                （7） 侮辱或者诽谤他人，侵害公民个人隐私等他人合法权益的；
+            </p>
+            <p>
+                （8） 危害社会公德，损害民族优秀文化传统的；
+            </p>
+            <p>
+                （9） 有关法律、行政法规和国家规定禁止的其他内容。
+            </p>
+            <p>
+                4.3.12 如用户提供的上传内容含有以上违反政策法律法规的信息或者内容的，由用户直接承担以上导致的一切不利后果，如因此给哔哩哔哩造成不利后果的，用户应负责消除影响，并且赔偿因此导致的一切损失
+            </p>
+        </div>
+        <i class="guanbi iconfont icon-guanbi"></i>
+    </div>
+</body>
+<script type="application/javascript" src="../static/js/Register/registerCommon.js"></script>
+</html>

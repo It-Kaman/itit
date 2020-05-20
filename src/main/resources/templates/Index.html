@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>IT知识学习网站</title>
+</head>
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()}+'/static/css/bootstrap.css'" href="../static/css/bootstrap.css">
+<!--swiper-->
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} +'/static/css/swiper.css'" href="../static/css/swiper.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} +'/static/icon/ali-icon/iconfont.css'" href="../static/icon/ali-icon/iconfont.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} +'/static/css/Page/font.css'" href="../static/css/Page/font.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} +'/static/css/Page/common.css'" href="../static/css/Page/common.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} +'/static/css/Page/header.css'" href="../static/css/Page/header.css">
+<link rel="stylesheet" type="text/css" th:href="${#request.getServletContext().getContextPath()} +'/static/css/Page/footer.css'" href="../static/css/Page/footer.css">
+
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()} +'/static/js/jquery-3.4.1.js'" src="../static/js/jquery-3.4.1.js"></script>
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/js/swiper.js'" src="../static/js/swiper.js"></script>
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/js/bootstrap-select.js'" src="../static/js/bootstrap-select.js"></script>
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/js/bootstrap.js'" src="../static/js/bootstrap.js"></script>
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/js/Page/header.js'" src="../static/js/Page/header.js"></script>
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/plugins/request.js'" src="../static/plugins/request.js"></script>
+<script type="application/javascript" th:src="${#request.getServletContext().getContextPath()}+'/static/js/ContextPath.js'" src="../static/js/ContextPath.js"></script>
+
+
+<style>
+    /*img.header-img{
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }*/
+    header{
+        background: none;
+        position: absolute;
+        top: 0px;
+        z-index: 2;
+    }
+    .header-swiper{
+        width: 100%;
+        height: 770px;
+        /*position: absolute;*/
+        position: relative;
+    }
+    .header-swiper>.swiper-wrapper>.swiper-slide{
+        background: #c0bfbf;
+    }
+    .header-swiper>.swiper-wrapper>.swiper-slide>.swiper-box{
+        width: 100%;
+        height: 100%;
+    }
+    .header-swiper .swiper-box>a>.box-face{
+        width: 100%;
+        height: 100%;
+    }
+    .header-swiper .swiper-box>a>.box-face>img{
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
+    .header-swiper .swiper-box>.box-content{
+        background: rgba(0,0,0,.5);
+        height: 50px;
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        z-index: 1;
+        float: right;
+        overflow: hidden;
+    }
+    .header-swiper .swiper-box>.box-content>a>span{
+        color: white;
+        float: right;
+        text-align: right;
+        font-size: 18px;
+        line-height: 50px;
+        padding-right: 50px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 30%;
+        white-space: nowrap;
+    }
+    .header-swiper .swiper-box>.box-content>a>span:active{
+        color: #282a2d;
+    }
+    .header-swiper>.header-pagination{
+        position: absolute;
+        bottom: 70px;
+    }
+    .header-swiper>.swiper-nav>div{
+        position: absolute;
+        width: 75px;
+        height: 75px;
+        top: 50%;
+        margin-top: -37.5px;
+        z-index: 3;
+    }
+    .header-swiper>.swiper-nav>.header-left{
+        left: 200px;
+    }
+    .header-swiper>.swiper-nav>.header-left>span{
+        background: url(../static/img/index/arrow-w-left.png) no-repeat center;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        transform: translate(24px,24px);
+        transition: transform 1s;
+        cursor: pointer;
+    }
+    .header-swiper>.swiper-nav>.header-right{
+        right:200px;
+    }
+    .header-swiper>.swiper-nav>.header-right>span{
+        background: url(../static/img/index/arrow-w-right.png) no-repeat center;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        transform: translate(24px,24px);
+        transition: transform 1s;
+        cursor: pointer;
+    }
+    .header-swiper>.swiper-nav>div>span.circle{
+        border-radius:50%;
+        border:1px solid white;
+        width:48px;
+        height:48px;
+        transition:transform .2s linear;
+    }
+
+
+    /*导航栏*/
+    nav{
+        margin-top: 30px;
+        width: 100%;
+        height: 100px;
+        /*background: black;*/
+        overflow: hidden;
+    }
+    nav>.nav-left{
+        float:left;
+        width: 20%;
+        /*background: #5bc0de;*/
+        height: 100%;
+    }
+    nav>.nav-left>ul{
+        margin-top: 15px;
+        overflow: hidden;
+    }
+    nav>.nav-left>ul>li{
+        float: left;
+        padding-left: 25px;
+    }
+    nav>.nav-left>ul>li>a>div{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #5bc0de;
+        position: relative;
+    }
+    nav>.nav-left>ul>li:nth-of-type(2)>a>div{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: deeppink;
+        position: relative;
+    }
+    nav>.nav-left>ul>li>a>div>span{
+        font-size: 30px;
+        position: absolute;
+        display: block;
+        top: 50%;
+        left: 50%;
+        margin-top: -21px;
+        margin-left: -15px;
+        color: white;
+    }
+    nav>.nav-left>ul>li>a>p{
+        margin-top: 5px;
+        text-align: center;
+    }
+    nav>.nav-line{
+        height: 100%;
+        width: 2px;
+        background: #c6c8ca;
+        float: left;
+    }
+    nav>.nav-tab{
+        float: left;
+        padding-left: 5%;
+        height: 100%;
+        overflow: hidden;
+        width: 79%;
+    }
+    nav>.nav-tab>ul{
+        overflow: hidden;
+        height: 100%;
+    }
+    nav>.nav-tab>ul>li{
+        float: left;
+        width: 16%;
+        height: 45%;
+        font-size: 20px;
+        margin-top: 2.5px;
+    }
+
+    section{
+        /*padding: 0% 10%;*/
+        margin-top: 50px;
+        width: 100%;
+        height: 2000px;
+    }
+    section>.section-box{
+        margin-bottom: 100px;
+        transition: all .5s;
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    section>.scrollShow{
+        opacity: 1;
+        transform: translateY(0px);
+        display: block;
+    }
+    section>.section-box>.box-content>ul{
+        margin-top: 20px;
+        overflow: hidden;
+        width: 100%;
+    }
+    section>.section-box>.box-content>ul>li{
+        float: left;
+        width: 20%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        /*height: 200px;*/
+        padding: 0 1%;
+        border-radius: 5px;
+    }
+    section>.section-box>.box-content>ul>li:nth-of-type(5n){
+        padding-right: 0.5%;
+    }
+    section>.section-box>.box-content>ul>li:nth-of-type(5n+1){
+        padding-left: 0.5%;
+    }
+    section>.section-box>.box-content>ul>li>a:hover{
+        text-decoration: none;
+    }
+    section>.section-box>.box-content>ul>li>a>div.video_box{
+        width: 100%;
+        height: 230px;
+        background: #e8e8e8;
+        border-radius:6px;
+        border: 1px solid #2d2a2a;
+        transition: all .5s;
+        overflow: hidden;
+    }
+    section>.section-box>.box-content>ul>li>a>div.video_box:hover{
+        box-shadow: 1px 2px 2px 2px rgba(0,0,0,.5);
+    }
+    section>.section-box>.box-content>ul>li>a>div.video_box>.img-box{
+        width: 100%;
+        height: 50%;
+        overflow: hidden;
+    }
+    section>.section-box>.box-content>ul>li>a>div.video_box>.img-box>img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    section>.section-box>.box-content>ul>li>a>div.video_box>.info-box{
+        width: 100%;
+        height: 50%;
+        margin-top: 1%;
+        padding: 0 5%;
+        overflow: hidden;
+    }
+    section>.section-box>.box-content>ul>li>a>div.video_box>.info-box>p{
+        font-size: 13px;
+        color: #2d2a2a;
+    }
+    section>.section-box>.box-content>ul>li>a>div.video_box>.info-box>p.name{
+        width: 100%;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 40px;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    section>.section-box>.box-content>ul>li>a>div.video_box>.info-box>span{
+        margin-bottom: 5px;
+        display: inline-block;
+        width: 50%;
+        color: #99a2aa;
+    }
+    section>.section-box>.box-content>ul>li>a>div.video_box>.info-box>p.author{
+        color: #2ba246;
+    }
+    section>.section-box>.box-more{
+        float: right;
+    }
+
+</style>
+<body>
+    <!--头部-->
+    <header class="container-fluid">
+        <!--左边部分-->
+        <div class="icon-left">
+            <a href="/index"><i class="zhanku">IT学习网站</i></a>
+            <!--<a class="" href="#">首页</a>-->
+        </div>
+        <div class="air"></div>
+        <!--查询-->
+        <div class="Search-Modular">
+            <input type="text" data-ope="normal" class="search-content" name="search-content" list="search-list" placeholder="请输入搜索关键词">
+            <button class="iconfont icon-sousuo"></button>
+            <datalist id="search-list"></datalist>
+        </div>
+        <!--右边部分-->
+        <div class="header-right-list">
+            <!--未登录-->
+            <!--/*@thymesVar id="user" type="com.itit.entry.User"*/-->
+            <ul th:if="${session.user == null}" class="unlogin">
+                <li>
+                    <a href="#">
+                        <button class="contribute-btn">投稿</button>
+                    </a>
+                    <div class="Contribute-list">
+                        <ul>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'" href="/upload/article/record">
+                                    <i class="iconfont icon-nav"></i>
+                                    <span>专栏投稿</span>
+                                </a>
+                            <li>
+                                <a th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                    <i class="iconfont icon-shipin"></i>视频投稿
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-yinpin"></i>音频管理
+                                </a>
+                            <li>
+                                <a href="#">
+                                    <i class="iconfont icon-guanli"></i>投稿管理
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/register">注册</a>
+                </li>
+                <li>
+                    <a href="/login">登录</a>
+                </li>
+                <li>
+                    <div class="header-img">
+                        <img th:src="${#request.getServletContext().getContextPath()}+'/static/img/header/default/akari.jpg'" class="img-circle" width="34px" height="34px"/>
+                        <div class="header-img-list">
+                            <ul>
+                                <li class="btn-group">
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/login'" href="/login"><div class="btn"><span>登录</span></div></a>
+                                    <a th:href="${#request.getServletContext().getContextPath()}+'/register'" href="/register"><div class="btn"><span>注册</span></div></a>
+                                </li>
+                                <li>选择语言</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!--已登录-->
+             <ul th:if="${session.user != null}" class="has-login" th:data-id="${session.user.getId()}">
+                 <li>
+                     <a href="#">
+                         <button class="contribute-btn">投稿</button>
+                     </a>
+                     <div class="Contribute-list">
+                         <ul>
+                             <li>
+                                 <a th:href="${#request.getServletContext().getContextPath()}+'/upload/article/record'"  href="/upload/article/record">
+                                     <i class="iconfont icon-nav"></i>
+                                     <span>专栏投稿</span>
+                                 </a>
+                             <li>
+                                 <a  th:href="${#request.getServletContext().getContextPath()}+'/upload/video/record'" href="/upload/video/record">
+                                     <i class="iconfont icon-shipin"></i>视频投稿
+                                 </a>
+                             </li>
+                             <li>
+                                 <a href="#">
+                                     <i class="iconfont icon-yinpin"></i>音频管理
+                                 </a>
+                             <li>
+                                 <a href="#">
+                                     <i class="iconfont icon-guanli"></i>投稿管理
+                                 </a>
+                             </li>
+                         </ul>
+                     </div>
+                 </li>
+                 <li><a href="#">历史</a></li>
+                 <li th:text="${session.user.anothername}"></li>
+                 <li><div class="header-img">
+                     <img th:src="${session.user.header}" class="img-circle" width="34px" height="34px"/>
+                     <div class="header-img-list">
+                         <ul>
+                             <li>
+                                 <ul>
+                                     <li><a th:href="'/UserCenter?id='+${session.user.getId()}">个人中心</a></li>
+                                     <li>投稿管理</li>
+                                     <li>订单中心</li>
+                                     <li>我的课程</li>
+                                 </ul>
+                             </li>
+                             <li>选择语言</li>
+                             <li><a style="display: block" th:href="${#request.getServletContext().getContextPath()}+'/logout'">退出</a></li>
+                         </ul>
+                     </div>
+                 </div></li>
+             </ul>
+        </div>
+    </header>
+    <!--头部背景图-->
+    <!--<img class="header-img" src="../static/img/u=2320029255,2607928772&fm=26&gp=0.jpg">-->
+    <!--轮播图-->
+    <div class="container-fluid swiper-container header-swiper">
+        <div class="swiper-wrapper">
+            <div th:each="swiper:${#request.getAttribute('swipers')}" class="swiper-slide header-swiper-slide">
+                <div class="swiper-box">
+                    <a href="#">
+                        <div class="box-face">
+                                <img th:src="${swiper.header}">
+                        </div>
+                    </a>
+                    <div class="box-content">
+                        <a href="javascript:;">
+                            <span th:text="${swiper.title}">测试</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+           <!-- <div class="swiper-slide header-swiper-slide">
+                <div class="swiper-box">
+                    <a href="#">
+                        <div class="box-face">
+                            <img src="../static/img/temp/idea.jpg" alt="">
+                        </div>
+                    </a>
+                    <div class="box-content">
+                        <a href="">
+                            <span>项目测试项目s测试项目测试项目测试目测试项目测试项目测试项目测试目测试项目测试项目测试项目测试</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide header-swiper-slide">
+                <div class="swiper-box">
+                    <a href="#">
+                        <div class="box-face">
+                            <img src="../static/img/temp/4、join方法_20200504222143.JPG" alt="">
+                        </div>
+                    </a>
+                    <div class="box-content">
+                        <a href="">
+                            <span>项目测试项目s测试项目测试项目测试目测试项目测试项目测试项目测试目测试项目测试项目测试项目测试</span>
+                        </a>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+        <!--分页器-->
+        <div class="swiper-pagination header-pagination"></div>
+        <!--左右控制-->
+        <div class="swiper-nav">
+            <div class="header-left">
+                <span></span>
+            </div>
+            <div class="header-right">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <nav class="container">
+        <div class="nav-left">
+            <ul>
+                <li>
+                    <a href="/index">
+                        <div>
+                            <span class="iconfont icon-shouye"></span>
+                        </div>
+                        <p>首页</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/search">
+                        <div>
+                            <span class="iconfont icon-paihangbang"></span>
+                        </div>
+                        <p>排行榜</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="nav-line"></div>
+        <div class="nav-tab">
+            <ul>
+                <li><a href="/search?status=4&tag=JAVA">JAVA</a></li>
+                <li><a href="/search?status=4&tag=C语言">C语言</a></li>
+                <li><a href="/search?status=4&tag=HTML">H5前端</a></li>
+                <li><a href="/search?status=4&tag=PHP">PHP</a></li>
+                <li><a href="/search?status=4&tag=Phyton">Phyton</a></li>
+                <li><a href="/search?status=4&tag=Mysql">Mysql</a></li>
+                <li><a href="/search?status=4&tag=Linux">Linux</a></li>
+                <li><a href="/search?status=4&tag=其他">其他</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="container">
+        <div class="section-box" id="1">
+            <h2 class="box-title">JAVA</h2>
+            <div class="box-content">
+               <ul></ul>
+            </div>
+            <a class="box-more" href="/search?status=4&tag=JAVA">查看更多></a>
+        </div>
+        <div class="section-box" id="6">
+            <h2 class="box-title">HTML</h2>
+            <div class="box-content">
+                <ul></ul>
+            </div>
+            <a class="box-more" href="/search?status=4&tag=HTML">查看更多></a>
+        </div>
+        <div class="section-box" id="11">
+            <h2 class="box-title">C语言</h2>
+            <div class="box-content">
+                <ul></ul>
+            </div>
+            <a class="box-more" href="/search?status=4&tag=C">查看更多></a>
+        </div>
+    </section>
+    <!--底部-->
+    <footer>
+        <label>&COPY;CopyRight From It-Kaman.All Rights Reserved.</label>
+    </footer>
+</body>
+</html>
+<script type="application/javascript">
+/*首页页顶轮播图*/
+var headerSwiper = new Swiper('.header-swiper', {
+    autoplay:{
+        disableOnInteraction:true,
+        delay:5000,
+    },//可选选项，自动滑动
+    loop:true,
+    noSwiping : true,
+    noSwipingClass:"header-swiper-slide",
+    navigation:{
+        prevEl:".header-left",
+        nextEl: ".header-right",
+    },
+    pagination: {
+        el: '.header-pagination',
+    },
+})
+
+    /*轮播图左右移动按钮*/
+$(".header-swiper>.swiper-nav>div").mousemove(function(){
+    $(this).children().eq(0).addClass("circle").css("transform", "translate(" + (event.offsetX - 12) + "px," + (event.offsetY - 12) + "px)");
+})
+$(".header-swiper>.swiper-nav>div").mouseleave(function(){
+    $(this).children().eq(0).removeClass("circle").removeAttr("style");
+})
+</script>
+<script>
+    $(function () {
+        request.ajax(getContextPath()+"search/hot","get","",true,function (data) {
+            if(data.success){
+                data.datas.forEach(function (element) {
+                    $("<option name='content' value='"+element.searchName+"'></option>").attr("label","搜索次数:"+element.num).appendTo("#search-list");
+                })
+                $("input[name='search-content']").attr("placeholder",data.showtag.searchName);
+            }
+        })
+    })
+
+    $("input[name='search-content']").keyup(function () {
+        $(this).attr("data-ope","clear");
+    })
+
+    $(".Search-Modular>button.icon-sousuo").click(function () {
+        var name = $("input[name='search-content']").attr("placeholder");
+        if( $("input[name='search-content']").data("ope") != "clear"){
+            window.location.href = getContextPath()+"search?name="+name;
+        }else {
+            window.location.href = getContextPath()+"search?name="+$("input[name='search-content']").val();
+        }
+    })
+    //滚动事件
+    $(window).scroll(function () {
+        if($(this).scrollTop() >= $("section").eq(0).offset().top - 500 &&($(this).scrollTop() <($("section").eq(0).offset().top -500 +$("section>.section-box").eq(0).height()))){
+            if(!$("section>.section-box:eq(0)").hasClass("ok")){
+                $("section>.section-box").eq(0).addClass("ok");
+                $("section>.section-box").eq(0).css({"opacity":1,"transform":"translateY(0px)"})
+                request.ajax(getContextPath()+"videos/recommend","POST",{"tagId":$(".section-box:eq(0)").attr("id")},true,function(data){
+                    if(data.success){
+                        data.datas.forEach(function(element){
+                            $(".section-box:eq(0)>.box-content>ul").append("<li>\n" +
+                                "<a href='"+getContextPath() + "videos/page/VO"+element.num+"'>"+
+                                "<div class='video_box'>"+
+                                "<div class='img-box'>"+
+                                "<img class='header' src='"+element.header+"' alt=''/>" +
+                                "</div>" +
+                                "<div class='info-box'>" +
+                                "<p class='name'>"+element.name+"</p>" +
+                                "<span class='clicknum'>点击量:"+(element.hotNum==null?"0":element.hotNum)+"</span>&nbsp;&nbsp;<span class='date'>"+dataFormat(element.createdate)+"</span>" +
+                                "<p class='author'>"+element.author.anothername+"</p>" +
+                                "</div>" +
+                                "</div>" +
+                                "</a>" +
+                                "</li>")
+                        })
+                    }
+                })
+            }
+        }else if($(this).scrollTop()>= $("section>.section-box:eq(0)").offset().top -100 && $(this).scrollTop() < ($("section").eq(0).offset().top + 100 +$("section>.section-box").eq(1).height())){
+            if(!$("section>.section-box:eq(1)").hasClass("ok")){
+                $("section>.section-box").eq(1).addClass("ok");
+                $("section>.section-box").eq(1).css({"opacity":1,"transform":"translateY(0px)"})
+                request.ajax(getContextPath()+"videos/recommend","POST",{"tagId":$(".section-box:eq(1)").attr("id")},true,function(data){
+                    if(data.success){
+                        data.datas.forEach(function(element){
+                            $(".section-box:eq(1)>.box-content>ul").append("<li>\n" +
+                                "<a href='"+getContextPath() + "videos/page/VO"+element.num+"'>"+
+                                "<div class='video_box'>"+
+                                "<div class='img-box'>"+
+                                "<img class='header' src='"+element.header+"' alt=''/>" +
+                                "</div>" +
+                                "<div class='info-box'>" +
+                                "<p class='name'>"+element.name+"</p>" +
+                                "<span class='clicknum'>点击量:"+(element.hotNum==null?"0":element.hotNum)+"</span>&nbsp;&nbsp;<span class='date'>"+dataFormat(element.createdate)+"</span>" +
+                                "<p class='author'>"+element.author.anothername+"</p>" +
+                                "</div>" +
+                                "</div>" +
+                                "</a>" +
+                                "</li>")
+                        })
+                    }
+                })
+            }
+        }else if($(this).scrollTop() >= $("section>.section-box:eq(1)").offset().top -100){
+            if(!$("section>.section-box:eq(2)").hasClass("ok")){
+                $("section>.section-box").eq(2).addClass("ok");
+                $("section>.section-box").eq(2).css({"opacity":1,"transform":"translateY(0px)"})
+                request.ajax(getContextPath()+"videos/recommend","POST",{"tagId":$(".section-box:eq(2)").attr("id")},true,function(data){
+                    if(data.success){
+                        data.datas.forEach(function(element){
+                            $(".section-box:eq(2)>.box-content>ul").append("<li>\n" +
+                                "<a href='"+getContextPath() + "videos/page/VO"+element.num+"'>"+
+                                "<div class='video_box'>"+
+                                "<div class='img-box'>"+
+                                "<img class='header' src='"+element.header+"' alt=''/>" +
+                                "</div>" +
+                                "<div class='info-box'>" +
+                                "<p class='name'>"+element.name+"</p>" +
+                                "<span class='clicknum'>点击量:"+(element.hotNum==null?"0":element.hotNum)+"</span>&nbsp;&nbsp;<span class='date'>"+dataFormat(element.createdate)+"</span>" +
+                                "<p class='author'>"+element.author.anothername+"</p>" +
+                                "</div>" +
+                                "</div>" +
+                                "</a>" +
+                                "</li>")
+                        })
+                    }
+                })
+            }
+        }
+    })
+
+    var dataFormat = function (time) {
+        time = time.slice(0,time.indexOf("T"));
+        return time;
+    }
+</script>

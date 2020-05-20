@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.VideoDao">
+    <select id="selectCountByUserId" parameterType="int" resultType="int">
+        select count(1) from itit_video where author = #{id}
+    </select>
+    <select id="selectCountByVideo" parameterType="VideoQuery" resultType="int">
+        select count(1) from itit_video
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="author != null and author.id != null">
+                AND author = #{author.id}
+            </if>
+        </where>
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into itit_video(name,description,url,status,header,author,createdate,num) values (
+        #{name},#{description},#{url},#{status},#{header},#{author.id},#{createdate},#{num})
+    </insert>
+    <resultMap id="videoMap" type="Video">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result column="url" property="url"/>
+        <result column="header" property="header"/>
+        <result column="status" property="status"/>
+        <result column="createdate" property="createdate"/>
+       <result column="author" property="author.id"></result>
+    </resultMap>
+    <select id="queryAll" parameterType="VideoQuery" resultMap="videoMap">
+        select id,name,description,url,header,status,author,createdate,num from itit_video
+        <where>
+          <if test="id != null">
+              id = #{id}
+          </if>
+          <if test="name != null and name != ''">
+              name = #{name}
+          </if>
+          <if test="status != null and status != ''">
+              status = #{status}
+          </if>
+          <if test="author != null and author.id != ''">
+              author = #{author.id}
+          </if>
+        </where>
+        order by createdate desc
+    </select>
+    <select id="queryById" resultMap="videoMap">
+        select id,name,description,url,header,status,author,createdate from itit_video where id = #{id}
+    </select>
+    <!--删除视频/封面专用-->
+    <select id="queryInId" resultType="Video">
+        select id,url,header,status from itit_video where id in
+        <foreach collection="array" item="id" separator="," close=")" open="(">
+            #{id}
+        </foreach>
+    </select>
+    <update id="edit" parameterType="Video">
+        update itit_video
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="reason != null and reason !=''">
+                reason = #{reason},
+            </if>
+            <if test="url != null and url !=''">
+                url = #{url},
+            </if>
+            <if test="header != null and header != ''">
+                header = #{header},
+            </if>
+        </set>
+        where id= #{id}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete from itit_video where id in
+        <foreach collection="array" open="("  close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </delete>
+    <resultMap id="searchVideo" type="VideoSearchVo">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="url" property="url"/>
+        <result column="status" property="status"/>
+        <result column="header" property="header"/>
+        <result column="createdate" property="createdate"/>
+        <result column="reason" property="reason"/>
+        <result column="num" property="num"/>
+        <result column="hotNum" property="hotNum"/>
+        <association property="author" javaType="User" columnPrefix="u_">
+            <id column="id" property="id"/>
+            <result property="anothername" column="anothername"/>
+        </association>
+    </resultMap>
+    <select id="queryByVideoQuery" parameterType="VideoQuery" resultMap="searchVideo">
+        select
+        distinct v.id,v.name,v.description,v.url,v.header,v.status,v.createdate,v.reason,v.num,u.anothername as u_anothername,u.id as u_id,c.num as hotNum
+        from itit_video v
+        left join itit_user u
+        on v.author = u.id
+        left join itit_clicknum c
+        on c.videoId = v.id
+        left join itit_tag_video_middle m
+        on v.id = m.video_id
+        <trim prefix=" where " suffixOverrides="and">
+            <if test="name != null and name != ''">
+                <bind name="likeName" value="'%' + _parameter.name + '%'" />
+                lower(name) like lower(#{likeName}) and
+            </if>
+            <if test="status != null">
+                status = #{status} and
+            </if>
+            <if test="column != null">
+                tag_id in
+                <foreach collection="column" item="c" open="(" close=")" separator=",">
+                    #{c}
+                </foreach>
+            </if>
+        </trim>
+        <trim prefix=" order by " suffixOverrides=",">
+            <choose>
+                <when test="time == true">
+                    createdate desc,
+                </when>
+                <otherwise>
+                    hotNum desc
+                </otherwise>
+            </choose>
+        </trim>
+    </select>
+    <select id="queryByRand"  parameterType="VideoQuery" resultMap="searchVideo">
+      select
+        v.id,v.name,v.description,v.url,v.header,v.status,v.createdate,v.reason,v.num,u.anothername as u_anothername,u.id as u_id,c.num as hotNum
+        from itit_video v
+        left join itit_user u
+        on v.author = u.id
+        left join itit_clicknum c
+        on c.videoId = v.id
+        left join itit_tag_video_middle m
+        on v.id = m.video_id
+        <trim prefix="where" suffixOverrides="and">
+            <if test="status != null">
+                status = #{status} and
+            </if>
+            <if test="column != null">
+                tag_Id in
+                <foreach collection="column" item="c" open="(" close=")" separator=",">
+                    #{c}
+                </foreach>
+            </if>
+        </trim>
+        order by rand()
+    </select>
+
+
+    <resultMap id="Base_Map_2" type="VideoPageVo">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <result column="num" property="num"/>
+        <result column="status" property="status"/>
+        <result column="createdate" property="createdate"/>
+        <result column="reason" property="reason"/>
+        <result column="url" property="url"/>
+        <result property="header" column="header"/>
+        <result property="num" column="num"></result>
+        <result column="description" property="description"/>
+        <association property="author" column="author" javaType="UserSearchVo" select="com.itit.dao.Ifac.UserDao.queryUserById"></association>
+    </resultMap>
+    <select id="findByQuery_second" parameterType="VideoQuery" resultMap="Base_Map_2">
+        select id,name,url,header,num,status,description,createdate,reason,author from itit_video
+        <where>
+            <if test="num!=null and num != ''">
+                num = #{num}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectClickNumById" parameterType="int" resultType="int">
+        select num from itit_clicknum where videoId = #{videoId}
+    </select>
+    <insert id="addClickNum" parameterType="int">
+        insert into itit_clicknum values (#{videoId},#{num});
+    </insert>
+    <update id="updateClickNum" parameterType="int">
+        update itit_clicknum set num = num + #{num} where videoId = #{videoId}
+    </update>
+
+    <resultMap id="Base_Video_Map3" type="UploadVideoVo">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="content" property="content"/>
+        <result column="num" property="num"/>
+        <result column="status" property="status"/>
+        <result column="description" property="description"/>
+        <result column="createdate" property="createdate"/>
+        <result column="reason" property="reason"/>
+        <result column="url" property="url"/>
+        <result column="header" property="header"/>
+        <association property="author" javaType="User" columnPrefix="u_">
+            <id property="id" column="id"/>
+            <result column="username" property="username"/>
+            <result column="anothername" property="anothername"/>
+        </association>
+        <collection property="column" column="id" ofType="String" select="com.itit.dao.Ifac.TagDao.VideoTagfindById"></collection>
+    </resultMap>
+
+    <select id="findByQueryLikename" parameterType="VideoQuery" resultMap="Base_Video_Map3">
+        select v.id,v.name,v.num,v.status,v.createdate,v.reason,v.url,v.header,
+        u.id as u_id, u.username as u_username, u.anothername as u_anothername
+        from itit_video v
+        left join itit_user u
+        on v.author = u.id
+        <trim prefix=" where " suffixOverrides="AND||OR">
+            <if test="name != null and name !=''">
+                <bind name="likeName" value="'%' + _parameter.name + '%'" />
+                lower(name) like lower(#{likeName}) AND
+            </if>
+            <if test="num != null and num !=''">
+                num = #{num} AND
+            </if>
+            <if test="status != null">
+                status = #{status} and
+            </if>
+            <if test="id != null">
+                id = #{id}
+            </if>
+        </trim>
+        order by createdate desc
+    </select>
+</mapper>

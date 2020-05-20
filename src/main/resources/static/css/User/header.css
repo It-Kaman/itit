@@ -1,0 +1,137 @@
+/*头像上传*/
+section>article.content-body>.inner-box{
+    width: 90%;
+    padding-left: 10%;
+    height: 500px;
+    /*background: #31b0d5;*/
+    text-align: center;
+    overflow: hidden;
+}
+section>article.content-body>.inner-box>div{
+    float: left;
+}
+section>article.content-body>.inner-box>.update-box{
+    width: 49.5%;
+    height: 100%;
+    position: relative;
+}
+section>article.content-body>.inner-box>.update-box>.container-bg{
+    width: 180px;
+    height: 180px;
+    border-radius: 4px;
+    border: 1px solid #e5e9ef;
+    position: absolute;
+    top: 50%;
+    margin-top: -90px;
+    left: 50%;
+    margin-left: -90px;
+}
+section>article.content-body>.inner-box>.update-box>.container-bg>#update_img{
+    width: 180px;
+    height: 180px;
+    border: 1px solid #e5e9ef;
+    top: 0;
+    left: 0;
+    position: absolute;
+    border-radius: 4px;
+    background: #f9f9f9;
+    cursor: move;
+}
+section>article.content-body>.inner-box>.update-box>.container-bg>.click-change {
+    width: 180px;
+    height: 180px;
+    border: 1px solid;
+    top: 0;
+    left: 0;
+    position: absolute;
+    border-radius: 4px;
+    background: #f9f9f9;
+    cursor: pointer;
+}
+/*头像*/
+section>article.content-body>.inner-box>.update-box>.container-bg>.click-change:hover{
+    background: #f1f2f5;
+}
+section>article.content-body>.inner-box>.update-box>.container-bg>.click-change>imgcon{
+    width: 54px;
+    height: 54px;
+    display: block;
+    margin: 52px auto 0;
+    background: url("/static/icon/updateImg.png");
+}
+section>article.content-body>.inner-box>.update-box>.container-bg>.click-change>span{
+    display: block;
+    margin-top: 10px;
+    font-size: 15px;
+    color: #9d9d9d;
+    line-height: 20px;
+    letter-spacing: 0;
+    font-family: 黑体;
+}
+
+/*头像重新设置*/
+section>article.content-body>.inner-box>.update-box>.container-bg>.reset {
+    width: 180px;
+    height: 180px;
+    border: 1px solid;
+    top: 0;
+    left: 0;
+    position: absolute;
+    border-radius: 4px;
+    cursor: pointer;
+}
+section>article.content-body>.inner-box>.update-box>.container-bg>.reset>imgcon{
+    width: 54px;
+    height: 54px;
+    display: block;
+    margin: 52px auto 0;
+    background: url("/static/icon/updateImg.png");
+}
+section>article.content-body>.inner-box>.update-box>.container-bg>.reset>span{
+    display: block;
+    margin-top: 10px;
+    font-size: 15px;
+    color: #9d9d9d;
+    line-height: 20px;
+    letter-spacing: 0;
+    font-family: 黑体;
+}
+section>article.content-body>.inner-box>.update-box>#input_img{
+    display: none;
+}
+section>article.content-body>.inner-box>.line{
+    height: 50%;
+    width: 1px;
+    background: black;
+    margin-top: 22%;
+}
+section>article.content-body>.inner-box>.show-box{
+    width: 49.5%;
+    height: 100%;
+    position: relative;
+}
+section>article.content-body>.inner-box>.show-box>.now-header-box{
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    top: 50%;
+    left: 50%;
+    margin-top: -90px;
+    margin-left: -90px;
+}
+section>article.content-body>.inner-box>.show-box>.now-header-box>.RightImage{
+    border: 1px solid rgb(37,40,43);
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+section>article.content-body>.btns{
+    width: 70%;
+    padding-left: 30%;
+    height: 34px;
+}
+section>article.content-body>.btns>button{
+    width: 100%;
+    height: 100%;
+}

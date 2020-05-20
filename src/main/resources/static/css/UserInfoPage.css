@@ -1,0 +1,248 @@
+/* 个人用户信息*/
+.UserPageInfo{
+    width: 980px;
+    height: 980px;
+    /* height: 100%; */
+    background: #fafafa;
+    margin: 60px auto 100px;
+    border-radius: 4px;
+    border: 1px solid #e1e2e5;
+    box-shadow: 0 2px 4px rgba(0,0,0,.14);
+}
+
+.UserPageInfo .UserPageInfo-left{
+    float: left;
+    width: 150px;
+    overflow: hidden;
+    height: 100%;
+}
+.UserPageInfo .UserPageInfo-left .UserPageInfo-left-title{
+    display: block;
+    width: 150px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 16px;
+    color: #9d9d9d;
+    cursor: default;
+    border-bottom: 1px solid #e1e2e5;
+}
+
+.UserPageInfo .UserPageInfo-left .UserPageInfo-ul{
+    border-bottom: 1px solid #e1e2e5;
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.UserPageInfo .UserPageInfo-left .UserPageInfo-ul .UserPageInfo-li{
+    width: 150px;
+    height: 48px;
+    line-height: 48px;
+    cursor: pointer;
+    list-style: none;
+}
+.UserPageInfo .UserPageInfo-left .UserPageInfo-ul .UserPageInfo-li:hover{
+    background-color: #eeeeee;
+}
+
+.UserPageInfo .UserPageInfo-left .UserPageInfo-ul .UserPageInfo-li .P-hasClick{
+    background-color: #5bc0de;
+    color: white;
+}
+
+.UserPageInfo .UserPageInfo-Right{
+    width: 828px;
+    /**/
+    height: 978px;
+    border-left: 1px solid #e1e2e5;
+    background: #fff;
+    float: left;
+    min-height: 890px!important;
+}
+
+.UserPageInfo .UserPageInfo-Right .UserPageInfo-Right-title{
+    height: 60px;
+    padding-left: 40px;
+    border-bottom: 1px solid #e1e2e5;
+    background: #fafafa;
+    font-size: 15px;
+    color: #000;
+}
+.UserPageInfo .UserPageInfo-Right .UserPageInfo-Right-title .UserPageInfo-Right-title-nameText{
+    float: left;
+    margin: 19px 0 0 5px;
+}
+
+.UserPageInfo .UserPageInfo-Right .UserPageInfo-Right-body{
+    padding: 20px 20px 0;
+    position: relative;
+}
+/*个人信息*/
+.body-mine-username,.body-mine-othername,.body-mine-IdeaSign,.body-mine-sex,.body-mine-age,.body-user-btn{
+    float: left;
+    margin-bottom: 22px;
+    width: 789px;
+}
+.body-mine-label{
+    width: 100px;
+    margin-right: 20px;
+    float: left;
+    line-height: 30px;
+    padding: 0;
+    font-size: 15px;
+    color: #5e5e5e;
+    font-weight: normal;
+}
+
+.mine-content{
+    line-height: 30px;
+    font-size: 15px;
+    color: #9d9d9d;
+}
+
+.mine-content .mine-inputBtn-Group{
+    display: inline-block;
+    font-size: 0;
+}
+
+.mine-inputBtn-Group,.mine-radio-button-span{
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.mine-radio-button,.mine-radio-button-span{
+    position: relative;
+    display: inline-block;
+}
+
+.body-mine-sex .mine-content .mine-inputBtn-Group .mine-radio-button .mine-radio-input{
+    opacity: 0;
+    outline: 0;
+    position: absolute;
+    z-index: -1;
+    left: -999px;
+}
+
+.mine-content .mine-radio-button-span{
+    margin-right: 20px;
+    padding: 8px 10px;
+    border: 1px solid #e1e2e5;
+    border-radius: 5px;
+    background-color: #f4f4f4;
+    color: #000;
+    font-size: 15px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+    outline: 0;
+    position: relative;
+    box-shadow: none!important;
+    /*transition: all .3s cubic-bezier(.645,.045,.355,1);*/
+}
+
+.mine-content #othername{
+    width: 250px;
+}
+.mine-content #mySign{
+    width: 618px;
+    float: left;
+    height: 88px;
+    resize: none;
+}
+.mine-content #age{
+    width: 50px;
+}
+
+.mine-username{
+    line-height: 30px;
+    font-size: 15px;
+}
+
+.cut-line{
+    width: 789px;
+    height: 39px;
+    border-bottom: 1px solid #e1e2e5;
+    margin-bottom:  40px;
+}
+.btn-room{
+    float: left;
+    width: 789px;
+    height: 36px;
+    position: relative;
+}
+/*首页*/
+    .home-head{
+        height: 789px;
+        height: 280px;
+        font-size: 15px;
+        border-bottom: 1px solid #e1e2e5;
+    }
+    .home-head .home-head-name{
+        padding: 40px 40px;
+        margin-top: 30px;
+        float: left;
+    }
+    .home-head .home-head-name .home-head-button-group{
+        margin-top: 20px;
+        /*margin-left: 10px;*/
+    }
+
+    .home-info-security{
+        margin-left: 100px;
+    }
+
+    .home-info-button,.home-info-security{
+        position: absolute;
+        width: 80px;
+        text-align: center;
+        line-height: 24px;
+        height: 26px;
+        display: inline-block;
+        border: 1px solid #ced3db;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #6d757a;
+        /*top: 8px;*/
+    }
+
+    .home-info-button:hover,.home-info-security:hover{
+        color: #5bc0de;
+        border: 1px solid #5bc0de;
+    }
+
+    .home-head .home-img{
+        padding: 40px 40px;
+        float: right;
+    }
+
+    .home-head .home-img img{
+        width: 150px;
+        height: 150px;
+        border: 1px solid #fff;
+        cursor: pointer;
+    }
+    .home-head .home-img img:hover{
+        border: 1px solid #5bc0de;
+    }
+
+    .home-head .home-head-name .home-head-username{
+        font-size: 22px;
+    }
+
+    .home-head .home-head-name .home-head-userId{
+        font-size: 15px;
+        color:#9d9d9d;
+    }
+	
+	/*帐号安全*/
+	.Security-title{
+		margin: 20px 20px;
+	}
+	.updatePwd_box{
+		margin: 0 auto;
+		width: 350px;
+	}
+	.updatePwd_box div{
+		margin-bottom: 30px;
+	}

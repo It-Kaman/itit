@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.IndexSwiperDao">
+    <sql id="Base_Column_List">
+      id,
+      title,
+      header,
+      url
+    </sql>
+
+
+    <select id="queryAll" parameterType="int" resultType="Swiper">
+        select <include refid="Base_Column_List" /> from itit_index_swiper
+    </select>
+
+    <delete id="deleteByIds" parameterType="int">
+        delete from itit_index_swiper where id in
+        <foreach collection="list" separator="," close=")" open="(" item="id">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
+

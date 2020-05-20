@@ -1,0 +1,291 @@
+/*头部*/
+header{
+    background:#272a2d;
+    height: 50px;
+    box-shadow: 2px 0px 2px 2px rgba(0,0,0,.2);
+    /*overflow: hidden;*/
+    width: 100%;
+    transition: all .2s;
+}
+/*|-左边模块*/
+header.container-fluid{
+    padding: 0px;
+}
+header>.icon-left{
+    float: left;
+    padding-left: 1%;
+}
+header>.icon-left>a>i{
+    color: #ffffff;
+    font-size: 25px;
+    margin: 10px 0px;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+}
+
+header>.air{
+    width: 10%;
+    height: 50px;
+    float: left
+}
+
+/*
+    |-中间查询模块
+*/
+header>.Search-Modular{
+    float: left;
+    width: 20%;
+    position: relative;
+}
+header>.Search-Modular>input{
+    width: 90%;
+    height: 35px;
+    margin-top: 7px;
+    outline: none;
+    /*  border-radius: 5px;*/
+    border: none;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+header>.Search-Modular>button{
+    width: 10%;
+    position: absolute;
+    right: 0px;
+    border: none;
+    top: 7px;
+    height: 35px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    outline: none;
+    font-size: 25px;
+    background: white;
+}
+header>.Search-Modular>button:active{
+    color: #2ba245;
+}
+header>.Search-Modular>.form-group>.icon-sousuo{
+    color: #272a2d;
+}
+/*|-右边模块*/
+header>.header-right-list{
+    float: right;
+    padding-right: 5%;
+    /*overflow: hidden;*/
+    width: 40%;
+}
+header>.header-right-list>ul{
+    /*overflow: hidden;*/
+}
+header>.header-right-list>ul>li{
+    float: right;
+    color: white;
+    padding-left: 5%;
+}
+header>.header-right-list>ul>li>a{
+    color: white;
+}
+header>.header-right-list>ul>li>a:active{
+    color: #c6c8ca;
+}
+/*投稿按钮*/
+header>.header-right-list>ul>li:nth-of-type(1){
+    position: relative;
+}
+
+header>.header-right-list>ul>li:nth-of-type(1)>a{
+    width: 90px;
+    height: 53px;
+    display: block;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>a>button{
+    width:90px;
+    height: 40px;
+    background: #07c160;
+    border: 0px;
+    border-radius: 5px;
+    outline:none;
+    color: white;
+    font-size: 16px;
+    margin-top: 5px;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list{
+    position: absolute;
+    left: 50px;
+    top: 50px;
+    display: none;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list:hover{
+    display: block;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list:before{
+    content: "";
+    background: white;
+    width: 10px;
+    height: 10px;
+    display: block;
+    transform: rotate(45deg);
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list>ul{
+    position: absolute;
+    left: -190px;
+    top: 4px;
+    background: white;
+    border-radius: 5px;
+    box-shadow:2px 2px 3px 2px rgba(0,0,0,.1);
+    color: black;
+    overflow: hidden;
+    width: 320px;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list>ul>li{
+    float: left;
+    width: 80px;
+    height: 70px;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list>ul>li>a{
+    width: 100%;
+    height: 100%;
+    display: block;
+    text-align: center;
+    padding-top: 10px;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list>ul>li>a:active{
+    color: black;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list>ul>li>a:hover{
+    background: #dad9d9;
+    color: black;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list>ul>li>a>i{
+    display: block;
+    font-size: 20px;
+}
+header>.header-right-list>ul>li:nth-of-type(1)>.Contribute-list>ul>li>span{
+    display: block;
+}
+/*登录 注册*/
+header>.header-right-list>ul>li:not(:first-of-type){
+    font-size: 15px;
+    height: 50px;
+    line-height: 50px;
+}
+/*头像*/
+header>.header-right-list>ul>li:last-of-type{
+    width: 34px;
+    height: 50px;
+    border-radius: 50%;
+    padding-left: 0px;
+}
+header>.header-right-list>ul>li:last-of-type:hover .header-img-list{
+    display: block;
+}
+header>.header-right-list>ul>li:last-of-type .header-img{
+    position: relative;
+}
+header>.header-right-list>ul>li:last-of-type .header-img>img{
+    cursor: pointer;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list{
+    /*background: white;*/
+    position: absolute;
+    width: 250px;
+    left: 10px;
+    top: 47px;
+    display: none;
+    transition: all 2s;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list:before{
+    content: "";
+    background: white;
+    width: 10px;
+    height: 10px;
+    display: block;
+    transform: rotate(45deg);
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul{
+    position: relative;
+    left: -80px;
+    top: -5px;
+    background: white;
+    border-radius: 5px;
+    box-shadow:2px 2px 3px 2px rgba(0,0,0,.1);
+    color: black;
+    overflow: hidden;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li{
+    overflow: hidden;
+    padding: 5% 5%;
+    width: 100%;
+    line-height: 20px;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li:not(last-of-type){
+    border-bottom: 1px solid #e2dfde;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li.btn-group>a>.btn{
+    border: 1px solid black;
+    outline: none;
+    background: white;
+    height: 30px;
+    width: 100px;
+    position: relative;
+    z-index: 3;
+    overflow: hidden;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li.btn-group>a>.btn:after{
+    content: "";
+    position: absolute;
+    display: inline-block;
+    background: black;
+    width: 0%;
+    height: 50px;
+    left: -50px;
+    top: -9px;
+    left: -5px;
+    transform: rotate(8deg);
+    transition: all .5s cubic-bezier(0.2, 0.0, 0.2, 1);
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li.btn-group>a:hover >.btn:after{
+    width: 107%;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li>a:nth-of-type(1)>.btn{
+    float: left;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li>a:nth-of-type(2)>.btn{
+    float: right;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li>a>.btn>span{
+    color: black;
+    position: relative;
+    z-index: 3;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li.btn-group>a:hover .btn>span{
+    color: white;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li:nth-of-type(2){
+    color: #939595;
+    font-size: 16px;
+    cursor: pointer;
+}
+header>.header-right-list>ul>li:last-of-type .header-img-list>ul>li:nth-of-type(2):hover{
+    background: #dedddd;
+    color: #939595;
+}
+/*已登录情况*/
+header>.header-right-list>ul.has-login .header-img-list>ul li{
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5% 0%;
+}
+header>.header-right-list>ul.has-login .header-img-list>ul>li>ul:nth-of-type(1)>li>a{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+header>.header-right-list>ul.has-login .header-img-list>ul>li:not(:nth-of-type(1)):hover{
+    background: #dedddd;
+    color: black;
+}
+header>.header-right-list>ul.has-login .header-img-list>ul>li>ul:nth-of-type(1)>li:hover>a{
+    color: #c8c6c6;
+}

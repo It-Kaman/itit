@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.SearchTagDao">
+    <sql id="Base_Column_List">
+      id,searchName,num
+    </sql>
+
+    <select id="queryByQuery" parameterType="SearchTagQuery" resultType="SearchTag">
+        select
+        <include refid="Base_Column_List" />
+        from itit_search_tag order by num desc
+    </select>
+    <insert id="add" parameterType="SearchTag">
+        insert into itit_search_tag(searchName,num) values(#{searchName},1);
+    </insert>
+    <delete id="deletebyIds">
+        delete from itit_search_tag where id in
+        <foreach collection="list" item="id" close=")" open="(" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteByGroup">
+        <bind name="groupNum" value="'%' + _parameter.num + '%'" />
+        delete from itit_search_tag where num #{groupNum}
+    </delete>
+    <update id="updateById">
+        update itit_search_tag set num = num + 1 where id = #{id};
+    </update>
+    <update id="updateByName" parameterType="String">
+        update itit_search_tag set num = num + 1 where searchName = #{searchName};
+    </update>
+    <delete id="deleteByQuery" parameterType="SearchTagQuery">
+        delete from itit_search_tag
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="searchName != null and searchName != ''">
+                searchName = #{searchName}
+            </if>
+            <if test="num != null and num != ''">
+                num = #{num}
+            </if>
+        </where>
+    </delete>
+</mapper>
+

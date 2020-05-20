@@ -1,0 +1,31 @@
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/css/search/VideoSearch.css">
+</head>
+<body>
+
+<a id="time" href="javascript:;">按照时间排序</a>
+<a id="hotNum" href="javascript:;">按照热度数排序</a>
+<input type="hidden" id="pageNum" form="searchForm" name="pageNum">
+<input type="hidden" id="pageSize" form="searchForm" name="pageSize"/>
+<ul class="videoList"></ul>
+<div class="pagination-box">
+    <span>共<span class="page_num">1</span>页</span>
+    <ul class="pagination">
+        <li class="disabled first">
+            <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="disabled last">
+            <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="script">
+    <script type="application/javascript" src="../../static/js/search/VideoSearch.js"></script>
+</div>
+</body>

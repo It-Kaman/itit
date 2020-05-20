@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+	<title>个人中心-首页</title>
+	<link rel="stylesheet" href="../../static/css/User/index.css">
+</head>
+<body>
+	<div class="index-box">
+		<div class="part1-content">
+			<ul>
+				<li class="username" th:text="${session.user.getAnothername()}">游客</li>
+				<li class="userId" th:text="'ID: '+${session.user.getId()}">ID:000</li>
+				<li>
+					<button>个人信息</button>
+					<button>账号安全</button>
+				</li>
+			</ul>
+		</div>
+		<div class="part1-header">
+			<div class="header">
+				<a href="#">
+					<img th:src="${session.user.getHeader()}" src="../../static/img/用户头像.jpg" alt="">
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="index-box">
+		<div class="like-num">
+			<div>
+				<span class="iconfont icon-follow"></span>
+			</div>
+			<span th:text="'粉丝数: ' + ${#request.getAttribute('Fans_Num')}">粉丝数:0</span>
+		</div>
+		<div class="send-num">
+			<div>
+				<span class="iconfont icon-fabiaowenzhang"></span>
+			</div>
+			<span th:text="'发表数:'+ ${#request.getAttribute('Article_Update_Num')} ">发表数:0</span>
+		</div>
+		<div class="video-num">
+			<div>
+				<span class="iconfont icon-bofang"></span>
+			</div>
+			<span th:text="'上传数:'+ ${#request.getAttribute('Video_Update_Num')} ">上传数:0</span>
+		</div>
+	</div>
+</body>
+<script type="application/javascript" src="../../static/js/jquery-3.4.1.js"></script>
+<script type="application/javascript">
+	
+	$(function () {
+        //获取右面页面元素
+        var $PageBody = $("article.content-body");
+        //标题
+        var $title = $("nav>div.title");
+        //获取左边页面元素
+        var $PageLeft = $("aside");
+        var $li = $PageLeft.children().eq(0).children();
+        var user_id = $(".user_id").text();
+        $("ul>li>button").click(function () {
+            //清空
+            $PageBody.empty();
+            console.log($(this).text());
+            if($(this).text() == "个人信息"){
+                $li.eq(1).addClass("active").siblings().removeClass("active");
+                $title.html("个人信息");
+                //开始建设
+                var src = "/UserCenter/info";
+                $.get({
+						url:src,
+						data:{"id":user_id},
+						success: function (data) {
+							$PageBody.html(data);
+                		}
+                });
+            }else if($(this).text() == "账号安全"){
+                $li.eq(3).addClass("active").siblings().removeClass("active");
+                $title.html("账号安全");
+                //开始建设
+                var src = "/UserCenter/security";
+                $.get(src, function (data) {
+                    $PageBody.html(data);
+                });
+            }
+        })
+    })
+
+
+
+</script>

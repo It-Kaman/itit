@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.ArticleDao">
+    <sql id="Base_Column_List">
+      id,
+      name,
+      content,
+      author,
+      num,
+      status
+    </sql>
+    <select id="selectCountByUserId" parameterType="int" resultType="int">
+        select count(1) from itit_article where author = #{id}
+    </select>
+    <resultMap id="UploadArticleMap" type="UploadArticleVo">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="content" property="content"/>
+        <result column="num" property="num"/>
+        <result column="status" property="status"/>
+        <result column="description" property="description"/>
+        <result column="createdate" property="createdate"/>
+        <result column="reason" property="reason"/>
+        <result property="author.id" column="author"></result>
+        <collection property="column" ofType="Integer" columnPrefix="m_">
+            <result column="id"/>
+        </collection>
+    </resultMap>
+    <resultMap id="UploadArticleMap2" type="UploadArticleVo">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="content" property="content"/>
+        <result column="num" property="num"/>
+        <result column="status" property="status"/>
+        <result column="description" property="description"/>
+        <result column="createdate" property="createdate"/>
+        <result column="reason" property="reason"/>
+        <association property="author" javaType="User" columnPrefix="u_">
+            <id property="id" column="id"/>
+            <result column="username" property="username"/>
+            <result column="anothername" property="anothername"/>
+        </association>
+        <collection property="column" column="id" ofType="String" select="com.itit.dao.Ifac.TagDao.ArticleTagfindById"></collection>
+    </resultMap>
+    <select id="findByQuery" parameterType="ArticleQuery" resultMap="UploadArticleMap2">
+        select a.id,a.name,a.num,a.status,a.createdate,a.reason,
+        u.id as u_id, u.username as u_username, u.anothername as u_anothername
+        from itit_article a
+        left join itit_user u
+        on a.author = u.id
+        <where>
+            <if test="id != null">
+                a.id = #{id}
+            </if>
+            <if test="name != null and name !=''">
+                a.name = #{name}
+            </if>
+            <if test="author != null and author.id != null">
+                a.author = #{author.id}
+            </if>
+            <if test="num != null and num !=''">
+                a.num = #{num}
+            </if>
+            <if test="status != null">
+                a.status = #{status}
+            </if>
+        </where>
+        order by createdate desc
+    </select>
+    <select id="findByQueryLikename" parameterType="ArticleQuery" resultMap="UploadArticleMap2">
+        select a.id,a.name,a.num,a.status,a.createdate,a.reason,
+        u.id as u_id, u.username as u_username, u.anothername as u_anothername
+        from itit_article a
+        left join itit_user u
+        on a.author = u.id
+        <trim prefix=" where " suffixOverrides="AND||OR">
+            <if test="name != null and name !=''">
+                <bind name="likeName" value="'%' + _parameter.name + '%'" />
+                lower(name) like lower(#{likeName}) AND
+            </if>
+            <if test="num != null and num !=''">
+                a.num = #{num} AND
+            </if>
+            <if test="status != null">
+                a.status = #{status}
+            </if>
+        </trim>
+        order by createdate desc
+    </select>
+    <resultMap id="findByIdMap" type="Article">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <result property="author.id" column="author"/>
+        <result column="num" property="num"/>
+        <result property="status" column="status"/>
+        <result column="description" property="description"/>
+        <result property="createdate" column="createdate"/>
+        <result property="reason" column="reason"/>
+    </resultMap>
+    <select id="findById" parameterType="int" resultMap="findByIdMap">
+        select id,name,content,author ,num,status,description,createdate,reason
+        from itit_article t where t.id = #{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into itit_article(name,description,content,num,status,author,createdate) values (
+        #{name},#{description},#{content},#{num},#{status},#{author.id},#{createdate})
+    </insert>
+    <insert id="addToColumn" parameterType="Integer">
+        insert into itit_tag_article_middle values (#{tagId},#{articleId});
+    </insert>
+    <update id="update" parameterType="Article">
+        update itit_article
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="reason != null">
+                reason = #{reason}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="findTagByArticleId" parameterType="Integer" resultType="Tag">
+        select id,name from itit_tag_article_middle t LEFT JOIN itit_tag tag on tag.id = t.tag_id where t.article_id = #{id};
+    </select>
+    <select id="findTagIdByArticleId" parameterType="Integer" resultType="Integer">
+        select id from itit_tag_article_middle t LEFT JOIN itit_tag tag on tag.id = t.tag_id where t.article_id = #{id};
+    </select>
+    <select id="findCountByIdAndAuthor" parameterType="ArticleQuery" resultType="int">
+        select count(1) from itit_article where author = #{author.id} and id =#{id};
+    </select>
+    <select id="findCountByAuthor" parameterType="int" resultType="int">
+        select count(1) from itit_article where author = #{id}
+    </select>
+    <resultMap id="searchArticle" type="ArticleSearchVo">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <result column="content" property="content"/>
+        <result column="num" property="num"/>
+        <result property="description" column="description"/>
+        <result column="createdate" property="createdate"/>
+        <result column="clickNum" property="clickNum"/>
+        <association property="author" javaType="User" columnPrefix="u_">
+            <id column="id" property="id"/>
+            <result property="anothername" column="anothername"/>
+        </association>
+    </resultMap>
+    <select id="findByQuerySearchVo" resultMap="searchArticle" parameterType="ArticleQuery">
+        SELECT
+        distinct a.id ,a.name,a.content,a.num,a.status,a.description,a.createdate,u.anothername as u_anothername,u.id as u_id,c.num as clickNum
+        FROM itit_article a
+        left join itit_user u
+        on a.author = u.id
+        left join itit_a_clicknum c
+        on a.id = c.article_id
+        left join itit_tag_article_middle t
+        on t.article_id = a.id
+        <trim prefix=" where " suffixOverrides="and">
+            <if test="name != null and name != ''">
+                <bind name="likeName" value="'%' + _parameter.name + '%'" />
+                lower(name) like lower(#{likeName}) and
+            </if>
+            <if test="status != null">
+                status = #{status} and
+            </if>
+            <if test="column != null">
+                tag_id in
+                <foreach collection="column" item="c" separator="," close=")" open="(">
+                    #{c}
+                </foreach>
+            </if>
+        </trim>
+        <trim prefix=" order by " suffixOverrides=",">
+            <choose>
+                <when test="time == true">
+                    createdate desc,
+                </when>
+                <otherwise>
+                    clickNum desc
+                </otherwise>
+            </choose>
+        </trim>
+    </select>
+    <delete id="delete" parameterType="int">
+        delete from itit_article where id in 
+        <foreach collection="array" open="(" close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </delete>
+    <delete id="deleteTagByArticleId" parameterType="int">
+        delete from itit_tag_article_middle where article_Id in
+        <foreach collection="array" open="(" close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </delete>
+    <delete id="deleteCommentByArticleId" parameterType="int">
+        delete from itit_a_comment where article_id in
+        <foreach collection="array" open="(" close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </delete>
+    <resultMap id="Base_Map_2" type="ArticlePageVo">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <result column="content" property="content"/>
+        <result column="num" property="num"/>
+        <result column="status" property="status"/>
+        <result column="createdate" property="createdate"/>
+        <result column="reason" property="reason"/>
+        <result column="description" property="description"/>
+        <association property="author" column="author" javaType="UserSearchVo" select="com.itit.dao.Ifac.UserDao.queryUserById"></association>
+    </resultMap>
+    <select id="findByQuery_second" parameterType="ArticleQuery" resultMap="Base_Map_2">
+        select id,name,content,num,status,description,createdate,reason,author from itit_article
+        <where>
+            <if test="num!=null and num != ''">
+                num = #{num}
+            </if>
+        </where>
+    </select>
+    <select id="selectClickNumById" parameterType="int">
+        select article_id,num from itit_a_clicknum where article_id = #{article_id}
+    </select>
+    <insert id="addClickNum" parameterType="int">
+        insert into itit_a_clicknum values (#{article_id},#{num});
+    </insert>
+    <update id="updateClickNum" parameterType="int">
+        update itit_a_clicknum set num = num + #{num} where article_id = #{article_id}
+    </update>
+    <delete id="deleteClickNum" parameterType="int">
+        delete from itit_a_clicknum where article_id in
+        <foreach collection="array" separator="," open="(" close=")" item="article_id">
+            #{article_id}
+        </foreach>
+    </delete>
+</mapper>
+

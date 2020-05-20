@@ -1,0 +1,101 @@
+<link rel="stylesheet" type="text/css" href="../../static/css/User/info.css" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="inner-box">
+        <div class="form-group">
+            <ul>
+                <li>
+                    <span>用户名：</span><span class="username" th:text="${#request.getAttribute('user').username}">游客</span>
+                </li>
+                <li>
+                    <span>邮箱：</span><span class="email" th:text="${#request.getAttribute('user').email}"></span>
+                </li>
+                <li>
+                    <span>手机号：</span><span class="phone" th:text="${#request.getAttribute('user').phone}"></span>
+                </li>
+                <li>
+                    <label for="anothername">昵称：</label>
+                    <input disabled type="text" name="anothername" id="anothername" class="form-control" placeholder="请填写昵称" th:value="${#request.getAttribute('user').anothername}">
+                </li>
+                <li>
+                    <label for="sex">性别:</label>
+                    <div class="sex-btn">男
+                        <input disabled type="radio" hidden="hidden" id="sex" name="sex" class="sex-radio" value="0">
+                    </div>
+                    <div class="air"></div>
+                    <div class="sex-btn">女
+                        <input disabled type="radio" hidden="hidden" id="sex" name="sex" class="sex-radio" value="1">
+                    </div>
+                    <div class="air"></div>
+                    <div class="sex-btn">秘密
+                        <input disabled type="radio" hidden="hidden" id="sex" name="sex" class="sex-radio" value="2">
+                    </div>
+                    <i hidden="hidden" class="sex-radio" th:text="${#request.getAttribute('user').sex}"></i>
+                </li>
+                <li>
+                    <label class="mySign" for="mySign">个人签名：</label>
+                    <textarea id="mySign" name="sign" class="form-control" rows="3" autocomplete="off" disabled placeholder="请填写你的个性签名" th:value="${#request.getAttribute('user').sign}"></textarea>
+                </li>
+                <li>
+                    <label for="website">个人网站：</label>
+                    <input disabled type="text" name="website" id="website" class="form-control" placeholder="请填写个人网站" th:value="${#request.getAttribute('user').website}">
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="update-btn">修改个人信息</button>
+    </div>
+    <div>
+        <script>
+            $(function () {
+                if(!isNaN(Number($(".sex-radio").text()))){
+                    $(".sex-btn").eq($(".sex-radio").text()).addClass("active");
+                    $(":radio").eq($(".sex-radio").text()).attr("checked");
+                }
+                //进入页面判断
+                var anothername = $("#anothername").val();
+                var sex = $(":radio:checked").val();
+                var sign = $("#mySign").val();
+                var webkit = $("#website").val();
+                $(".update-btn").click(function () {
+                    console.log(!$(this).hasClass("enabled"));
+                    if(!$(this).hasClass("enabled")){
+                        $(this).addClass("enabled");
+                        $("input,textarea").removeAttr("disabled");
+                        $(".sex-btn").addClass("enabled");
+                    }else{
+                        $(this).removeClass("enabled");
+                        $("input,textarea").attr("disabled","");
+                        $(".sex-btn").removeClass("enabled");
+                        if(sign == $("#mySign").val() && sex == $(":radio:checked").val() && webkit == $("#website").val() &&
+                        anothername ==  $("#anothername").val()){
+                            anothername = $("#anothername").val();
+                            sex = $(":radio:checked").val();
+                            sign = $("#mySign").val();
+                            webkit = $("#website").val();
+                            return false;
+                        }else {
+                            anothername = $("#anothername").val();
+                            sex = $(":radio:checked").val();
+                            sign = $("#mySign").val();
+                            webkit = $("#website").val();
+                            //提交
+                            $.ajax({
+                                url:" UserCenter/updateInfo",
+                                data:JSON.stringify({'anothername':$("#anothername").val(),'sex':$(":radio:checked").val(),'sign':$("#mySign").val(),'website':$("#website").val()}),
+                                contentType:"application/json;charset=utf-8",
+                                dataType:"json",
+                                type:"post",
+                                success:function (data) {
+                                    if(data == true){
+                                        alert("更新成功!")
+                                    }else {
+                                        alert("更新失败!");
+                                    }
+                                }
+                            })
+                        }
+                    }
+                })
+            })
+        </script>
+    </div>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心-帐号安全</title>
+    <link rel="stylesheet" href="../../static/css/User/security.css">
+    <script type="application/javascript" src="../../static/js/jquery-3.4.1.js"></script>
+</head>
+<body>
+    <div class="inner-box">
+        <div class="part1">
+            <div>当前密码强度：</div>
+            <ul class="strong-show">
+                <li  class="air"></li>
+                <li class="air"></li>
+                <li  class="air"></li>
+                <li class="air"></li>
+                <li class="air"></li>
+            </ul>
+            <span class="strong-content" style="color: red" th:text="${#request.getAttribute('strong-content')}">弱</span>
+        </div>
+        <div class="part2">
+            <a th:href="'/UserCenter/modifyPassword?id=' + ${session.user.getId()}">
+                <span class="part2-title btn btn-default">修改密码</span>
+            </a>
+        </div>
+        <div class="line"></div>
+        <div class="part3">
+            <span>当前是否设置安全问题：</span>
+            <span class="secuity-answer" th:text="${#request.getAttribute('secuity-answer')}"></span>
+            <a href="/Security/checkQuestion">
+                <span class="btn btn-info">设置/修改安全问题</span>
+            </a>
+        </div>
+    </div>
+</body>
+<script>
+    $(function () {
+        var content = $(".strong-content").text();
+        if (content == "强"){
+            $(".strong-show").children(":even").removeAttr("class").addClass("strong");
+        }else if(content =="中"){
+            $(".strong-show").children(":even").removeAttr("class").parent().children().eq(0).removeAttr("class").addClass("medium").parent().children().eq(2).removeAttr("class").addClass("medium").parent().children().eq(4).addClass("air");
+        }else {
+            $(".strong-show").children(":even").removeAttr("class").parent().children(":even").addClass("air").parent().children().eq(0).removeClass("air").addClass("week");
+        }
+    })
+</script>
+</html>

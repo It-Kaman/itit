@@ -1,0 +1,171 @@
+/*首页*/
+section>article.content-body>.index-box{
+    height: 300px;
+    border-bottom: 1px solid #c6c8ca;
+}
+section>article.content-body>.index-box>.part1-content{
+    float: left;
+    width: 40%;
+    height: 100%;
+}
+section>article.content-body>.index-box>.part1-content>ul{
+    width: 80%;
+    padding-left: 10%;
+    margin-top: 50px;
+}
+section>article.content-body>.index-box>.part1-content>ul>li{
+    margin-bottom: 15px;
+}
+section>article.content-body>.index-box>.part1-content>ul>li.username{
+    font-size: 25px;
+    font-family: 黑体;
+    color: rgb(42,42,44);
+}
+section>article.content-body>.index-box>.part1-content>ul>li.userId{
+    font-size: 17px;
+    color: rgb(191,192,194);
+}
+section>article.content-body>.index-box>.part1-content>ul>li>button{
+    border: 1px solid rgb(42,42,44);
+    border-radius: 5px;
+    background: white;
+    height: 30px;
+    outline: none;
+    width:35%;
+}
+
+section>article.content-body>.index-box>.part1-content>ul>li>button:hover{
+    background: rgb(48,48,51);
+    color: white;
+}
+
+section>article.content-body>.index-box>.part1-header{
+    width: 40%;
+    float: right;
+    height: 100%;
+    position: relative;
+}
+section>article.content-body>.index-box>.part1-header>.header{
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    margin-left: -22%;
+    margin-top: -40%;
+    border-radius: 50%;
+}
+section>article.content-body>.index-box>.part1-header>.header>a:hover img{
+    border: 1px solid rgb(7,193,96);
+}
+section>article.content-body>.index-box>.part1-header>.header>a>img{
+    width: 100%;
+    position: center;
+    object-fit: cover;
+    height:100%;
+    border-radius: 50%;
+    border:1px solid rgb(37,40,44);
+}
+section>article.content-body>.index-box>.like-num,section>article.content-body>.index-box>.send-num,section>article.content-body>.index-box>.video-num{
+    width: 33%;
+    padding-right: 3%;
+    height: 100%;
+    float: left;
+    text-align: center;
+    position: relative;
+    transition: all 1s;
+}
+section>article.content-body>.index-box>.like-num>div{
+    width: 100px;
+    height: 100px;
+    background: deeppink;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    margin-left: -50px;
+    top: 50%;
+    margin-top: -70px;
+}
+section>article.content-body>.index-box>div:hover >div{
+    opacity: .8;
+}
+section>article.content-body>.index-box>.like-num>span{
+    color: deeppink;
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 50%;
+    margin-left: -50px;
+    top: 50%;
+    margin-top: 50px;
+    font-size: 16px;
+}
+section>article.content-body>.index-box>div:hover >span{
+    opacity: .8;
+}
+section>article.content-body>.index-box>.like-num>div>span{
+    display: block;
+    font-size: 50px;
+    color: white;
+    height: 100px;
+    line-height: 100px;
+}
+
+section>article.content-body>.index-box>.send-num>div{
+    width: 100px;
+    height: 100px;
+    background: rgb(7,193,96);
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    margin-left: -50px;
+    top: 50%;
+    margin-top: -70px;
+}
+section>article.content-body>.index-box>.send-num>span {
+    color: rgb(7, 193, 96);
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 50%;
+    margin-left: -50px;
+    top: 50%;
+    margin-top: 50px;
+    font-size: 16px;
+}
+section>article.content-body>.index-box>.send-num>div>span{
+    display: block;
+    font-size: 50px;
+    color: white;
+    height: 100px;
+    line-height: 100px;
+}
+section>article.content-body>.index-box>.video-num>div{
+    width: 100px;
+    height: 100px;
+    background: #5bc0de;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    margin-left: -50px;
+    top: 50%;
+    margin-top: -70px;
+}
+section>article.content-body>.index-box>.video-num>span {
+    color: #5bc0de;
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 50%;
+    margin-left: -50px;
+    top: 50%;
+    margin-top: 50px;
+    font-size: 16px;
+}
+section>article.content-body>.index-box>.video-num>div>span{
+    display: block;
+    font-size: 50px;
+    color: white;
+    height: 100px;
+    line-height: 100px;
+}

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+<!--引入COS 外部配置文件-->
+    <context:property-placeholder system-properties-mode="NEVER" location="
+    classpath:config/properties/SecretInfo.properties,
+    classpath:config/properties/File.properties,
+    classpath:config/properties/ConstrainInfo.properties,
+    classpath:config/properties/db.properties"
+    />
+
+    <!--上传专用-->
+    <bean name="basicCOSCredentials" class="com.qcloud.cos.auth.BasicCOSCredentials">
+        <constructor-arg name="accessKey" value="${COS_SECRETID}"></constructor-arg>
+        <constructor-arg name="secretKey" value="${COS_SECRETKEY}"></constructor-arg>
+    </bean>
+
+    <!--下载专用-->
+    <bean name="redDownload" class="com.qcloud.cos.auth.AnonymousCOSCredentials"></bean>
+
+    <bean name="region" class="com.qcloud.cos.region.Region">
+        <constructor-arg name="region_name" value="${COS_REGION}"></constructor-arg>
+    </bean>
+
+    <bean name="clientConfig" class="com.qcloud.cos.ClientConfig">
+        <constructor-arg name="region" ref="region"></constructor-arg>
+    </bean>
+
+    <bean name="cosClientUpload" class="com.qcloud.cos.COSClient" destroy-method="shutdown">
+        <constructor-arg name="clientConfig" ref="clientConfig"></constructor-arg>
+        <constructor-arg name="cred" ref="basicCOSCredentials"></constructor-arg>
+    </bean>
+
+    <bean name="cosClientDownload" class="com.qcloud.cos.COSClient" destroy-method="shutdown">
+        <constructor-arg name="clientConfig" ref="clientConfig"/>
+        <constructor-arg name="cred" ref="redDownload"/>
+    </bean>
+
+    <!--高级接口-->
+    <bean name="transferManagerConfiguration" class="com.qcloud.cos.transfer.TransferManagerConfiguration">
+        <property name="minimumUploadPartSize" value="${qc.minimumUploadPartSize}"/>
+        <property name="multipartUploadThreshold" value="${qc.multipartUploadThreshold}"/>
+    </bean>
+
+
+
+    <bean name="security" class="com.itit.entry.Security"></bean>
+
+    <!--查询对象列表目录Bean-->
+    <bean name="listObjectsRequest" class="com.qcloud.cos.model.ListObjectsRequest"></bean>
+
+    <!--自定义异常-->
+    <bean class="com.itit.exception.MyHandlerException"></bean>
+
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="driverClassName" value="${db.driver-class-name}"/>
+        <property name="initialSize" value="${db.initaliSize}"/>
+        <property name="maxWait" value="${db.maxWait}"></property>
+        <property name="maxActive" value="${db.maxActive}"></property>
+    </bean>
+
+    <!-- spring的事务管理 -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <!-- 通用的配置 -->
+        <tx:attributes>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="query*" read-only="true"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut expression="execution(* com.itit.service.Impl.*.*(..))" id="pointcut"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut"/>
+    </aop:config>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/upload/**"/>
+            <mvc:exclude-mapping path="/static/**"/>
+            <bean class="com.itit.interceptor.UserLoginInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/register*/**"/>
+            <bean class="com.itit.interceptor.RegisterInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/upload/video/**"></mvc:mapping>
+            <bean class="com.itit.interceptor.TeacherInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**"></mvc:mapping>
+            <mvc:mapping path="/teachers/admin/**"/>
+            <mvc:mapping path="/articles/admin/**"/>
+            <mvc:mapping path="/videos/admin/**"/>
+            <bean class="com.itit.interceptor.AdminInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8" />
+        <!-- 指定所上传文件的总大小,单位字节。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
+        <property name="resolveLazily" value="true" /><!-- 懒接收 -->
+    </bean>
+</beans>

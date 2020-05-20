@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.SecurityDao">
+    <select id="GetSecurityById" parameterType="int" resultType="Security">
+        select security_q1,security_a1,security_q2,security_a2 from itit_security where id = #{id}
+    </select>
+    
+    <insert id="add" parameterType="Security" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into itit_security(security_q1,security_a1,security_q2,security_a2) values (#{security_q1},#{security_a1},#{security_q2},#{security_a2})
+    </insert>
+
+    <update id="updateQ" parameterType="Security">
+        updare itit_security set security_q1 = #{security_q1},security_a1 = #{security_a1},security_q2 = #{security_q2},security_a2 = #{security_a2} where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itit.dao.Ifac.TVmiddleDao">
+    <insert id="add" parameterType="int">
+      insert into itit_tag_video_middle(tag_id,video_id) values
+      (#{tag_id},#{video_id})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from itit_tag_video_middle where video_id in
+        <foreach collection="array" open="("  close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </delete>
+</mapper>
